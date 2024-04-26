@@ -18,8 +18,11 @@ const Navbar = () => {
     const {user} =useSelector((state)=>state.profile );
     const {totalItems}=useSelector((state)=> state.cart); 
 
-
+    const [showDocumentation, setShowDocumentation] = useState(false);
     const [subLinks,setSubLinks]=useState([]);
+    const handleDocumentationClick = () => {
+        setShowDocumentation(!showDocumentation);
+    };
 //  const fetchSublinks=async()=>{
 //     try{
 //       const result= await apiConnector("GET",categories.CATEGORIES_API);
@@ -61,14 +64,22 @@ const Navbar = () => {
                 <li>
                     <Link to="/">Past Missions</Link>
                 </li>
-                <li className='relative'>
-                    <Link to="/">Documentation</Link>
-                    <div className="relative">
-                    
-                    <div className="hover:bg-white w-[200px] h-[100px] absolute z-10"></div>
-                </div>
-                                    
-                </li>
+                <li>
+                    <div  className="relative">
+                    <button onClick={handleDocumentationClick} className="  hover:text-gray-900 focus:outline-none">Documentation</button>
+                        {showDocumentation && (
+                            <div className="absolute top-4 left-0 bg-white border border-gray-200 rounded-md shadow-md p-4 mt-2 z-10">
+                                <ul>
+                                    <li><a href="#" className="text-gray-800 hover:text-gray-900">Link 1</a></li>
+                                    <li><a href="#" className="text-gray-800 hover:text-gray-900">Link 2</a></li>
+                                    <li><a href="#" className="text-gray-800 hover:text-gray-900">Link 3</a></li>
+                                    {/* Add more hardcoded links as needed */}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                        
+                    </li>
                 <li>
                     <Link to="/">Quizes</Link>
                 </li>
