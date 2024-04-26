@@ -11,6 +11,7 @@ import {categories} from "../services/api"
 import { useNavigate} from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logout } from "../services/operations/authAPI"
+import { HiArrowRightCircle } from "react-icons/hi2";
 const Navbar = () => {
     const navigate=useNavigate();
     const dispatch = useDispatch()
@@ -20,8 +21,14 @@ const Navbar = () => {
 
     const [showDocumentation, setShowDocumentation] = useState(false);
     const [subLinks,setSubLinks]=useState([]);
-    const handleDocumentationClick = () => {
-        setShowDocumentation(!showDocumentation);
+    
+
+    const handleDocumentationHover = () => {
+        setShowDocumentation(true);
+    };
+
+    const handleDocumentationLeave = () => {
+        setShowDocumentation(false);
     };
 //  const fetchSublinks=async()=>{
 //     try{
@@ -56,30 +63,44 @@ const Navbar = () => {
                     <Link to="/">Home</Link>
                 </li>
                 <li>
-                    <Link to="/">About</Link>
+                    <Link to="/">Feedbacks</Link>
                 </li>
                 <li>
                     <Link to="/">Contact</Link>
                 </li>
                 <li>
-                    <Link to="/">Past Missions</Link>
+                    <Link to="/">Join Community</Link>
                 </li>
                 <li>
-                    <div  className="relative">
-                    <button onClick={handleDocumentationClick} className="  hover:text-gray-900 focus:outline-none">Documentation</button>
-                        {showDocumentation && (
-                            <div className="absolute top-4 left-0 bg-white border border-gray-200 rounded-md shadow-md p-4 mt-2 z-10">
-                                <ul>
-                                    <li><a href="#" className="text-gray-800 hover:text-gray-900">Link 1</a></li>
-                                    <li><a href="#" className="text-gray-800 hover:text-gray-900">Link 2</a></li>
-                                    <li><a href="#" className="text-gray-800 hover:text-gray-900">Link 3</a></li>
-                                    {/* Add more hardcoded links as needed */}
-                                </ul>
-                            </div>
-                        )}
+            <div className="relative" onMouseEnter={handleDocumentationHover} onMouseLeave={handleDocumentationLeave}>
+                <button className="hover:text-gray-900 focus:outline-none">Documentation</button>
+                {showDocumentation && (
+                    <div className="absolute top-4 left-1 w-[250px] bg-white border border-gray-200 rounded-md shadow-md p-4 mt-2 z-10 text-lg">
+                        <ul>
+                            <li className="py-2 px-4 hover:bg-blue-100 hover:text-white">
+                                <a href="#" className="text-gray-800 hover:text-gray-900 flex items-center">
+                                    <span>Explore Universe</span>
+                                    <HiArrowRightCircle className="ml-10 text-gray-500 hover:text-gray-700" />
+                                </a>
+                            </li>
+                            <li className="py-2 px-4 hover:bg-blue-100 hover:text-white">
+                                <a href="#" className="text-gray-800 hover:text-gray-900 flex items-center">
+                                    <span>Discover Solar System</span>
+                                    <HiArrowRightCircle className="ml-2 text-gray-500 hover:text-gray-700" />
+                                </a>
+                            </li>
+                            <li className="py-2 px-4 hover:bg-blue-100 hover:text-white">
+                                <a href="#" className="text-gray-800 hover:text-gray-900 flex items-center">
+                                    <span>Space History</span>
+                                    <HiArrowRightCircle className="ml-2 text-gray-500 hover:text-gray-700" />
+                                </a>
+                            </li>
+                            {/* Add more hardcoded links as needed */}
+                        </ul>
                     </div>
-                        
-                    </li>
+                )}
+            </div>
+        </li>
                 <li>
                     <Link to="/">Quizes</Link>
                 </li>
