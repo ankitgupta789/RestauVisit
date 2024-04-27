@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const otpGenerator = require("otp-generator");
 const mailSender = require("../utils/mailSender");
 const { passwordUpdated } = require("../mail/templates/passwordUpdate");
-const Profile = require("../models/Profile");
+const Profile = require("../models/Profile.js");
 require("dotenv").config();
 
 // Signup Controller for Registering USers
