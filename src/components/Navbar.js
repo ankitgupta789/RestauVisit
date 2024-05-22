@@ -30,6 +30,15 @@ const Navbar = () => {
     const handleDocumentationLeave = () => {
         setShowDocumentation(false);
     };
+    const handleExploreClick = () => {
+        navigate('/exploreUniverse');
+    };
+    const handleExploreClick2 = () => {
+        navigate('/solarSystem');
+    };
+    const handleExploreClick3 = () => {
+        navigate('/spaceHistory');
+    };
 //  const fetchSublinks=async()=>{
 //     try{
 //       const result= await apiConnector("GET",categories.CATEGORIES_API);
@@ -79,19 +88,27 @@ const Navbar = () => {
                         <ul>
                             <li className="py-2 px-4 hover:bg-blue-100 hover:text-white">
                                 <a href="#" className="text-gray-800 hover:text-gray-900 flex items-center">
+                                <button onClick={handleExploreClick}>
                                     <span>Explore Universe</span>
+                                </button>
                                     <HiArrowRightCircle className="ml-10 text-gray-500 hover:text-gray-700" />
                                 </a>
                             </li>
                             <li className="py-2 px-4 hover:bg-blue-100 hover:text-white">
                                 <a href="#" className="text-gray-800 hover:text-gray-900 flex items-center">
-                                    <span>Discover Solar System</span>
+                                <button onClick={handleExploreClick2}>
+                                <span>Discover Solar System</span>
+                                </button>
+                                    
                                     <HiArrowRightCircle className="ml-2 text-gray-500 hover:text-gray-700" />
                                 </a>
                             </li>
                             <li className="py-2 px-4 hover:bg-blue-100 hover:text-white">
                                 <a href="#" className="text-gray-800 hover:text-gray-900 flex items-center">
+                                    
+                                    <button onClick={handleExploreClick3}>
                                     <span>Space History</span>
+                                </button>
                                     <HiArrowRightCircle className="ml-2 text-gray-500 hover:text-gray-700" />
                                 </a>
                             </li>

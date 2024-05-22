@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes,Navigate } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
@@ -13,8 +13,16 @@ import VerifyEmail from "./pages/VerifyEmail";
 import MyProfile from "./pages/MyProfile";
 import AddDocument from "./pages/AddDocument"
 import {addfeedback} from "./services/operations/feedback"
+import { useSelector } from "react-redux";
+
+import ExploreUniverse from "./pages/ExploreUniverse"
+import SpaceHistory from "./pages/SpaceHistory"
+import SolarSystem from "./pages/SolarSystem"
+
 //import Navbar from "./components/Navbar";
 function App() {
+  const{token} = useSelector((state) =>state.auth);
+  const {user} =useSelector((state)=>state.profile );
 
   //const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [modal, setModal] = useState(false);
@@ -50,7 +58,7 @@ function App() {
     <div className="w-screen h-screen bg-richblack-900 flex flex-col">
       <Navbar className="relative"/>
       
-      <div className="absolute bottom-20 right-10 z-20">
+      {user && <div className="absolute bottom-20 right-10 z-20">
     {!modal && (
       <button
         className="bg-blue-100 text-white font-bold py-2 px-4 rounded close-btn animate-bounce"
@@ -94,6 +102,7 @@ function App() {
       )}
     </div>
   </div>
+}
 
       <Routes>
 
@@ -103,6 +112,10 @@ function App() {
         <Route path="/forgotpassword" element={<ForgotPassword/>} />
         <Route path="/update-password/:id" element={<UpdatePassword/>} />
         <Route path="/verifyemail" element={<VerifyEmail/>} />
+        <Route path="/exploreUniverse" element={user ? <ExploreUniverse/>: <Login/>} />
+        <Route path="/solarSystem" element={user ? <SolarSystem/>: <Login/>} />
+        <Route path="/spaceHistory" element={user ? <SpaceHistory/>: <Login/>} />
+      
        
         {/* <Route path="/dashboard/my-profile" element={<MyProfile/>} /> */}
         <Route path="/dashboard" element = {
@@ -111,6 +124,7 @@ function App() {
           </PrivateRoute>
        
         } />
+
         <Route path="/dashboard/my-profile" element={ < MyProfile />} /> 
         <Route path="/dashboard/addDocument" element={ < AddDocument />} /> 
 
