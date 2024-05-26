@@ -11,22 +11,23 @@ exports.createCourse = async (req, res) => {
 		// Get all required fields from request body
 		let {
 			documentName,
-			description,
+			
 			whatWeWillLearn,
 
 			category,
 			instructions,
+			email,
 		} = req.body;
-      console.log("request ki body me kuch pada abhi hai",req.body,description,documentName,whatWeWillLearn,instructions,category)
+      console.log("request ki body me kuch pada abhi hai",req.body,documentName,whatWeWillLearn,instructions,category,email)
 		// Check if any of the required fields are missing
 		if (
 			!documentName ||
-			!description ||
 			!whatWeWillLearn ||
 			!instructions||
 			
 			
-			!category
+			!category||
+			!email
 		) {
 			return res.status(400).json({
 				success: false,
@@ -38,12 +39,13 @@ exports.createCourse = async (req, res) => {
 		// Create a new course with the given details
 		const newCourse = await Course.create({
 			documentName,
-			description,
+			
 			whatWeWillLearn: whatWeWillLearn,
 			category,
 			instructions: instructions,
+			email
 		});
-		
+		console.log("mai yahan aachuka hun guys");
 		// Return the new course and a success message
 		return res.status(200).json({
 			success: true,

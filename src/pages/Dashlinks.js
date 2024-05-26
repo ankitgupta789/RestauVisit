@@ -22,7 +22,7 @@ export const sidebarLinks = [
     {
       id: 3,
       name: "My Documents",
-      path: "/dashboard/my-courses",
+      path: "/mydoc",
       type: ACCOUNT_TYPE.INSTRUCTOR,
       icon: "VscVm",
     },

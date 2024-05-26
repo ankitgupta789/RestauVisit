@@ -2,10 +2,11 @@ import {toast} from "react-hot-toast"
 import axios from "axios"
 
 export const addDocument = async ({documentName,
-description,
+
 whatWeWillLearn,
 category,
 instructions,
+email,
  }) => {
     let result = null
     const toastId = toast.loading("Loading...");
@@ -14,10 +15,10 @@ instructions,
     try {
         const response= await axios.post("http://localhost:4000/api/v1/course/createCourse",
         {documentName,
-        description,
         whatWeWillLearn,
         category,
-        instructions
+        instructions,
+        email
       })
       console.log("CREATE DOCUMENT API RESPONSE............", response)
   
@@ -34,4 +35,20 @@ instructions,
     }
     toast.dismiss(toastId)
     return result
-  }
+  };
+  export const getAllDocuments = async () => {
+    let result = null;
+    const toastId = toast.loading("Loading...");
+    try {
+      const response = await axios.get("http://localhost:4000/api/v1/course/getAllCourses");
+      console.log("GET ALL DOCUMENTS API RESPONSE............", response);
+  
+      toast.success("Documents Fetched Successfully");
+      result = response.data.data; // Adjust according to your API response structure
+    } catch (error) {
+      console.log("GET ALL DOCUMENTS API ERROR............", error);
+      toast.error(error.message);
+    }
+    toast.dismiss(toastId);
+    return result;
+  };

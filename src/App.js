@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 import ExploreUniverse from "./pages/ExploreUniverse"
 import SpaceHistory from "./pages/SpaceHistory"
 import SolarSystem from "./pages/SolarSystem"
-
+import MyDoc from "./pages/MyDoc";
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -115,7 +115,7 @@ function App() {
         <Route path="/exploreUniverse" element={user ? <ExploreUniverse/>: <Login/>} />
         <Route path="/solarSystem" element={user ? <SolarSystem/>: <Login/>} />
         <Route path="/spaceHistory" element={user ? <SpaceHistory/>: <Login/>} />
-      
+        <Route path="/mydoc" element={<MyDoc/>} />
        
         {/* <Route path="/dashboard/my-profile" element={<MyProfile/>} /> */}
         <Route path="/dashboard" element = {

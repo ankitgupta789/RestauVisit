@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getAllDocuments } from '../services/operations/document';
-
-const SpaceHistory = () => {
+import { useSelector } from 'react-redux';
+const MyDoc = () => {
+    const {user} =useSelector((state)=>state.profile );
     const [selectedDocument, setSelectedDocument] = useState(null);
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -13,7 +14,7 @@ const SpaceHistory = () => {
             try {
                 const response = await getAllDocuments();
                 // Filter documents to only include those with category "Explore Universe"
-                const filteredDocuments = response.filter(doc => doc.category === "Space History");
+                const filteredDocuments = response.filter(doc => doc.email === user.email);
                 setDocuments(filteredDocuments);
                 console.log('Filtered documents: ', filteredDocuments);
                 setLoading(false);
@@ -71,6 +72,6 @@ const SpaceHistory = () => {
             )}
         </div>
     );
-};
+}
 
-export default SpaceHistory;
+export default MyDoc;
