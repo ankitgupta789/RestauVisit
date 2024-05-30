@@ -78,7 +78,7 @@ const Navbar = () => {
                     <Link to="/">Contact</Link>
                 </li>
                 <li>
-                    <Link to="/">Join Community</Link>
+                    <Link to="/community">Join Community</Link>
                 </li>
                 <li>
             <div className="relative" onMouseEnter={handleDocumentationHover} onMouseLeave={handleDocumentationLeave}>

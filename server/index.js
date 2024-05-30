@@ -6,7 +6,9 @@ const profileRoutes = require("./routes/Profile");
 //const paymentRoutes = require("./routes/Payments");
 const courseRoutes = require("./routes/Course");
 const feedbackRoutes=require("./routes/Feedback2.js")
-
+const chatRouter = require('./routes/chatRoutes/chatRoutes.js');
+const userRouter=require("./routes/UserRoutes/userData.js")
+const messageRoutes = require('./routes/messageRoutes/messageRoutes.js');
 const database = require("./config/database");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -42,8 +44,11 @@ cloudinaryConnect();
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/course", courseRoutes);
-console.log("hello");
+app.use("/api/user",userRouter)
 app.use("/api/v1/feedback", feedbackRoutes);
+app.use("/api/community",chatRouter)
+app.use("/api/message", messageRoutes)
+
 
 
 //def route
@@ -55,7 +60,55 @@ app.get("/", (req, res) => {
 	});
 });
 
-app.listen(PORT, () => {
+const server=app.listen(PORT, () => {
 	console.log(`App is running at ${PORT}`)
 })
 
+
+
+const io = require('socket.io')(server, {
+	pingTimeout: 50000,
+	cors: {
+	  origin: 'http://localhost:3000', // Specify your frontend URL
+	  methods: ["GET", "POST"],
+	  credentials: true
+	}
+  });
+  
+  io.on("connection", (socket) => {
+	console.log("Connected to the client (socket.io)");
+  
+	socket.on("setup", (userData) => {
+	  socket.join(userData._id);
+	  console.log("This is the user id ", userData._id);
+	  socket.emit("connected");
+	});
+  
+	socket.on("join-chat", (room) => {
+	  console.log("User joined the room ", room);
+	});
+  
+	socket.on("new-msg", (newMsg) => {
+	  var chat = newMsg.chat;
+  
+	  if (!chat.users) {
+		return console.log("Chat users not defined");
+	  }
+  
+	  chat.users.forEach((user) => {
+		if (user._id === newMsg.sender._id) {
+		  return;
+		}
+		socket.in(user._id).emit("Msg-recieved", newMsg);
+	  });
+	});
+  
+	socket.on("typing", (user) => socket.in(user).emit("Typing"));
+	socket.on("stop typing", (room) => socket.in(room).emit("Stop typing"));
+  
+	socket.off("setup", (userData) => {
+	  console.log("USER DISCONNECTED");
+	  socket.leave(userData._id);
+	});
+  });
+  

@@ -14,11 +14,12 @@ import MyProfile from "./pages/MyProfile";
 import AddDocument from "./pages/AddDocument"
 import {addfeedback} from "./services/operations/feedback"
 import { useSelector } from "react-redux";
-
+import Chats from './components/Chats-ChatsHome/Chats.js'
 import ExploreUniverse from "./pages/ExploreUniverse"
 import SpaceHistory from "./pages/SpaceHistory"
 import SolarSystem from "./pages/SolarSystem"
 import MyDoc from "./pages/MyDoc";
+
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -103,7 +104,7 @@ function App() {
     </div>
   </div>
 }
-
+      
       <Routes>
 
         <Route path="/" element= {<Home/>} />
@@ -127,9 +128,10 @@ function App() {
 
         <Route path="/dashboard/my-profile" element={ < MyProfile />} /> 
         <Route path="/dashboard/addDocument" element={ < AddDocument />} /> 
+        <Route path="/community" element={<Chats/>}/>
 
-      </Routes>
-
+        </Routes>
+     
     </div>
     )
 }

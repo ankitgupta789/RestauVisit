@@ -6,7 +6,8 @@ import App from "./App";
 import {Provider} from "react-redux";
 import rootReducer from "./reducer";
 import {configureStore} from "@reduxjs/toolkit"
-
+import { ChakraProvider } from "@chakra-ui/react";
+import ChatProvider from "./UserContext.js";
 const store=configureStore({
   reducer:rootReducer,
 });
@@ -14,14 +15,18 @@ const store=configureStore({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-   <Provider store={store}>
-    <BrowserRouter>
+    
+  <ChakraProvider>
+      <Provider store={store}>
+        <BrowserRouter>
+          <ChatProvider>
+          
+             <App />
+             <Toaster/>
+           </ChatProvider>
+        </BrowserRouter>
   
-  <App />
-  <Toaster/>
-</BrowserRouter>
-  
- </Provider>
-  
+      </Provider>
+  </ChakraProvider>
 
 );
