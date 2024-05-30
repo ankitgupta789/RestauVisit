@@ -19,7 +19,11 @@ import ExploreUniverse from "./pages/ExploreUniverse"
 import SpaceHistory from "./pages/SpaceHistory"
 import SolarSystem from "./pages/SolarSystem"
 import MyDoc from "./pages/MyDoc";
+<<<<<<< Updated upstream
 
+=======
+import About from "./pages/About";
+>>>>>>> Stashed changes
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -117,6 +121,7 @@ function App() {
         <Route path="/solarSystem" element={user ? <SolarSystem/>: <Login/>} />
         <Route path="/spaceHistory" element={user ? <SpaceHistory/>: <Login/>} />
         <Route path="/mydoc" element={<MyDoc/>} />
+        <Route path="/about" element={<About/>} />
        
         {/* <Route path="/dashboard/my-profile" element={<MyProfile/>} /> */}
         <Route path="/dashboard" element = {
