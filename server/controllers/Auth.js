@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const otpGenerator = require("otp-generator");
 const mailSender = require("../utils/mailSender");
 const { passwordUpdated } = require("../mail/templates/passwordUpdate");
-const Profile = require("../models/Profile.js");
+//const Profile = require("../models/Profile2.js");
 require("dotenv").config();
 
 // Signup Controller for Registering USers
@@ -82,12 +82,12 @@ exports.signup = async (req, res) => {
 		approved === "Instructor" ? (approved = false) : (approved = true);
 
 		// Create the Additional Profile For User
-		const profileDetails = await Profile.create({
-			gender: null,
-			dateOfBirth: null,
-			about: null,
-			contactNumber: null,
-		});
+		// const profileDetails = await Profile.create({
+		// 	gender: null,
+		// 	dateOfBirth: null,
+		// 	about: null,
+		// 	contactNumber: null,
+		// });
 		const user = await User.create({
 			firstName,
 			lastName,
@@ -96,7 +96,7 @@ exports.signup = async (req, res) => {
 			password: hashedPassword,
 			accountType: accountType,
 			approved: approved,
-			additionalDetails: profileDetails._id,
+			
 			image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
 		});
 
@@ -130,7 +130,7 @@ exports.login = async (req, res) => {
 		}
 
 		// Find user with provided email
-		const user = await User.findOne({ email }).populate("additionalDetails");
+		const user = await User.findOne({ email });
 
 		// If user not found with provided email
 		if (!user) {

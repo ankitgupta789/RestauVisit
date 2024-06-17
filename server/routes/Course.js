@@ -9,6 +9,7 @@ const {
   createCourse,
   getAllCourses,
   getCourseDetails,
+  checkCourseExistence
 } = require("../controllers/Course")
 
 
@@ -62,7 +63,7 @@ router.post("/getCourseDetails", getCourseDetails)
 // TODO: Put IsAdmin Middleware here
 router.post("/createCategory", auth, isAdmin)
 
-
+router.get("/checkCourseExistence/:documentName",checkCourseExistence)
 
 
 module.exports = router

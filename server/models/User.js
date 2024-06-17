@@ -41,11 +41,7 @@ const userSchema = new mongoose.Schema(
 			type: Boolean,
 			default: true,
 		},
-		additionalDetails: {
-			type: mongoose.Schema.Types.ObjectId,
-			required: true,
-			ref: "Profile",
-		},
+		
 		courses: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
@@ -68,6 +64,23 @@ const userSchema = new mongoose.Schema(
 				ref: "courseProgress",
 			},
 		],
+		about: {
+			type: String,
+			trim: true,
+		  },
+		  gender: {
+			type: String,
+			enum: ["Male", "Female", "Other"],
+			
+		  },
+		  contactNumber: {
+			type: String,
+			trim: true,
+		  },
+		  address: {
+			type: String,
+			trim: true,
+		  },
 
 		// Add timestamps for when the document is created and last modified
 	},

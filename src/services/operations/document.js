@@ -52,3 +52,24 @@ email,
     toast.dismiss(toastId);
     return result;
   };
+  // Function to check if a document exists by documentName
+export const checkDocumentExistence = async (documentName) => {
+  try {
+    
+    const response = await axios.get(
+      `http://localhost:4000/api/v1/course/checkCourseExistence/${documentName}`
+    );
+    console.log("CHECK DOCUMENT EXISTENCE API RESPONSE............", response);
+    
+    if (!response.data.success) {
+      toast.error(`document name ${documentName}doesn't exist`);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.log("CHECK DOCUMENT EXISTENCE API ERROR............", error);
+    toast.error(error.message);
+    return false;
+  }
+};

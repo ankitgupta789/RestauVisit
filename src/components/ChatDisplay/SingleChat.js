@@ -232,7 +232,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
                 p={3}
                 bg="#E8E8E8"
                 w="100%"
-                h="100%"
+                h="70vh"
                 borderRadius="lg"
                 overflowY="hidden"
             >
@@ -248,9 +248,23 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
                     />
                     
                 ):(
-                    <div className="messages">
-                    <MessagesComponent messages={messages} style={{display:"flex",flexDirection:"column",overflowY:"scroll",scrollbarWidth:"none"}}/>
-                  </div>
+                  <Box
+                    className="messages"
+                    display="flex"
+                    flexDirection="column"
+                    overflowY="scroll"
+                    css={{
+                      '&::-webkit-scrollbar': {
+                        width: '6px',
+                      },
+                      '&::-webkit-scrollbar-thumb': {
+                        background: '#a0aec0',
+                        borderRadius: '10px',
+                      },
+                    }}
+                  >
+                    <MessagesComponent messages={messages} />
+                  </Box>
                 )
             }
 

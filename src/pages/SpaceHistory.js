@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { getAllDocuments } from '../services/operations/document';
-
+import Query from './Query'; // Import the Query component
+import Note from './Note';
 const SpaceHistory = () => {
     const [selectedDocument, setSelectedDocument] = useState(null);
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showInstructions, setShowInstructions] = useState(false);
+    const [showQueryModal, setShowQueryModal] = useState(false);
+    const [selectedEmail, setSelectedEmail] = useState(''); // State to manage selected email
+    const [showNoteSection, setShowNoteSection] = useState(false); // State for showing note section
+  //  const [selectedEmail, setSelectedEmail] = useState(''); // State to manage selected email
+    const [noteContent, setNoteContent] = useState(''); // State for note content
+
     useEffect(() => {
         const fetchDocuments = async () => {
             try {
                 const response = await getAllDocuments();
                 // Filter documents to only include those with category "Explore Universe"
-                const filteredDocuments = response.filter(doc => doc.category === "Space History");
+                const filteredDocuments = response.filter(doc => doc.category === "Past Missions");
                 setDocuments(filteredDocuments);
                 console.log('Filtered documents: ', filteredDocuments);
                 setLoading(false);
@@ -34,6 +40,28 @@ const SpaceHistory = () => {
     const handleCloseInstructions = () => {
         setSelectedDocument(null);
         setShowInstructions(false);
+    };
+
+    const handleSendQuery = () => {
+        if (selectedDocument !== null) {
+            setSelectedEmail(documents[selectedDocument].email); // Set the selected email
+            setShowQueryModal(true); // Show the query modal when Send Query button is clicked
+        }
+    };
+
+    const handleCloseQueryModal = () => {
+        setShowQueryModal(false); // Close the query modal
+    };
+
+    const handleQuerySubmit = (query, email) => {
+        console.log('Query:', query);
+        console.log('Email:', email);
+        setShowQueryModal(false);
+        // Handle the actual query submission logic here (e.g., send to server)
+    };
+    const handleSaveNote = () => {
+        //setShowQueryModal(false); // Close the query modal
+        setShowNoteSection(false);
     };
 
     return (
@@ -65,9 +93,30 @@ const SpaceHistory = () => {
                             rows={18}
                             cols={120}
                         />
-                        <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded" onClick={handleCloseInstructions}>Close</button>
+                        <div className="flex justify-between space-x-2">
+                            <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleCloseInstructions}>Close</button>
+                            <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleSendQuery}>Send Query</button>
+                            <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={() => setShowNoteSection(true)}>Add Note</button>
+                        </div>
+                        
                     </div>
                 </div>
+            )}
+            {showQueryModal && (
+                <Query
+                    show={showQueryModal}
+                    onClose={handleCloseQueryModal}
+                    onSubmit={handleQuerySubmit}
+                    email={selectedEmail} // Pass the selected email to the Query component
+                />
+            )}
+              {showNoteSection && (
+                <Note
+                    show={showNoteSection}
+                    onClose={() => setShowNoteSection(false)}
+                    onSave={handleSaveNote}
+                    documentName={documents[selectedDocument].documentName}
+                />
             )}
         </div>
     );

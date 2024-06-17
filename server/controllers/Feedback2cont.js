@@ -7,6 +7,7 @@ exports.createFeedback = async (req, res) => {
     console.log(email, content);
 
     try {
+        
         const user = await User.findOne({ email: email });
 		if (!user) {
 			return res.json({

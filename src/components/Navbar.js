@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from "../assets/Logo.svg"
+import logo1 from "../assets/logo1.png"
 import {Link} from "react-router-dom"
 import {toast} from "react-hot-toast"
 import { useSelector  } from 'react-redux'
@@ -63,7 +63,7 @@ const Navbar = () => {
     <div className='flex justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto'>
 
         <Link to="/"> 
-            <img src={logo} alt="Logo" width={160} height={32} loading="lazy"/>
+            <img src={logo1} alt="Logo" width={160} height={32} loading="lazy"/>
         </Link>
 
         <nav>
@@ -71,9 +71,24 @@ const Navbar = () => {
                 <li>
                     <Link to="/">Home</Link>
                 </li>
-                <li>
-                    <Link to="/">Feedbacks</Link>
-                </li>
+                {
+                    user?.accountType==="Instructor" &&
+                    <Link to="/addDocument">Add Document</Link>
+                }
+                {
+                        user?.accountType === "Student" && (
+                            <li>
+                                <Link to="/mynotes">MyNotes</Link>
+                            </li>
+                        )
+                    }
+                    {
+                        user?.accountType === "Instructor" && (
+                            <li>
+                                <Link to="/myqueries">Queries</Link>
+                            </li>
+                        )
+                    }
                 <li>
                     <Link to="/about">About</Link>
                 </li>
@@ -107,7 +122,7 @@ const Navbar = () => {
                                 <a href="#" className="text-gray-800 hover:text-gray-900 flex items-center">
                                     
                                     <button onClick={handleExploreClick3}>
-                                    <span>Space History</span>
+                                    <span>Past Missions</span>
                                 </button>
                                     <HiArrowRightCircle className="ml-2 text-gray-500 hover:text-gray-700" />
                                 </a>
@@ -118,9 +133,19 @@ const Navbar = () => {
                 )}
             </div>
         </li>
-                <li>
-                    <Link to="/">Quizes</Link>
+
+                {user?.accountType==="Instructor"&&
+                     <li>
+                     <Link to="/addQuestion">Add Quiz</Link>
+                   </li>
+                }
+                {
+                    user?.accountType==="Student" &&
+                    <li>
+                    <Link to="/practice">Exercises</Link>
                 </li>
+                }
+               
             </ul>
         </nav>
 

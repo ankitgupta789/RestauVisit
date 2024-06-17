@@ -2,10 +2,13 @@ const express = require("express");
 const app = express();
 
 const userRoutes = require("./routes/User.js");
-const profileRoutes = require("./routes/Profile");
+const profileRoutes = require("./routes/Prof.js");
 //const paymentRoutes = require("./routes/Payments");
 const courseRoutes = require("./routes/Course");
 const feedbackRoutes=require("./routes/Feedback2.js")
+const queryRoutes=require("./routes/Query.js")
+const noteRoutes=require("./routes/Note.js")
+const questionRoutes=require("./routes/Question.js")
 const chatRouter = require('./routes/chatRoutes/chatRoutes.js');
 const userRouter=require("./routes/UserRoutes/userData.js")
 const messageRoutes = require('./routes/messageRoutes/messageRoutes.js');
@@ -48,6 +51,9 @@ app.use("/api/user",userRouter)
 app.use("/api/v1/feedback", feedbackRoutes);
 app.use("/api/community",chatRouter)
 app.use("/api/message", messageRoutes)
+app.use("/api/v1/query",queryRoutes);
+app.use("/api/v1/note",noteRoutes);
+app.use("/api/v1/question",questionRoutes);
 
 
 

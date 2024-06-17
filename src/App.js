@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
-import Dashboard from "./pages/Dashboard"
+//import Dashboard from "./pages/Dashboard"
 import ForgotPassword from "./pages/ForgotPassword";
 import { useEffect, useState } from 'react'
 import PrivateRoute from "./components/PrivateRoute";
@@ -19,11 +19,13 @@ import ExploreUniverse from "./pages/ExploreUniverse"
 import SpaceHistory from "./pages/SpaceHistory"
 import SolarSystem from "./pages/SolarSystem"
 import MyDoc from "./pages/MyDoc";
-<<<<<<< Updated upstream
-
-=======
+import MyQueries from "./components/MyQueries.js";
 import About from "./pages/About";
->>>>>>> Stashed changes
+import MyNotes from "./pages/MyNotes.js";
+import CreateQuestion from "./pages/CreateQuestion.js";
+
+import Practice from "./pages/Practice.js";
+import Exercise from "./pages/Exercise.js";
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -120,21 +122,50 @@ function App() {
         <Route path="/exploreUniverse" element={user ? <ExploreUniverse/>: <Login/>} />
         <Route path="/solarSystem" element={user ? <SolarSystem/>: <Login/>} />
         <Route path="/spaceHistory" element={user ? <SpaceHistory/>: <Login/>} />
-        <Route path="/mydoc" element={<MyDoc/>} />
+        
         <Route path="/about" element={<About/>} />
        
+        
+
+
         {/* <Route path="/dashboard/my-profile" element={<MyProfile/>} /> */}
-        <Route path="/dashboard" element = {
-          <PrivateRoute>
-              <Dashboard/>
-          </PrivateRoute>
        
-        } />
 
-        <Route path="/dashboard/my-profile" element={ < MyProfile />} /> 
-        <Route path="/dashboard/addDocument" element={ < AddDocument />} /> 
-        <Route path="/community" element={<Chats/>}/>
+        <Route path="/my-profile" element={ user?< MyProfile />:<Login/>}/> 
+        {user?.accountType==='Instructor'
+        
+        &&<Route path="/addDocument" element={user? < AddDocument />:<Login/>}/> 
+        }
+        {user?.accountType==='Instructor'
+        
+        &&<Route path="/myqueries" element={user?<MyQueries/>:<Login/>} />
+        }
+        {user?.accountType==='Instructor'
+        
+        && <Route path ="/addQuestion"  element={<CreateQuestion/>}/>
+        }
+        {user?.accountType==='Instructor'
+        
+        &&<Route path="/mydoc" element={user?<MyDoc/>:<Login/>} />
+        }
+        
 
+
+
+        {user?.accountType==='Student'
+        && <Route path="/mynotes"element={user?<MyNotes/>:<Login/>}/>
+        }
+        {user?.accountType==='Student'
+        &&<Route path ="/practice"  element={<Practice/>}/>
+        }
+        {user?.accountType==='Student'
+        &&<Route path="/exercise" element={<Exercise/>}/>
+        }
+        
+        <Route path="/community" element={user?<Chats/>:<Login/>}/>
+       
+        
+        
         </Routes>
      
     </div>

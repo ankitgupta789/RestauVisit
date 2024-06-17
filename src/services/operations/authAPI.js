@@ -77,7 +77,17 @@ export function signUp(
         if (!response.data.success) {
           throw new Error(response.data.message)
         }
-        toast.success("Sign Up Successful")
+        
+        const response2=await axios.post("http://localhost:4000/api/v1/profile/createProfile",
+      {
+        gender:"",
+        dateOfBirth:"",
+        about:"",
+        contactNumber:"",
+        email,
+        address:""
+      })
+      toast.success("Sign Up Successful")
         navigate("/login")
       } catch (error) {
         console.log("SIGNUP API ERROR............", error)
@@ -160,7 +170,7 @@ export function signUp(
         localStorage.setItem("user", JSON.stringify(response.data.user))
        // const {user} =useSelector((state)=>state.profile );
         
-        navigate("/dashboard")
+        navigate("/")
       }
        catch (error) {
         console.log("LOGIN API ERROR............", error)

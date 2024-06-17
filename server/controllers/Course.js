@@ -1,7 +1,7 @@
 const Course = require("../models/Course");
 
 const User = require("../models/User");
-
+const { toast } = require('react-hot-toast');
 // Function to create a new course
 exports.createCourse = async (req, res) => {
 	try {
@@ -132,4 +132,35 @@ exports.getCourseDetails = async (req, res) => {
             message:error.message,
         });
     }
-}
+};
+exports.checkCourseExistence = async (req, res) => {
+	try {
+	  const { documentName } = req.params;
+      console.log("document name",documentName)
+	  // Check if the course exists with the given document name
+	  const existingCourse = await Course.findOne({ documentName:documentName });
+	  
+	  if (existingCourse) {
+		console.log("document exists")
+		return res.status(200).json({
+		  success: true,
+		  message: "Course exists",
+		  data: existingCourse,
+		});
+	  } else {
+		console.log("document not  exists")
+		//toast.error(`Course with document name '${documentName}' does not exist`);
+		return res.status(200).json({
+		  success: false,
+		  message: `Course with document name '${documentName}' does not exist`,
+		});
+	  }
+	} catch (error) {
+	  console.error(error);
+	  return res.status(500).json({
+		success: false,
+		message: "Failed to check course existence",
+		error: error.message,
+	  });
+	}
+  };

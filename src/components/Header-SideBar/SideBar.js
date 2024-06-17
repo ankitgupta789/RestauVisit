@@ -59,7 +59,7 @@ const SideBar = () => {
       };
 
       const { data } = await axios.get(`http://localhost:4000/api/user?search=${search}`, config);
-      console.log(data);
+      console.log("side bar data is ",data);
       setLoading(false);
       setSearchResult(data);
     } catch (error) {

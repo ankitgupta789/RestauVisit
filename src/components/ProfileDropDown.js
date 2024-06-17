@@ -52,13 +52,26 @@ export default function ProfileDropdown() {
         <AiOutlineCaretDown className="text-sm text-richblack-100" />
       </div>
       {open && (
-        <div onClick={(e) => e.stopPropagation()}  ref = {ref}  className="absolute top-[118%] right-0 z-[1000] divide-y-[1px] divide-richblack-700 overflow-hidden rounded-md border-[1px] border-richblack-700 bg-richblack-800" >
-          <Link to="/dashboard" onClick={() => setOpen(false)}>
+        <div onClick={(e) => e.stopPropagation()}  ref = {ref}  className="absolute top-[118%] right-0 z-[1000] divide-y-[1px] divide-richblack-700 overflow-hidden rounded-md border-[1px] border-richblack-700 bg-richblack-800 w-[150px]" >
+          
+          <Link to="/my-profile" onClick={() => setOpen(false)}>
             <div className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
               <VscDashboard className="text-lg" />
-              Dashboard
+              My Profile
             </div>
           </Link>
+
+          {user?.accountType=='Instructor' &&
+
+            <Link to="/mydoc" onClick={() => setOpen(false)}>
+              <div className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
+                <VscDashboard className="text-lg" />
+                My Documents
+              </div>
+            </Link>
+
+          }
+          
           <div onClick = {() => {dispatch(logout(navigate));  setOpen(false); }}  className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25" >
             <VscSignOut className="text-lg" />
             Logout
