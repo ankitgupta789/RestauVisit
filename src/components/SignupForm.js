@@ -59,7 +59,7 @@ const SignupForm = () => {
             dispatch(setSignupData(finalData))
             // Send OTP to user for verification
             dispatch(sendOtp(formData.email, navigate))
-            navigate("/verifyemail");
+            
             
     }
 

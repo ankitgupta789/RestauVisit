@@ -9,7 +9,10 @@ const {
   createCourse,
   getAllCourses,
   getCourseDetails,
-  checkCourseExistence
+  checkCourseExistence,
+  getUnpublishedCourses,
+  editPublishedCourse,
+  findbycategory
 } = require("../controllers/Course")
 
 
@@ -64,6 +67,7 @@ router.post("/getCourseDetails", getCourseDetails)
 router.post("/createCategory", auth, isAdmin)
 
 router.get("/checkCourseExistence/:documentName",checkCourseExistence)
-
-
+router.get("/getUnpublishedCourses",getUnpublishedCourses);
+router.put("/editPublishedCourse/:courseId", editPublishedCourse);
+router.get("/findbycategory",findbycategory);
 module.exports = router

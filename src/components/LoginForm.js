@@ -26,6 +26,7 @@ const LoginForm = () => {
     function submitHandler(event) {
         event.preventDefault()
     dispatch(login(formData.email, formData.password, navigate))
+    
     }
 
   return (

@@ -1,24 +1,30 @@
 import {toast} from "react-hot-toast"
 import axios from "axios"
 
-export const addDocument = async ({documentName,
-
-whatWeWillLearn,
-category,
-instructions,
-email,
+export const addDocument = async ({title,
+  category,
+  authorName, 
+  content,
+  articleSummary,
+  difficultyLevel,
+  enableComments,
+  email,
  }) => {
     let result = null
     const toastId = toast.loading("Loading...");
     // console.log("Data :",data);
     // console.log("Token :",token);
     try {
+      console.log("kuch hai??",title,category,authorName,content,articleSummary,difficultyLevel,enableComments,email);
         const response= await axios.post("http://localhost:4000/api/v1/course/createCourse",
-        {documentName,
-        whatWeWillLearn,
-        category,
-        instructions,
-        email
+        {title,
+          category,
+          authorName, 
+          content,
+          articleSummary,
+          difficultyLevel,
+          enableComments,
+          email
       })
       console.log("CREATE DOCUMENT API RESPONSE............", response)
   
@@ -72,4 +78,35 @@ export const checkDocumentExistence = async (documentName) => {
     toast.error(error.message);
     return false;
   }
+};
+// Function to get all unpublished courses
+export const getUnpublishedCourses = async () => {
+  let result = null;
+  const toastId = toast.loading("Loading...");
+
+  try {
+    // Make a GET request to fetch unpublished courses
+    const response = await axios.get("http://localhost:4000/api/v1/course/getUnpublishedCourses");
+    
+    // Log the response for debugging
+    console.log("GET UNPUBLISHED COURSES API RESPONSE............", response);
+    
+    // Check if the response is successful
+    if (response.data.success) {
+      toast.success("Unpublished Courses Fetched Successfully");
+      result = response.data.data; // Assuming that the courses are stored in response.data.data
+    } else {
+      toast.error("No unpublished courses found.");
+    }
+  } catch (error) {
+    // Handle errors and show a toast notification
+    console.log("GET UNPUBLISHED COURSES API ERROR............", error);
+    toast.error(error.message);
+  }
+
+  // Dismiss the loading toast
+  toast.dismiss(toastId);
+
+  // Return the result
+  return result;
 };

@@ -23,9 +23,10 @@ import MyQueries from "./components/MyQueries.js";
 import About from "./pages/About";
 import MyNotes from "./pages/MyNotes.js";
 import CreateQuestion from "./pages/CreateQuestion.js";
-
+import Drafts from "./pages/Drafts.js";
 import Practice from "./pages/Practice.js";
 import Exercise from "./pages/Exercise.js";
+import Articles from "./pages/Articles.js";
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -125,8 +126,8 @@ function App() {
         
         <Route path="/about" element={<About/>} />
        
-        
-
+        <Route path="/drafts" element={<Drafts/>}/>
+        <Route path="/articles" element={<Articles/>}/>
 
         {/* <Route path="/dashboard/my-profile" element={<MyProfile/>} /> */}
        

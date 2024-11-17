@@ -72,18 +72,18 @@ const Navbar = () => {
                     <Link to="/">Home</Link>
                 </li>
                 {
-                    user?.accountType==="Instructor" &&
-                    <Link to="/addDocument">Add Document</Link>
+                    user?.accountType==="Instructor" && user?.email!="ankitguptamanheru1@gmail.com"&&
+                    <Link to="/addDocument">Publish Article</Link>
                 }
                 {
-                        user?.accountType === "Student" && (
+                        user?.accountType === "Student"&& user?.email!="ankitguptamanheru1@gmail.com" && (
                             <li>
                                 <Link to="/mynotes">MyNotes</Link>
                             </li>
                         )
                     }
                     {
-                        user?.accountType === "Instructor" && (
+                        user?.accountType === "Instructor"&& user?.email!="ankitguptamanheru1@gmail.com" && (
                             <li>
                                 <Link to="/myqueries">Queries</Link>
                             </li>
@@ -92,13 +92,20 @@ const Navbar = () => {
                 <li>
                     <Link to="/about">About</Link>
                 </li>
+                {
+                    user?.email==="ankitguptamanheru1@gmail.com" &&
+                    (<l1>
+                        <Link to ="/drafts">Drafts</Link>
+                    </l1>)
+                }
+                
                 <li>
                     <Link to="/community">Join Community</Link>
                 </li>
                 <li>
-            <div className="relative" onMouseEnter={handleDocumentationHover} onMouseLeave={handleDocumentationLeave}>
-                <button className="hover:text-gray-900 focus:outline-none">Documentation</button>
-                {showDocumentation && (
+            {/* <div className="relative" onMouseEnter={handleDocumentationHover} onMouseLeave={handleDocumentationLeave}>
+                <button className="hover:text-gray-900 focus:outline-none">Articles</button>
+                {/* {showDocumentation && (
                     <div className="absolute top-4 left-1 w-[250px] bg-white border border-gray-200 rounded-md shadow-md p-4 mt-2 z-10 text-lg">
                         <ul>
                             <li className="py-2 px-4 hover:bg-blue-100 hover:text-white">
@@ -128,10 +135,11 @@ const Navbar = () => {
                                 </a>
                             </li>
                             {/* Add more hardcoded links as needed */}
-                        </ul>
+                        {/* </ul>
                     </div>
-                )}
-            </div>
+                )} */}
+            {/* </div> */}
+            <Link to='/articles'>Articles</Link>
         </li>
 
                 {user?.accountType==="Instructor"&&
@@ -144,7 +152,7 @@ const Navbar = () => {
                     <li>
                     <Link to="/practice">Exercises</Link>
                 </li>
-                }
+                } 
                
             </ul>
         </nav>

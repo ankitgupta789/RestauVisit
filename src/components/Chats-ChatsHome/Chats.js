@@ -7,7 +7,7 @@ import { ChatState } from '../../UserContext.js'
 import SideBar from '../Header-SideBar/SideBar'
 import Navbar from '../Navbar.js'
 import { useToast } from '@chakra-ui/react';
-
+import UserContext from '../../UserContext.js'
 const Chats = () => {
   const [fetchAgain, setFetchAgain] = useState(true);
   const {user}=ChatState()
@@ -34,14 +34,14 @@ const Chats = () => {
           // console.log("Data of chats ",data)
           setChats(data)
       } catch (error) {
-          toast({
-              title: "Error Occured!",
-              description: "Failed to Load the chats",
-              status: "error",
-              duration: 5000,
-              isClosable: true,
-              position: "bottom-left",
-            });
+          // toast({
+          //     title: "Error Occured!",
+          //     description: "Failed to Load the chats",
+          //     status: "error",
+          //     duration: 5000,
+          //     isClosable: true,
+          //     position: "bottom-left",
+          //   });
           
       }
   }
@@ -51,7 +51,7 @@ const Chats = () => {
 
   return (
     <div className='w-full h-full'>
-      
+      <UserContext/>
       {user && <SideBar/>} 
       <Box style={{display:"flex",padding:"10px",width:"100%",justifyContent:"space-between"}}>
         {user && <MyChat  fetchAgain={fetchAgain} />} 
