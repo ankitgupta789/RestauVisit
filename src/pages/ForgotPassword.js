@@ -22,7 +22,7 @@ function ForgotPassword() {
         <div className="spinner"></div>
       ) : (
         <div className="max-w-[500px] p-4 lg:p-8">
-         <h1 className="text-lg font-semibold leading-[1.5rem] text-richblack-5">
+         <h1 className="text-lg font-semibold leading-[1.5rem] text-black">
     {!emailSent ? "Reset your password" : "Check email"}
 </h1>
 <p className="my-4 text-sm leading-[1.25rem] text-richblack-100">

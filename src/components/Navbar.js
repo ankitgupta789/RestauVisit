@@ -63,14 +63,17 @@ const Navbar = () => {
     <div className='flex justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto'>
 
         <Link to="/"> 
-            <img src={logo1} alt="Logo" width={160} height={32} loading="lazy"/>
+            <img src={logo1} alt="Logo" width={160} height={20} loading="lazy"/>
         </Link>
 
         <nav>
             <ul className='text-richblack-100 flex gap-x-6'>
+
+                {(user==null ||  user.accountType=="User") &&
                 <li>
                     <Link to="/">Home</Link>
                 </li>
+                        }  
                 {
                     user?.accountType==="Instructor" && user?.email!="ankitguptamanheru1@gmail.com"&&
                     <Link to="/addDocument">Publish Article</Link>
@@ -89,68 +92,56 @@ const Navbar = () => {
                             </li>
                         )
                     }
+               {(user==null ||  user.accountType=="User") &&
                 <li>
-                    <Link to="/about">About</Link>
+                    <Link to="/search">Search</Link>
                 </li>
-                {
-                    user?.email==="ankitguptamanheru1@gmail.com" &&
-                    (<l1>
-                        <Link to ="/drafts">Drafts</Link>
-                    </l1>)
-                }
+                }  
+                {(user==null ||  user.accountType=="User") &&
+                <li>
+                    <Link to="/about">About_Us</Link>
+                </li>
+                        }  
+               
                 
+                {(user==null ||  user.accountType=="User") &&
                 <li>
-                    <Link to="/community">Join Community</Link>
+                    <Link to="/reviews">Reviews</Link>
                 </li>
+                        }  
+                {(user==null ||  user.accountType=="User") &&
                 <li>
-            {/* <div className="relative" onMouseEnter={handleDocumentationHover} onMouseLeave={handleDocumentationLeave}>
-                <button className="hover:text-gray-900 focus:outline-none">Articles</button>
-                {/* {showDocumentation && (
-                    <div className="absolute top-4 left-1 w-[250px] bg-white border border-gray-200 rounded-md shadow-md p-4 mt-2 z-10 text-lg">
-                        <ul>
-                            <li className="py-2 px-4 hover:bg-blue-100 hover:text-white">
-                                <a href="#" className="text-gray-800 hover:text-gray-900 flex items-center">
-                                <button onClick={handleExploreClick}>
-                                    <span>Explore Universe</span>
-                                </button>
-                                    <HiArrowRightCircle className="ml-10 text-gray-500 hover:text-gray-700" />
-                                </a>
-                            </li>
-                            <li className="py-2 px-4 hover:bg-blue-100 hover:text-white">
-                                <a href="#" className="text-gray-800 hover:text-gray-900 flex items-center">
-                                <button onClick={handleExploreClick2}>
-                                <span>Discover Solar System</span>
-                                </button>
-                                    
-                                    <HiArrowRightCircle className="ml-2 text-gray-500 hover:text-gray-700" />
-                                </a>
-                            </li>
-                            <li className="py-2 px-4 hover:bg-blue-100 hover:text-white">
-                                <a href="#" className="text-gray-800 hover:text-gray-900 flex items-center">
-                                    
-                                    <button onClick={handleExploreClick3}>
-                                    <span>Past Missions</span>
-                                </button>
-                                    <HiArrowRightCircle className="ml-2 text-gray-500 hover:text-gray-700" />
-                                </a>
-                            </li>
-                            {/* Add more hardcoded links as needed */}
-                        {/* </ul>
-                    </div>
-                )} */}
-            {/* </div> */}
-            <Link to='/articles'>Articles</Link>
-        </li>
+                    <Link to="/reserveSeat">Reserve_Seat</Link>
+                </li>
+                        }  
 
-                {user?.accountType==="Instructor"&&
+                {user?.accountType==="Restaurant"&&
                      <li>
-                     <Link to="/addQuestion">Add Quiz</Link>
+                     <Link to="/photos">Photos</Link>
                    </li>
                 }
                 {
-                    user?.accountType==="Student" &&
+                    user?.accountType==="Restaurant" &&
                     <li>
-                    <Link to="/practice">Exercises</Link>
+                    <Link to="/menu">Menu</Link>
+                </li>
+                } 
+                {
+                    user?.accountType==="Restaurant" &&
+                    <li>
+                    <Link to="/myreviews">My_Reviews</Link>
+                </li>
+                } 
+                {
+                    user?.accountType==="Restaurant" &&
+                    <li>
+                    <Link to="/reservations">Reservations</Link>
+                </li>
+                } 
+                 {
+                    user&&
+                    <li>
+                    <Link to="/notifications">Notification</Link>
                 </li>
                 } 
                

@@ -14,7 +14,7 @@ import MyProfile from "./pages/MyProfile";
 import AddDocument from "./pages/AddDocument"
 import {addfeedback} from "./services/operations/feedback"
 import { useSelector } from "react-redux";
-import Chats from './components/Chats-ChatsHome/Chats.js'
+import Reviews from './components/Reviews.js'
 import ExploreUniverse from "./pages/ExploreUniverse"
 import SpaceHistory from "./pages/SpaceHistory"
 import SolarSystem from "./pages/SolarSystem"
@@ -26,7 +26,13 @@ import CreateQuestion from "./pages/CreateQuestion.js";
 import Drafts from "./pages/Drafts.js";
 import Practice from "./pages/Practice.js";
 import Exercise from "./pages/Exercise.js";
-import Articles from "./pages/Articles.js";
+import Search from "./components/Search.js";
+import Reserve from "./components/Reserve.js";
+import Photos from "./components/Photos.js";
+import Menu from "./components/Menu.js";
+import MyReviews from "./components/MyReviews.js";
+import Reservations from "./components/Reservations.js"
+import Notifications from "./components/Notifications.js"
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -63,7 +69,7 @@ function App() {
   };
 
   return (
-    <div className="w-screen h-screen bg-richblack-900 flex flex-col">
+    <div className="w-screen h-screen bg-brown-5 flex flex-col">
       <Navbar className="relative"/>
       
       {user && <div className="absolute bottom-20 right-10 z-20">
@@ -127,16 +133,36 @@ function App() {
         <Route path="/about" element={<About/>} />
        
         <Route path="/drafts" element={<Drafts/>}/>
-        <Route path="/articles" element={<Articles/>}/>
+        <Route path="/search" element={<Search/>}/>
+        <Route path="/reviews" element={<Reviews/>}/>
+        <Route 
+            path="/reserveSeat" 
+            element={user && user.accountType === "User" ? <Reserve /> : <Login />} 
+        />
 
+ 
+        <Route 
+            path="/photos" 
+            element={user && user.accountType === "Restaurant" ? <Photos /> : <Login />} 
+        />
+        <Route 
+            path="/menu" 
+            element={user && user.accountType === "Restaurant" ? <Menu /> : <Login />} 
+        />
+        <Route 
+            path="/myreviews" 
+            element={user && user.accountType === "Restaurant" ? <MyReviews /> : <Login />} 
+        />
+         <Route 
+            path="/reservations" 
+            element={user && user.accountType === "Restaurant" ? <Reservations /> : <Login />} 
+        />
+        <Route path="/notifications" element={user ? <Notifications/>: <Login/>} />
         {/* <Route path="/dashboard/my-profile" element={<MyProfile/>} /> */}
        
 
         <Route path="/my-profile" element={ user?< MyProfile />:<Login/>}/> 
-        {user?.accountType==='Instructor'
         
-        &&<Route path="/addDocument" element={user? < AddDocument />:<Login/>}/> 
-        }
         {user?.accountType==='Instructor'
         
         &&<Route path="/myqueries" element={user?<MyQueries/>:<Login/>} />
@@ -163,7 +189,7 @@ function App() {
         &&<Route path="/exercise" element={<Exercise/>}/>
         }
         
-        <Route path="/community" element={user?<Chats/>:<Login/>}/>
+        
        
         
         
