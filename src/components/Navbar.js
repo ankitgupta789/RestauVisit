@@ -60,7 +60,8 @@ const Navbar = () => {
     // let setIsLoggedIn = props.setIsLoggedIn;
 
   return (
-    <div className='flex justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto'>
+    <div className='items-center bg-blue-50'>
+    <div className='flex justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto '>
 
         <Link to="/"> 
             <img src={logo1} alt="Logo" width={160} height={20} loading="lazy"/>
@@ -250,6 +251,7 @@ const Navbar = () => {
 
 
       
+    </div>
     </div>
   )
 }

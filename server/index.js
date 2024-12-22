@@ -20,6 +20,7 @@ const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 const commentRoutes=require("./routes/Comments.js");
 const ratingRoutes=require("./routes/Rating.js");
+const photosRoutes=require("./routes/Photos.js");
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 
@@ -57,6 +58,7 @@ app.use("/api/v1/note",noteRoutes);
 app.use("/api/v1/question",questionRoutes);
 app.use("/api/v1/comment",commentRoutes);
 app.use('/api/v1/rating', ratingRoutes);
+app.use('/api/v1/photos', photosRoutes);
 
 //def route
 
