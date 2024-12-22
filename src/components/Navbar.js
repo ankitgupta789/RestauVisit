@@ -67,7 +67,7 @@ const Navbar = () => {
         </Link>
 
         <nav>
-            <ul className='text-richblack-100 flex gap-x-6'>
+            <ul className='text-black flex gap-x-6'>
 
                 {(user==null ||  user.accountType=="User") &&
                 <li>

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getProfile, updateProfile } from "../services/operations/profile";
+import { states, cities } from "../dummyData/addressData";  // Assuming this is where your data comes from
 
 const MyProfile = () => {
   const { user } = useSelector((state) => state.profile);
@@ -18,9 +19,13 @@ const MyProfile = () => {
   const [formData, setFormData] = useState({
     gender: "",
     contactNumber: "",
-    address: "",
+    address: "",  // Add field for generalized address
     about: "",
+    state: "",   // Add state to form data
+    city: "",    // Add city to form data
   });
+
+  const [filteredCities, setFilteredCities] = useState([]);  // State for filtered cities based on selected state
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -30,8 +35,10 @@ const MyProfile = () => {
         setFormData({
           gender: result?.gender || "",
           contactNumber: result?.contactNumber || "",
-          address: result?.address || "",
+          address: result?.address || "",  // Update address
           about: result?.about || "",
+          state: result?.state || "",   // Update state
+          city: result?.city || "",     // Update city
         });
         setLoading(false);
       } catch (err) {
@@ -44,6 +51,13 @@ const MyProfile = () => {
       fetchProfile();
     }
   }, [user.email]);
+
+  // Update filtered cities when the state changes
+  useEffect(() => {
+    if (formData.state) {
+      setFilteredCities(cities[formData.state] || []); // Set cities based on the selected state
+    }
+  }, [formData.state]);
 
   const handleChange = (e) => {
     setFormData({
@@ -186,12 +200,9 @@ const MyProfile = () => {
             onSubmit={handleSubmit}
             className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6"
           >
-            {/* Form fields */}
+            {/* Gender Field */}
             <div>
-              <label
-                htmlFor="gender"
-                className="mb-2 text-sm text-black"
-              >
+              <label htmlFor="gender" className="mb-2 text-sm text-black">
                 Gender
               </label>
               <input
@@ -203,11 +214,10 @@ const MyProfile = () => {
                 className="text-sm font-medium p-2 border border-black rounded-md w-full"
               />
             </div>
+
+            {/* Phone Number Field */}
             <div>
-              <label
-                htmlFor="contactNumber"
-                className="mb-2 text-sm text-black"
-              >
+              <label htmlFor="contactNumber" className="mb-2 text-sm text-black">
                 Phone Number
               </label>
               <input
@@ -219,11 +229,60 @@ const MyProfile = () => {
                 className="text-sm font-medium p-2 border border-black rounded-md w-full"
               />
             </div>
-            <div className="col-span-2">
-              <label
-                htmlFor="address"
-                className="mb-2 text-sm text-black"
+
+            {/* State Dropdown */
+            user.accountType=="Restaurant" &&
+           ( <div>
+              <label htmlFor="state" className="mb-2 text-sm text-black">
+                State
+              </label>
+              <select
+                id="state"
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                className="text-sm font-medium p-2 border border-gray-300 rounded-md w-full mt-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
+                <option value="">Select State</option>
+                {states.map((state) => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
+              </select>
+            </div>
+  )
+}
+            
+            {/* City Dropdown */
+            user.accountType=="Restaurant" && 
+            (
+              <div>
+              <label htmlFor="city" className="mb-2 text-sm text-black">
+                City
+              </label>
+              <select
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                className="text-sm font-medium p-2 border border-black rounded-md w-full"
+                disabled={!formData.state}
+              >
+                <option value="">Select City</option>
+                {filteredCities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
+            </div>
+            )}
+            
+
+            {/* Generalized Address Field */}
+            <div>
+              <label htmlFor="address" className="mb-2 text-sm text-black">
                 Address
               </label>
               <input
@@ -235,11 +294,10 @@ const MyProfile = () => {
                 className="text-sm font-medium p-2 border border-black rounded-md w-full"
               />
             </div>
+
+            {/* About Field */}
             <div className="col-span-2">
-              <label
-                htmlFor="about"
-                className="mb-2 text-sm text-black"
-              >
+              <label htmlFor="about" className="mb-2 text-sm text-black">
                 About
               </label>
               <textarea
@@ -250,6 +308,7 @@ const MyProfile = () => {
                 className="text-sm font-medium p-2 border border-black rounded-md w-full h-20 resize-none"
               />
             </div>
+
             <div className="col-span-2 flex justify-end">
               <button
                 type="submit"

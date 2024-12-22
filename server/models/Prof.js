@@ -28,6 +28,14 @@ const profileSchema = new mongoose.Schema({
     type: String,
     default: "", // Set a default value or leave it empty if no image is provided
   },
+  city: { // New field for city
+    type: String,
+    trim: true, // Ensure no extra spaces
+  },
+  state: { // New field for state
+    type: String,
+    trim: true, // Ensure no extra spaces
+  }
 });
 
 // Export the Profile model
