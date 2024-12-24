@@ -36,3 +36,40 @@ export const updateProfile = async (email, updates) => {
     throw error; // Propagate error to caller
   }
 };
+
+export const searchRestaurants = async (name) => {
+  let result = null;
+  // const toastId = toast.loading("Searching...");
+
+  try {
+    // console.log("Searching for restaurants with name:", name);
+    const response = await axios.get("http://localhost:4000/api/v1/profile/searchRestaurants", {
+      params: { name },
+    });
+    result = response.data;
+    
+    // toast.dismiss(toastId);
+    return result;
+  } catch (error) {
+    console.error("Error searching restaurants:", error.message);
+    toast.error(error.message);
+  }
+};
+export const searchRestaurantsByCity = async (city) => {
+  let result = null;
+  // const toastId = toast.loading("Searching...");
+  console.log(city,"recieved city or not");
+  try {
+  
+    const response = await axios.get("http://localhost:4000/api/v1/profile/searchRestaurantsCity", {
+      params: { city },
+    });
+    result = response.data;
+    
+    // toast.dismiss(toastId);
+    return result;
+  } catch (error) {
+    console.error("Error searching restaurants:", error.message);
+    toast.error(error.message);
+  }
+};

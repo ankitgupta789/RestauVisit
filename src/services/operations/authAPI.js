@@ -80,6 +80,7 @@ export function signUp(
         
         const response2=await axios.post("http://localhost:4000/api/v1/profile/createProfile",
       {
+        name:"",
         gender:"",
         dateOfBirth:"",
         about:"",

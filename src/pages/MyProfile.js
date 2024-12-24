@@ -17,12 +17,15 @@ const MyProfile = () => {
   const [loadingImage, setLoadingImage] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);  // State for save loading
   const [formData, setFormData] = useState({
+    firstName: "",    // Add firstName to formData
+    lastName: "",     // Add lastName to formData
     gender: "",
     contactNumber: "",
-    address: "",  // Add field for generalized address
+    address: "",      // Add field for generalized address
     about: "",
-    state: "",   // Add state to form data
-    city: "",    // Add city to form data
+    state: "",        // Add state to form data
+    city: "",         // Add city to form data
+    name: "",  // Add restaurantName to formData
   });
 
   const [filteredCities, setFilteredCities] = useState([]);  // State for filtered cities based on selected state
@@ -33,12 +36,15 @@ const MyProfile = () => {
         const result = await getProfile(user.email);
         setProfile(result);
         setFormData({
+          firstName: result?.firstName || "", // Update firstName
+          lastName: result?.lastName || "",   // Update lastName
           gender: result?.gender || "",
           contactNumber: result?.contactNumber || "",
           address: result?.address || "",  // Update address
           about: result?.about || "",
           state: result?.state || "",   // Update state
           city: result?.city || "",     // Update city
+          name: result?.name || "", // Update restaurantName
         });
         setLoading(false);
       } catch (err) {
@@ -111,7 +117,7 @@ const MyProfile = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 h-screen overflow-auto">
+    <div className="container mx-auto p-4 h-screen overflow-auto max-h-[11/12]">
       <div className="header mb-6">
         <h1 className="text-3xl font-medium text-black">My Profile</h1>
       </div>
@@ -200,6 +206,52 @@ const MyProfile = () => {
             onSubmit={handleSubmit}
             className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6"
           >
+            {/* Restaurant Name Field */
+            user.accountType=="Restaurant"&&
+            <div>
+              <label htmlFor="name" className="mb-2 text-sm text-black">
+                Restaurant Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="text-sm font-medium p-2 border border-black rounded-md w-full"
+              />
+            </div>
+            }
+            {/* First Name Field */}
+            <div>
+              <label htmlFor="firstName" className="mb-2 text-sm text-black">
+                First Name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="text-sm font-medium p-2 border border-black rounded-md w-full"
+              />
+            </div>
+
+            {/* Last Name Field */}
+            <div>
+              <label htmlFor="lastName" className="mb-2 text-sm text-black">
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="text-sm font-medium p-2 border border-black rounded-md w-full"
+              />
+            </div>
+
             {/* Gender Field */}
             <div>
               <label htmlFor="gender" className="mb-2 text-sm text-black">
@@ -215,10 +267,10 @@ const MyProfile = () => {
               />
             </div>
 
-            {/* Phone Number Field */}
+            {/* Contact Number Field */}
             <div>
               <label htmlFor="contactNumber" className="mb-2 text-sm text-black">
-                Phone Number
+                Contact Number
               </label>
               <input
                 type="text"
@@ -230,57 +282,7 @@ const MyProfile = () => {
               />
             </div>
 
-            {/* State Dropdown */
-            user.accountType=="Restaurant" &&
-           ( <div>
-              <label htmlFor="state" className="mb-2 text-sm text-black">
-                State
-              </label>
-              <select
-                id="state"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                className="text-sm font-medium p-2 border border-gray-300 rounded-md w-full mt-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select State</option>
-                {states.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </select>
-            </div>
-  )
-}
-            
-            {/* City Dropdown */
-            user.accountType=="Restaurant" && 
-            (
-              <div>
-              <label htmlFor="city" className="mb-2 text-sm text-black">
-                City
-              </label>
-              <select
-                id="city"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                className="text-sm font-medium p-2 border border-black rounded-md w-full"
-                disabled={!formData.state}
-              >
-                <option value="">Select City</option>
-                {filteredCities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-            </div>
-            )}
-            
-
-            {/* Generalized Address Field */}
+            {/* Address Field */}
             <div>
               <label htmlFor="address" className="mb-2 text-sm text-black">
                 Address
@@ -295,6 +297,49 @@ const MyProfile = () => {
               />
             </div>
 
+            {/* State and City Selection */}
+            <div className="col-span-2 flex gap-x-6">
+              <div className="w-full">
+                <label htmlFor="state" className="mb-2 text-sm text-black">
+                  State
+                </label>
+                <select
+                  id="state"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  className="text-sm font-medium p-2 border border-black rounded-md w-full"
+                >
+                  <option value="">Select State</option>
+                  {states.map((state) => (
+                    <option key={state} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="w-full">
+                <label htmlFor="city" className="mb-2 text-sm text-black">
+                  City
+                </label>
+                <select
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  className="text-sm font-medium p-2 border border-black rounded-md w-full"
+                >
+                  <option value="">Select City</option>
+                  {filteredCities.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             {/* About Field */}
             <div className="col-span-2">
               <label htmlFor="about" className="mb-2 text-sm text-black">
@@ -305,39 +350,17 @@ const MyProfile = () => {
                 name="about"
                 value={formData.about}
                 onChange={handleChange}
-                className="text-sm font-medium p-2 border border-black rounded-md w-full h-20 resize-none"
+                className="text-sm font-medium p-2 border border-black rounded-md w-full"
               />
             </div>
 
             <div className="col-span-2 flex justify-end">
               <button
                 type="submit"
-                className="bg-blue-500 text-black px-4 py-2 rounded-md hover:bg-blue-600"
+                disabled={loadingSave}
+                className={`px-4 py-2 text-white bg-blue-50 rounded-md ${loadingSave ? "opacity-50 cursor-not-allowed" : ""}`}
               >
-                {loadingSave ? (
-                  <svg
-                    className="w-6 h-6 text-white animate-spin"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 100 8v4a8 8 0 01-8-8z"
-                    ></path>
-                  </svg>
-                ) : (
-                  "Save Changes"
-                )}
+                {loadingSave ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </form>

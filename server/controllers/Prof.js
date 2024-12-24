@@ -3,7 +3,7 @@ const Prof = require("../models/Prof")
 
 
 exports.createProfile = async (req, res) => {
-    const { gender, dateOfBirth, about, contactNumber, email, address } = req.body;
+    const {name, gender, dateOfBirth, about, contactNumber, email, address } = req.body;
     
 
     try {
@@ -12,7 +12,7 @@ exports.createProfile = async (req, res) => {
 		console.log("email is,",email);
 		console.log("am i called or not");
         const newProfile = await Prof.create({
-			gender, dateOfBirth, about, contactNumber, email, address
+			name,gender, dateOfBirth, about, contactNumber, email, address
         });
         
         
@@ -83,4 +83,38 @@ exports.updateProfile = async (req, res) => {
     console.error('Error updating profile:', error.message);
     res.status(500).json({ error: 'Server error' });
   }
+};
+exports.searchRestaurants = async (req, res) => {
+    const { name } = req.query;
+
+    try {
+        if (!name) {
+            return res.status(400).json({ error: "Name parameter is required." });
+        }
+
+        const results = await Prof.find({
+            name: { $regex: `^${name}`, $options: "i" },
+        });
+
+        return res.status(200).json(results);
+    } catch (error) {
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+exports.searchRestaurantsCity = async (req, res) => {
+    const { city } = req.query;
+
+    try {
+        if (!city) {
+            return res.status(400).json({ error: "city parameter is required." });
+        }
+
+        const results = await Prof.find({
+            city: { $regex: `^${city}`, $options: "i" },
+        });
+
+        return res.status(200).json(results);
+    } catch (error) {
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
 };

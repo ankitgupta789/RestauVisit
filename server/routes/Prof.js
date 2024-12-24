@@ -4,7 +4,9 @@ const { auth } = require("../middlewares/auth")
 const {
   createProfile,
   getProfileByEmail,
-  updateProfile
+  updateProfile,
+  searchRestaurants,
+  searchRestaurantsCity
 } = require("../controllers/Prof")
 
 // ********************************************************************************************************
@@ -15,4 +17,6 @@ const {
 router.post("/createProfile",createProfile)
 router.get("/getProfileByEmail",getProfileByEmail)
 router.put('/updateProfile/:email', updateProfile);
+router.get("/searchRestaurants", searchRestaurants);
+router.get("/searchRestaurantsCity", searchRestaurantsCity);
 module.exports = router

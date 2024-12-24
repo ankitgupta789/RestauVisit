@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 // Define the Profile schema
 const profileSchema = new mongoose.Schema({
+  name:{
+    type:String,
+  },
   gender: {
     type: String,
   },
