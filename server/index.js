@@ -22,6 +22,7 @@ const commentRoutes=require("./routes/Comments.js");
 const ratingRoutes=require("./routes/Rating.js");
 const photosRoutes=require("./routes/Photos.js");
 const menuRoutes=require("./routes/Menu.js");
+const reviewRoutes=require("./routes/Review.js");
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 
@@ -61,6 +62,7 @@ app.use("/api/v1/comment",commentRoutes);
 app.use('/api/v1/rating', ratingRoutes);
 app.use('/api/v1/photos', photosRoutes);
 app.use('/api/v1/menu', menuRoutes);
+app.use('/api/v1/review', reviewRoutes);
 //def route
 
 app.get("/", (req, res) => {

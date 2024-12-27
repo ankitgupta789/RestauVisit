@@ -13,5 +13,6 @@ router.put('/editItem/:id', menuItemController.editItem);
 
 // Delete a menu item by ID
 router.delete('/deleteItem/:id', menuItemController.deleteItem);
+router.get("/search/:email", menuItemController.searchMenuItem);
 
 module.exports = router;

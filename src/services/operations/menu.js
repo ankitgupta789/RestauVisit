@@ -55,8 +55,6 @@ export const addItem = async (user, name, description, price, category, image_ur
 // Function to edit an existing menu item by ID
 export const editItem = async (user, id, updatedData) => {
   try {
-    // console.log(`Editing menu item with ID: ${id}`);
-    // console.log(user,id,updatedData);
     console.log(updatedData,"data to be updated");
     const response = await axios.put(
       `http://localhost:4000/api/v1/menu/editItem/${id}`,
@@ -94,3 +92,23 @@ export const deleteItem = async (user, id) => {
     return null; // Return null if there's an error
   }
 };
+export const searchMenuItems = async (email, query) => {
+    try {
+      console.log(`Searching menu items for restaurant email: ${email} with query: ${query}`);
+      
+      const response = await axios.get(
+        `http://localhost:4000/api/v1/menu/search/${email}?query=${query}`
+      );
+  
+      if (response.data && response.data.length > 0) {
+        console.log("Search results:", response.data);
+        return response.data; // Return the search results
+      } else {
+        console.log("No menu items found for the given query.");
+        return []; // Return an empty array if no items are found
+      }
+    } catch (error) {
+      console.error("Error searching menu items:", error);
+      return []; // Return an empty array in case of an error
+    }
+  };

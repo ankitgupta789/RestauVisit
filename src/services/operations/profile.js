@@ -5,7 +5,7 @@ import axios from "axios";
 export const getProfile = async (email) => {
   let result = null;
  // console.log(email);
-  const toastId = toast.loading("Loading...");
+  // const toastId = toast.loading("Loading...");
 
   try {
     console.log(" here email is",email);
@@ -16,8 +16,8 @@ export const getProfile = async (email) => {
    // console.log("response is ",response);
       result = response.data.data;
      // console.log("result fetch hua bhi hai ya nhi",result);
-      toast.success("Profile is ready");
-      toast.dismiss(toastId);
+      // toast.success("Profile is ready");
+      // toast.dismiss(toastId);
       return result;
   } catch (error) {
       console.log("GET PRofile API ERROR............", error);

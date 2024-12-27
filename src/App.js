@@ -33,6 +33,7 @@ import Menu from "./components/Menu.js";
 import MyReviews from "./components/MyReviews.js";
 import Reservations from "./components/Reservations.js"
 import Notifications from "./components/Notifications.js"
+import SearchedRestaurant from "./components/SearchedRestaurant.js";
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -139,7 +140,10 @@ function App() {
             path="/reserveSeat" 
             element={user && user.accountType === "User" ? <Reserve /> : <Login />} 
         />
-
+        <Route 
+            path="/searchedRestaurant" 
+            element={user && user.accountType === "User" ? <SearchedRestaurant /> : <Login />} 
+        />
  
         <Route 
             path="/photos" 

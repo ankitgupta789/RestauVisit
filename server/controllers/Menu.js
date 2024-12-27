@@ -133,11 +133,52 @@ const deleteItem = async (req, res) => {
       res.status(500).json({ message: "Error deleting menu item", error });
     }
   };
+  const searchMenuItem = async (req, res) => {
+    try {
+      const { email } = req.params;
+      const { query } = req.query;
+  
+      if (!email) {
+        return res.status(400).json({ message: "Restaurant email is required." });
+      }
+  
+      if (!query) {
+        return res.status(400).json({ message: "Search query is required." });
+      }
+  
+      // Split the query into individual words
+      const queryWords = query.split(" ").filter((word) => word.trim() !== "");
+  
+      // Create a search condition for each word
+      const searchConditions = queryWords.map((word) => ({
+        $or: [
+          { name: { $regex: word, $options: "i" } },
+          { category: { $regex: word, $options: "i" } },
+          { description: { $regex: word, $options: "i" } }
+        ]
+      }));
+  
+      // Perform the search
+      const menuItems = await MenuItem.find({
+        restaurant_email: email,
+        $and: searchConditions
+      });
+  
+      if (menuItems.length === 0) {
+        return res.status(404).json({ message: "No menu items found matching the query." });
+      }
+  
+      res.status(200).json(menuItems);
+    } catch (error) {
+      res.status(500).json({ message: "Error searching menu items", error });
+    }
+  };
   
 
 module.exports = {
     getAllItems,
   addItem,
   editItem,
-  deleteItem
+  deleteItem,
+  searchMenuItem
 };

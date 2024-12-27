@@ -217,7 +217,7 @@ const Menu = () => {
             <img
               src={item.image_url}
               alt={item.name}
-              className="w-60 h-45 object-cover mb-4 rounded-lg"
+              className="w-60 h-35 object-cover mb-4 rounded-lg"
             />
             {/* Availability Badge */}
             <span

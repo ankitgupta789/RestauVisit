@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { searchRestaurants, searchRestaurantsByCity } from "../services/operations/profile";
+import { searchRestaurants, searchRestaurantsByCity} from "../services/operations/profile";
 import backgroundImage from "../assets/background.jpeg"; // Import the image
 import backgroundImage2 from "../assets/background2.jpeg";
+import { useNavigate } from "react-router-dom"; // For navigation to new pages
+
 const SearchBar = () => {
   const [query, setQuery] = useState(""); // User input for restaurant name
   const [restaurantResults, setRestaurantResults] = useState([]); // Search results for restaurants by name
@@ -11,6 +13,7 @@ const SearchBar = () => {
   const [sliderOpen, setSliderOpen] = useState(false); // State to control the slider visibility
 
   const sliderRef = useRef(null); // Reference to the slider element
+  const navigate = useNavigate(); // Navigation function
 
   // Handle search for restaurant name
   const handleRestaurantSearch = (e) => {
@@ -61,6 +64,11 @@ const SearchBar = () => {
     }
   };
 
+  const handleRestaurantClick = (email) => {
+    navigate("/searchedRestaurant", {
+      state: { email: email }, // Pass the email via state
+    });
+  };
   useEffect(() => {
     // Add event listener for detecting clicks outside the slider
     if (sliderOpen) {
@@ -124,14 +132,13 @@ const SearchBar = () => {
           {restaurantResults.length > 0 ? (
             <ul className="max-h-60 overflow-y-auto">
               {restaurantResults.map((restaurant) => (
-                <li
-                  key={restaurant._id}
-                  className="p-3 cursor-pointer hover:bg-gray-100 transition duration-300"
-                >
-                  <span className="font-semibold">{restaurant.name}</span> -{" "}
-                  <span className="text-gray-500">
-                    {restaurant.city}, {restaurant.state}
-                  </span>
+                <li key={restaurant._id} className="p-3">
+                  <button
+                    onClick={() => handleRestaurantClick(restaurant.email)}
+                    className="w-full text-left font-semibold text-blue-600 hover:underline"
+                  >
+                    {restaurant.name} - {restaurant.city}, {restaurant.state}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -174,14 +181,13 @@ const SearchBar = () => {
           {cityResults.length > 0 ? (
             <ul className="max-h-60 overflow-y-auto bg-white">
               {cityResults.map((restaurant) => (
-                <li
-                  key={restaurant._id}
-                  className="p-3 cursor-pointer hover:bg-gray-100 transition duration-300"
-                >
-                  <span className="font-semibold">{restaurant.name}</span> -{" "}
-                  <span className="text-gray-500">
-                    {restaurant.city}, {restaurant.state}
-                  </span>
+                <li key={restaurant._id} className="p-3">
+                  <button
+                    onClick={() => handleRestaurantClick(restaurant._id)}
+                    className="w-full text-left font-semibold text-blue-600 hover:underline"
+                  >
+                    {restaurant.name} - {restaurant.city}, {restaurant.state}
+                  </button>
                 </li>
               ))}
             </ul>
