@@ -38,6 +38,10 @@ const profileSchema = new mongoose.Schema({
   state: { // New field for state
     type: String,
     trim: true, // Ensure no extra spaces
+  },
+  upiId: { // New field for state
+    type: String,
+    trim: true, // Ensure no extra spaces
   }
 });
 

@@ -5,6 +5,7 @@ import { getAllImages } from "../services/operations/photos"; // Importing the f
 import { searchMenuItems, getAllItems } from "../services/operations/menu"; // Function to query menu items
 import { useSelector } from "react-redux";
 import { addReview,getAllReviews,editReview,deleteReview } from "../services/operations/Review";
+import { addToCart } from "../services/operations/cart";
 const SearchedRestaurant = () => {
   const location = useLocation();
   const { email } = location.state || {};
@@ -316,7 +317,21 @@ const SearchedRestaurant = () => {
     setMenuOpen(null); // Close the menu
     fetchAllReviews();
   };
- 
+ //clicking the Add Cart button
+  const handleClickCart = async (itemId) => {
+    try {
+      // Assuming you have the user's ID stored somewhere (e.g., in local storage or context)
+      const userId = user._id; // Replace with your actual user ID fetching logic
+  
+      // Call the addToCart function
+      await addToCart(userId, itemId);
+  
+      // Optionally, update the UI or show a success message
+      console.log("Item added to cart!");
+    } catch (error) {
+      console.error("Error in handleClickCart:", error);
+    }
+  };
   
 
   return (
@@ -414,13 +429,20 @@ const SearchedRestaurant = () => {
     <>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {currentItems.map((item, index) => (
-          <div key={index} className="bg-white shadow-lg rounded-lg p-4">
+          <div key={index} className="relative bg-white shadow-lg rounded-lg p-4">
             {/* Menu Item Image */}
             <img
               src={`${item.image_url}?auto=format&fit=crop`}
               alt={item.name}
               className="w-full h-40 object-cover rounded-lg"
             />
+            <span
+              className={`absolute top-2 left-2 text-sm font-bold px-3 py-1 rounded-lg ${
+                item.availability ? "bg-caribbeangreen-100 text-white" : "bg-pink-200 text-white"
+              }`}
+            >
+              {item.availability ? "Available" : "Unavailable"}
+            </span>
             <h3 className="text-xl font-semibold text-gray-800 mt-2">
               {item.name}
             </h3>
@@ -428,6 +450,16 @@ const SearchedRestaurant = () => {
             <p className="text-gray-800 font-semibold mt-2">
               ${item.price}
             </p>
+            
+            {/* Add to Cart Button */}
+            {item.availability && (
+              <button
+                className="mt-4 w-full py-2 bg-caribbeangreen-500 text-white font-semibold rounded-lg hover:bg-caribbeangreen-600"
+                onClick={() => handleClickCart(item._id)} // Call the addToCart function
+              >
+                Add to Cart
+              </button>
+            )}
           </div>
         ))}
       </div>
@@ -461,6 +493,7 @@ const SearchedRestaurant = () => {
     <p className="text-gray-600">No menu items found.</p>
   )}
 </div>
+
 
 
         {/* Search Section */}

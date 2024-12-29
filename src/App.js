@@ -34,6 +34,7 @@ import MyReviews from "./components/MyReviews.js";
 import Reservations from "./components/Reservations.js"
 import Notifications from "./components/Notifications.js"
 import SearchedRestaurant from "./components/SearchedRestaurant.js";
+import Cart from "./pages/Cart.js";
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -122,6 +123,7 @@ function App() {
       <Routes>
 
         <Route path="/" element= {<Home/>} />
+        <Route path="/cart" element={<Cart/>} />
         <Route path="/login" element = {<Login />} />
         <Route path="/signup" element={<Signup  />} />
         <Route path="/forgotpassword" element={<ForgotPassword/>} />
@@ -132,7 +134,7 @@ function App() {
         <Route path="/spaceHistory" element={user ? <SpaceHistory/>: <Login/>} />
         
         <Route path="/about" element={<About/>} />
-       
+        
         <Route path="/drafts" element={<Drafts/>}/>
         <Route path="/search" element={<Search/>}/>
         <Route path="/reviews" element={<Reviews/>}/>

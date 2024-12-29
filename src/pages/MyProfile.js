@@ -11,7 +11,7 @@ const MyProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-
+  const [error, setError] = useState('');
   const [prof, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -25,7 +25,8 @@ const MyProfile = () => {
     about: "",
     state: "",        // Add state to form data
     city: "",         // Add city to form data
-    name: "",  // Add restaurantName to formData
+    name: "",
+    upiId: '',  // Add restaurantName to formData
   });
 
   const [filteredCities, setFilteredCities] = useState([]);  // State for filtered cities based on selected state
@@ -45,6 +46,7 @@ const MyProfile = () => {
           state: result?.state || "",   // Update state
           city: result?.city || "",     // Update city
           name: result?.name || "", // Update restaurantName
+          upiId: result?.upiId || "",
         });
         setLoading(false);
       } catch (err) {
@@ -71,8 +73,15 @@ const MyProfile = () => {
       [e.target.name]: e.target.value,
     });
   };
-
+  const validateUPI = (upi) => {
+    const upiRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+$/; // Simple UPI format validation
+    return upiRegex.test(upi);
+  };
   const handleSubmit = async (e) => {
+    if (!validateUPI(formData.upiId)) {
+      setError('Please enter a valid UPI ID');
+      return;
+    }
     e.preventDefault();
     setLoadingSave(true); // Set loading to true during save
     try {
@@ -339,7 +348,17 @@ const MyProfile = () => {
                 </select>
               </div>
             </div>
-
+            <div>
+        <label>UPI ID:</label>
+        <input
+          type="text"
+          name="upiId"
+          value={formData.upiId}
+          onChange={handleChange}
+          required
+        />
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+      </div>
             {/* About Field */}
             <div className="col-span-2">
               <label htmlFor="about" className="mb-2 text-sm text-black">

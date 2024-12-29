@@ -193,7 +193,7 @@ const Navbar = () => {
 
                 {
                     user && user?.accountType != "Instructor" && (
-                        <Link to="/dashboard/cart" className='relative'>
+                        <Link to="/cart" className='relative'>
                             <span style={{ fontSize: '24px', color: 'yellow' }}>
                                     <AiOutlineShoppingCart />
                                 </span>
