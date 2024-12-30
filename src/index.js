@@ -8,6 +8,17 @@ import rootReducer from "./reducer";
 import {configureStore} from "@reduxjs/toolkit"
 import { ChakraProvider } from "@chakra-ui/react";
 import ChatProvider from "./UserContext.js";
+import 'react-app-polyfill/stable';
+import { Buffer } from 'buffer';
+import crypto from 'crypto-browserify';
+// import { Buffer } from 'buffer';
+import process from 'process';
+
+// window.Buffer = Buffer;
+window.process = process;
+// Provide polyfills globally
+window.Buffer = Buffer;
+
 const store=configureStore({
   reducer:rootReducer,
 });

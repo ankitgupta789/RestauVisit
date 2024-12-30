@@ -173,12 +173,29 @@ const deleteItem = async (req, res) => {
       res.status(500).json({ message: "Error searching menu items", error });
     }
   };
-  
+  const getMenuItemsById = async (req, res) => {
+    try {
+        const { itemIds } = req.query; // Array of emails sent from the frontend
+        console.log(itemIds);
+        if (!itemIds || !Array.isArray(itemIds)) {
+            return res.status(400).json({ error: 'Invalid input. Provide an array of ids.' });
+        }
+
+        // Fetch menuItems with email matching any in the array
+        const menuItems = await MenuItem.find({ _id: { $in: itemIds } });
+        // console.log(menuItems,"items in the cart");
+        return res.status(200).json({ success: true, data: menuItems });
+    } catch (error) {
+        console.error('Error fetching menu items:', error);
+        return res.status(500).json({ success: false, error: 'Server error' });
+    }
+};
 
 module.exports = {
     getAllItems,
   addItem,
   editItem,
   deleteItem,
-  searchMenuItem
+  searchMenuItem,
+  getMenuItemsById
 };

@@ -112,3 +112,24 @@ export const searchMenuItems = async (email, query) => {
       return []; // Return an empty array in case of an error
     }
   };
+  export const fetchItemsByIds = async (itemIds) => {
+    try {
+      console.log(`Fetching menu items for item IDs:`, itemIds);
+  
+      // Ensure itemIds is an array
+      if (!Array.isArray(itemIds)) {
+        throw new Error("The 'itemIds' parameter must be an array.");
+      }
+      console.log(itemIds,"ids sent from the frontend");
+      // Call the backend API
+      const response = await axios.get('http://localhost:4000/api/v1/menu/getItemsByIds', { params: { itemIds }, });
+      console.log(response.data,"response for the cart");
+      // Check if menu items exist
+      
+        return response.data; // Return the list of menu items
+     
+    } catch (error) {
+      console.error("Error fetching menu items:", error);
+      return []; // Return an empty array in case of an error
+    }
+  };

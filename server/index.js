@@ -24,6 +24,7 @@ const photosRoutes=require("./routes/Photos.js");
 const menuRoutes=require("./routes/Menu.js");
 const reviewRoutes=require("./routes/Review.js");
 const cartRoutes=require("./routes/Cart.js");
+const orderRoutes=require("./routes/Order.js");
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 
@@ -65,6 +66,7 @@ app.use('/api/v1/photos', photosRoutes);
 app.use('/api/v1/menu', menuRoutes);
 app.use('/api/v1/review', reviewRoutes);
 app.use('/api/v1/cart',cartRoutes);
+app.use('/api/v1/order',orderRoutes);
 //def route
 
 app.get("/", (req, res) => {
