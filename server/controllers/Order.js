@@ -25,7 +25,7 @@ console.log('RAZORPAY_KEY_SECRET:', process.env.RAZORPAY_KEY_SECRET);
     }
 
     const totalAmount = orderData.totalAmount;
-
+    await Payment.deleteMany({ userId, status: 'Created' });
     // console.log(items,"reached here?");
     // Create Razorpay order
     const razorpayOrder = await razorpayInstance.orders.create({
@@ -84,8 +84,8 @@ console.log(restaurantOrders, "Grouped items by restaurant");
     const newOrder = new Order({
       orderId: razorpayOrder.id,
       userId:new mongoose.Types.ObjectId(userId),
-      items: items.map((restaurant) => ({
-        restaurantId:new mongoose.Types.ObjectId(restaurant.restaurantId),
+      items: restaurantOrders.map((restaurant) => ({
+        restaurantEmail:restaurant.restaurant_email,
         items: restaurant.items,
         subTotal: restaurant.subTotal
       })),
@@ -94,10 +94,10 @@ console.log(restaurantOrders, "Grouped items by restaurant");
     });
 
     await newOrder.save();
-    
+    console.log(newOrder,"orderCreated or not");
     // Save initial payment record
     const newPayment = new Payment({
-      paymentId: '', // Payment ID will be updated after the payment is completed
+      
       orderId: razorpayOrder.id,
       userId:new mongoose.Types.ObjectId(userId),
       amount: totalAmount,
@@ -119,5 +119,6 @@ console.log(restaurantOrders, "Grouped items by restaurant");
     res.status(500).json({ message: 'Failed to create order', error: error.message });
   }
 };
+
 
 module.exports = { createOrder };

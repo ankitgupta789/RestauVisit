@@ -44,9 +44,9 @@ const getCartItems = async (req, res) => {
       const cartItems = await Cart.find({ userId })
         .populate('itemId', 'name price'); // Only populate the name and price fields
   
-      if (!cartItems.length) {
-        return res.status(404).json({ message: 'No items found in cart' });
-      }
+      // if (!cartItems.length) {
+      //   return res.status(404).json({ message: 'No items found in cart' });
+      // }
   
       return res.status(200).json({ cartItems });
     } catch (error) {

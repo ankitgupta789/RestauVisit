@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   orderId: { type: String, required: true, unique: true }, // Razorpay order ID
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to the user
-  restaurants: [
+  items: [
     {
-      restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant', required: true }, // Restaurant ID
+      restaurantEmail: {type:String,required:true}, // Restaurant ID
       items: [
         {
           itemId: { type: mongoose.Schema.Types.ObjectId, ref: 'MenuItem', required: true }, // Menu item ID

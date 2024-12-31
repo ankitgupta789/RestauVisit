@@ -4,7 +4,7 @@ import { createOrder } from '../services/order'; // Import the function to creat
 import { useSelector } from 'react-redux';
 import { fetchItemsByIds } from '../services/operations/menu';
 import Razorpay from 'razorpay'; // Assuming Razorpay integration library is available
-
+import { verifyPaymentWithServer } from '../services/verifyPayment';
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -90,19 +90,42 @@ const Cart = () => {
         };
     
         const response = await createOrder(orderData);
-    
+      console.log(response,"response in clientside");
         // Open Razorpay payment interface
         const options = {
           key: 'rzp_test_G6ohIQO7ZOHmVY', // Replace with your Razorpay key
-          amount: response.data.amount * 100, // Amount in paise
+          amount: response.data.totalAmount * 100, // Amount in paise
           currency: 'INR',
           name: 'Your Website Name',
           description: 'Order Payment',
           order_id: response.data.orderId,
           handler: async (paymentResult) => {
-            alert('Payment successful');
-            console.log('Payment Result:', paymentResult);
-          },
+            try {          
+              // Process the payment (e.g., save details to the database)
+              const paymentData = {
+                paymentId: paymentResult.razorpay_payment_id,
+                orderId: paymentResult.razorpay_order_id,
+                signature: paymentResult.razorpay_signature,
+                status: 'Completed',  // You can change this based on your logic
+                amount: response.data.totalAmount * 100,
+                userId: user._id,       // User ID associated with the payment
+              };
+             console.log(paymentData,"outputting paymentData");
+              const data = await verifyPaymentWithServer(paymentData);
+              console.log(data,"data in frontend");
+              // const responseData = await response.json();
+              // if (responseData.status === 'success') {
+              //   alert('Payment successful');
+              // } else {
+              //   alert('Payment verification failed');
+              // }
+          
+            } catch (error) {
+              console.error('Error during payment handling:', error);
+              alert('Payment processing failed, please try again later');
+            }
+          }
+          ,
           prefill: {
             name: user.name,
             email: user.email,
@@ -112,7 +135,7 @@ const Cart = () => {
             color: '#3399cc',
           },
         };
-    
+        console.log(options);
         // Use window.Razorpay since it's globally available
         if (window.Razorpay) {
           const rzp = new window.Razorpay(options);
