@@ -52,7 +52,9 @@ const Cart = () => {
 
   const handleDeleteItem = async (itemId) => {
     try {
-      await deleteCartItem(user._id, itemId);
+      const userId=user._id;
+      console.log(itemId,"id of deleted item")
+      await deleteCartItem(userId, itemId);
       setCartItems((prevItems) => prevItems.filter((item) => item._id !== itemId));
     } catch (err) {
       console.error('Failed to delete cart item', err);

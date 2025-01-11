@@ -192,8 +192,24 @@ const Navbar = () => {
         <div className='flex gap-x-4 items-center'>
 
                 {
-                    user && user?.accountType != "Instructor" && (
+                    user && user?.accountType == "User" && (
                         <Link to="/cart" className='relative'>
+                            <span style={{ fontSize: '24px', color: 'yellow' }}>
+                                    <AiOutlineShoppingCart />
+                                </span>
+                                {
+                                    totalItems > 0 && (
+                                        <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'yellow' }}>
+                                            {totalItems}
+                                        </span>
+                                    )
+                                }
+                        </Link>
+                    )
+                }
+                 {
+                    user && user?.accountType == "Restaurant" && (
+                        <Link to="/myorders" className='relative'>
                             <span style={{ fontSize: '24px', color: 'yellow' }}>
                                     <AiOutlineShoppingCart />
                                 </span>

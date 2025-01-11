@@ -2,13 +2,68 @@ const Razorpay = require('razorpay');
 const Order = require('../models/Order'); // Import the Order model
 const Payment = require('../models/Payment'); // Import the Payment model
 const mongoose = require('mongoose');
+const socketIO = require('socket.io');
 const Menu=require('../models/Menu');
+const {app,server}=require('../middlewares/Socket');
+
+const io = socketIO(server, {
+  cors: {
+    origin: '*',
+  }
+});
+
+
+// socket 
+
+
+  io.on("connection", (socket) => {
+	console.log("Connected to the client (socket.io)");
+  
+	socket.on("setup", (userData) => {
+	  socket.join(userData._id);
+	  console.log("This is the user id ", userData._id);
+	  socket.emit("connected");
+	});
+  
+	socket.on("join-chat", (room) => {
+	  console.log("User joined the room ", room);
+	});
+  
+	socket.on("new-msg", (newMsg) => {
+	  var chat = newMsg.chat;
+  
+	  if (!chat.users) {
+		return console.log("Chat users not defined");
+	  }
+  
+	  chat.users.forEach((user) => {
+		if (user._id === newMsg.sender._id) {
+		  return;
+		}
+		socket.in(user._id).emit("Msg-recieved", newMsg);
+	  });
+	});
+  
+	socket.on("typing", (user) => socket.in(user).emit("Typing"));
+	socket.on("stop typing", (room) => socket.in(room).emit("Stop typing"));
+  
+	socket.off("setup", (userData) => {
+	  console.log("USER DISCONNECTED");
+	  socket.leave(userData._id);
+	});
+  });
+
+
+
+
 
 // Initialize Razorpay instance
 const razorpayInstance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID, // Add your Razorpay key ID
   key_secret: process.env.RAZORPAY_KEY_SECRET // Add your Razorpay secret key
 });
+
+
 
 // Controller function to create an order
 const createOrder = async (req, res) => {

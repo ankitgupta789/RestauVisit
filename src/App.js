@@ -35,6 +35,7 @@ import Reservations from "./components/Reservations.js"
 import Notifications from "./components/Notifications.js"
 import SearchedRestaurant from "./components/SearchedRestaurant.js";
 import Cart from "./pages/Cart.js";
+import Orders from "./pages/Orders.js";
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -177,9 +178,9 @@ function App() {
         
         && <Route path ="/addQuestion"  element={<CreateQuestion/>}/>
         }
-        {user?.accountType==='Instructor'
+        {user?.accountType==='Restaurant'
         
-        &&<Route path="/mydoc" element={user?<MyDoc/>:<Login/>} />
+        &&<Route path="/myorders" element={user?<Orders/>:<Login/>} />
         }
         
 

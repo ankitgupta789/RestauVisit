@@ -56,11 +56,13 @@ const getCartItems = async (req, res) => {
   };
   const deleteCartItem = async (req, res) => {
     try {
-      const { itemId } = req.params; // Get cart item ID from the request parameters
-     console.log(itemId,"id recieved");
+      const { itemId } = req.params; // Extract itemId from the URL
+      const userId = req.headers.userid;// Extract userId from query params
+    //  console.log(itemId,"id recieved");
+     console.log(userId, itemId, "Query parameters for deletion");
       // Find and delete the cart item
-      const deletedItem = await Cart.findOneAndDelete({ itemId });
-  
+      const deletedItem = await Cart.deleteOne({ userId, itemId });
+      console.log(deletedItem,"item deleted ");
       if (!deletedItem) {
         return res.status(404).json({ message: 'Cart item not found' });
       }

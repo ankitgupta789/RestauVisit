@@ -1,5 +1,5 @@
 const express = require("express");
-const app = express();
+// const app = express();
 
 const userRoutes = require("./routes/User.js");
 const profileRoutes = require("./routes/Prof.js");
@@ -26,14 +26,20 @@ const reviewRoutes=require("./routes/Review.js");
 const cartRoutes=require("./routes/Cart.js");
 const orderRoutes=require("./routes/Order.js");
 const paymentRoutes=require("./routes/Payment.js")
+const RestauNotifications=require("./routes/RestauNotification.js")
+
+const {app,server}=require('./middlewares/Socket.js')
+
+const http = require('http');
+// const Server = http.createServer(app);
 dotenv.config();
 const PORT = process.env.PORT || 4000;
-
+const connectedSockets={};
 //database connect
 database.connect();
 //middlewares
-app.use(express.json());
-app.use(cookieParser());
+// app.use(express.json());
+ app.use(cookieParser());
 app.use(
 	cors({
 		origin:"http://localhost:3000",
@@ -41,12 +47,6 @@ app.use(
 	})
 )
 
-app.use(
-	fileUpload({
-		useTempFiles:true,
-		tempFileDir:"/tmp",
-	})
-)
 //cloudinary connection
 cloudinaryConnect();
 
@@ -69,9 +69,9 @@ app.use('/api/v1/review', reviewRoutes);
 app.use('/api/v1/cart',cartRoutes);
 app.use('/api/v1/order',orderRoutes);
 app.use('/api/v1/payment',paymentRoutes);
+app.use('/api/v1/restauNotify',RestauNotifications);
 
 //def route
-
 app.get("/", (req, res) => {
 	return res.json({
 		success:true,
@@ -79,55 +79,10 @@ app.get("/", (req, res) => {
 	});
 });
 
-const server=app.listen(PORT, () => {
-	console.log(`App is running at ${PORT}`)
+// const server=app.listen(PORT, () => {
+// 	console.log(`App is running at ${PORT}`)
+// })
+
+server.listen(PORT,()=>{
+	console.log('server lisning on https://localhost:3000')
 })
-
-
-
-const io = require('socket.io')(server, {
-	pingTimeout: 50000,
-	cors: {
-	  origin: 'http://localhost:3000', // Specify your frontend URL
-	  methods: ["GET", "POST"],
-	  credentials: true
-	}
-  });
-  
-  io.on("connection", (socket) => {
-	console.log("Connected to the client (socket.io)");
-  
-	socket.on("setup", (userData) => {
-	  socket.join(userData._id);
-	  console.log("This is the user id ", userData._id);
-	  socket.emit("connected");
-	});
-  
-	socket.on("join-chat", (room) => {
-	  console.log("User joined the room ", room);
-	});
-  
-	socket.on("new-msg", (newMsg) => {
-	  var chat = newMsg.chat;
-  
-	  if (!chat.users) {
-		return console.log("Chat users not defined");
-	  }
-  
-	  chat.users.forEach((user) => {
-		if (user._id === newMsg.sender._id) {
-		  return;
-		}
-		socket.in(user._id).emit("Msg-recieved", newMsg);
-	  });
-	});
-  
-	socket.on("typing", (user) => socket.in(user).emit("Typing"));
-	socket.on("stop typing", (room) => socket.in(room).emit("Stop typing"));
-  
-	socket.off("setup", (userData) => {
-	  console.log("USER DISCONNECTED");
-	  socket.leave(userData._id);
-	});
-  });
-  

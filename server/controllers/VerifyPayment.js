@@ -2,6 +2,50 @@
 const Payment = require('../models/Payment'); // Import your Payment model (or path to your model)
 const crypto = require('crypto');
 const Order=require("../models/Order");
+const socketIO = require('socket.io');
+const Notification=require("../models/RestauNotification");
+const { connectedSockets } = require('../index');
+
+
+const {app,server}=require('../middlewares/Socket');
+
+const io = socketIO(server, {
+  cors: {
+    origin: '*',
+  }
+});
+
+
+// socket 
+
+
+io.on('connection', (socket) => {
+  console.log('Connected to the client (socket.io)');
+
+  // Restaurant joins a specific room
+  socket.on('join-order-room', (restaurantEmail) => {
+    socket.join(restaurantEmail);
+    console.log(`Restaurant with email ${restaurantEmail} joined the order room.`);
+  });
+
+  // Notify restaurant of new order
+  socket.on('new-order', (orderDetails) => {
+    const restaurantEmail = orderDetails.restaurantEmail;
+    console.log(orderDetails,"printing orderDetails");
+    socket.to(restaurantEmail).emit('order-notification', orderDetails);
+  });
+  
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
+
+
+
+
+
+
+
 
 // Razorpay Secret Key (ensure you use the secret key from your Razorpay account)
 const razorpaySecret = process.env.RAZORPAY_KEY_SECRET; // Replace with your actual Razorpay secret key
@@ -52,23 +96,52 @@ const verifyPayment = async (req, res) => {
         existingPayment.amount = amount;
         existingPayment.status = 'Completed'; // Update the status if necessary
         await existingPayment.save();
-        res.status(200).json({ status: 'success', message: 'Payment verified successfully', payment: existingPayment });
+        // res.status(200).json({ status: 'success', message: 'Payment verified successfully', payment: existingPayment });
       } 
       else {
         console.log("alreday not present in db");
         // If no existing payment is found, create a new one
         const newPayment = new Payment(paymentData);
         await newPayment.save();
-        res.status(200).json({ status: 'success', message: 'Payment verified successfully', payment: newPayment });
+        // res.status(200).json({ status: 'success', message: 'Payment verified successfully', payment: newPayment });
       }
-      await Order.findOneAndUpdate(
+      const orderDetails=await Order.findOneAndUpdate(
         { orderId },
         { paymentStatus: 'Completed' },
         { new: true }
       );
+      console.log(orderDetails,"here send notification to each of restaurants");
+
+
+      if (orderDetails && orderDetails.items) {
+        // Loop through the order items to send notifications to each restaurant
+        for (let restaurant of orderDetails.items) {
+          const restaurantEmail = restaurant.restaurantEmail;
+      
+          // Save the notification for each restaurant
+        //   const message = `New order received! Order ID: ${orderDetails.orderId}, Total Amount: ${orderDetails.totalAmount}`;
+          
+          const newNotification = new Notification({
+            restaurantEmail: restaurantEmail, // Restaurant's email
+            orderId: orderDetails.orderId, // Order ID
+            items: restaurant.items, // Notification message
+          });
+        console.log(newNotification,restaurantEmail,"printing exact notification sent per restaurant");
+          // Save the notification to the database
+          await newNotification.save();
+        //  console.log(io,"printing io");
+        io.to(restaurantEmail).emit('order-notification', newNotification);
+          console.log(`New order notification sent to restaurant: ${restaurantEmail}`);
+
+        }
+      
+        console.log("Notifications sent to the respective restaurants.");
+      } else {
+        console.error("No items found in the order.");
+      }
     // Step 3: Send a success response
     
-    
+    res.status(200).json({ status: 'success', message: 'Payment verified successfully, notifications sent.' });
   } catch (error) {
     console.error('Error during payment verification:', error);
     res.status(500).json({ status: 'failed', message: 'Server error during payment verification' });

@@ -26,9 +26,14 @@ export const getCartItems = async (userId) => {
       console.error('Error fetching cart items:', error.response?.data?.message || error.message);
     }
 };
-export const deleteCartItem = async (itemId) => {
+export const deleteCartItem = async (userId,itemId) => {
   try {
-    const response = await axios.delete(`http://localhost:4000/api/v1/cart/deleteCartItem/${itemId}`);
+    console.log("is call recieved for deleting",userId,itemId);
+    const response = await axios.delete(`http://localhost:4000/api/v1/cart/deleteCartItem/${itemId}`, {
+      headers: {
+        userId: userId,
+      },
+    });
     console.log('Cart item deleted:', response.data);
     return response.data;
   } catch (error) {
