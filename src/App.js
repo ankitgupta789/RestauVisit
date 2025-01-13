@@ -32,7 +32,7 @@ import Photos from "./components/Photos.js";
 import Menu from "./components/Menu.js";
 import MyReviews from "./components/MyReviews.js";
 import Reservations from "./components/Reservations.js"
-import Notifications from "./components/Notifications.js"
+import OrderHistory from "./pages/OrderHistory.js"
 import SearchedRestaurant from "./components/SearchedRestaurant.js";
 import Cart from "./pages/Cart.js";
 import Orders from "./pages/Orders.js";
@@ -164,7 +164,7 @@ function App() {
             path="/reservations" 
             element={user && user.accountType === "Restaurant" ? <Reservations /> : <Login />} 
         />
-        <Route path="/notifications" element={user ? <Notifications/>: <Login/>} />
+        <Route path="/orderHistory" element={user ? <OrderHistory/>: <Login/>} />
         {/* <Route path="/dashboard/my-profile" element={<MyProfile/>} /> */}
        
 

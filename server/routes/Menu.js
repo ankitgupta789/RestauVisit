@@ -3,7 +3,7 @@ const router = express.Router();
 const menuItemController = require('../controllers/Menu');
 
 // Fetch all menu items related to a restaurant by email
-router.get('/getAllItems/:email', menuItemController.getAllItems);
+router.get('/getAllItems/:userId', menuItemController.getAllItems);
 
 // Add a new menu item
 router.post('/addItem', menuItemController.addItem);

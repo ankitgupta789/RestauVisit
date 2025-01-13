@@ -4,54 +4,6 @@ const Payment = require('../models/Payment'); // Import the Payment model
 const mongoose = require('mongoose');
 const socketIO = require('socket.io');
 const Menu=require('../models/Menu');
-const {app,server}=require('../middlewares/Socket');
-
-const io = socketIO(server, {
-  cors: {
-    origin: '*',
-  }
-});
-
-
-// socket 
-
-
-  io.on("connection", (socket) => {
-	console.log("Connected to the client (socket.io)");
-  
-	socket.on("setup", (userData) => {
-	  socket.join(userData._id);
-	  console.log("This is the user id ", userData._id);
-	  socket.emit("connected");
-	});
-  
-	socket.on("join-chat", (room) => {
-	  console.log("User joined the room ", room);
-	});
-  
-	socket.on("new-msg", (newMsg) => {
-	  var chat = newMsg.chat;
-  
-	  if (!chat.users) {
-		return console.log("Chat users not defined");
-	  }
-  
-	  chat.users.forEach((user) => {
-		if (user._id === newMsg.sender._id) {
-		  return;
-		}
-		socket.in(user._id).emit("Msg-recieved", newMsg);
-	  });
-	});
-  
-	socket.on("typing", (user) => socket.in(user).emit("Typing"));
-	socket.on("stop typing", (room) => socket.in(room).emit("Stop typing"));
-  
-	socket.off("setup", (userData) => {
-	  console.log("USER DISCONNECTED");
-	  socket.leave(userData._id);
-	});
-  });
 
 
 
@@ -175,5 +127,31 @@ console.log(restaurantOrders, "Grouped items by restaurant");
   }
 };
 
+const getUserOrders = async (req, res) => {
+  try {
+    const { userId } = req.params; // Extract userId from the request params
 
-module.exports = { createOrder };
+    // Validate the userId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid userId' });
+    }
+
+    // Query the database for orders associated with the userId
+    const userOrders = await Order.find({ userId:new mongoose.Types.ObjectId(userId) });
+
+    if (!userOrders || userOrders.length === 0) {
+      return res.status(404).json({ message: 'No orders found for this user' });
+    }
+
+    // Respond with the user's orders
+    res.status(200).json({
+      message: 'Orders retrieved successfully',
+      orders: userOrders,
+    });
+  } catch (error) {
+    console.error('Error fetching user orders:', error);
+    res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
+  }
+};
+
+module.exports = { createOrder,getUserOrders };

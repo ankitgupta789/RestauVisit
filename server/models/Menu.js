@@ -39,9 +39,10 @@ const menuItemSchema = new Schema({
     type: Date, 
     default: Date.now 
   },
-  restaurant_email: { 
-    type: String, 
-    required: true 
+  userId: {
+    type: mongoose.Schema.Types.ObjectId, // Reference the ObjectId of the user
+    ref: "User", // The name of the model being referenced
+    required: true,
   }
 });
 

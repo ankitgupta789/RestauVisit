@@ -1,11 +1,11 @@
 import axios from "axios";
 
 // Function to get all images for a user by email
-export const getAllImages = async (email) => {
+export const getAllImages = async (userId) => {
   try {
     // Call the API to get the images based on email
-    console.log(email, "email sent ");
-    const response = await axios.get(`${"http://localhost:4000/api/v1/photos/getphotos"}/${email}`);
+    console.log(userId, "email sent ");
+    const response = await axios.get(`${"http://localhost:4000/api/v1/photos/getphotos"}/${userId}`);
     
     // Check if photos exist
     if (response.data && response.data.length > 0) {
@@ -22,11 +22,11 @@ export const getAllImages = async (email) => {
 };
 
 // Function to add a new image for a user by email
-export const addImage = async (email, imageUrl) => {
+export const addImage = async (userId, imageUrl) => {
   try {
-    console.log(email, imageUrl, "console for checking if data received during posting image");
+    console.log(userId, imageUrl, "console for checking if data received during posting image");
 
-    const response = await axios.post(`${"http://localhost:4000/api/v1/photos/addphotos"}`, { email, url: imageUrl });
+    const response = await axios.post(`${"http://localhost:4000/api/v1/photos/addphotos"}`, { userId, url: imageUrl });
 
     // Check if the image was added successfully
     if (response.status === 201) {
@@ -40,9 +40,9 @@ export const addImage = async (email, imageUrl) => {
 };
 
 // Function to delete an image for a user by email
-export const deleteImage = async (email, imageUrl) => {
+export const deleteImage = async (userId, imageUrl) => {
   try {
-    const response = await axios.delete(`${"http://localhost:4000/api/v1/photos/deletephotos"}`, { data: { email, url: imageUrl } });
+    const response = await axios.delete(`${"http://localhost:4000/api/v1/photos/deletephotos"}`, { data: { userId, url: imageUrl } });
 
     // Check if the image was deleted successfully
     if (response.status === 200) {

@@ -4,14 +4,14 @@ const User = require('../models/User');
 // Add a new menu item
 const getAllItems = async (req, res) => {
     try {
-      const { email } = req.params; // Assuming the email is sent in the request body
+      const { userId } = req.params; // Assuming the email is sent in the request body
   
-      if (!email) {
-        return res.status(400).json({ message: "Email is required to fetch menu items" });
+      if (!userId) {
+        return res.status(400).json({ message: "userId is required to fetch menu items" });
       }
   
       // Fetch all menu items related to the provided email
-      const menuItems = await MenuItem.find({ restaurant_email: email });
+      const menuItems = await MenuItem.find({ userId: userId });
   
       if (menuItems.length === 0) {
         return res.status(404).json({ message: "No menu items found for this restaurant" });
@@ -40,7 +40,7 @@ const addItem = async (req, res) => {
     if (existingUser._id.toString() !== user._id || existingUser.email !== restaurant_email) {
       return res.status(403).json({ message: "You are not authorized to add menu items to this restaurant" });
     }
-    
+    const userId=user._id;
     // Create new menu item
     const newMenuItem = new MenuItem({
       name,
@@ -50,7 +50,7 @@ const addItem = async (req, res) => {
       image_url,
       preparation_time,
       availability,
-      restaurant_email
+      userId
     });
 
     await newMenuItem.save();
@@ -119,9 +119,10 @@ const deleteItem = async (req, res) => {
       if (!existingUser) {
         return res.status(404).json({ message: "User not found" });
       }
-  
-      // Ensure the user is the owner of the restaurant
-      if (existingUser._id.toString() !== user._id || existingUser.email !== menuItem.restaurant_email) {
+      // console.log(menuItem,"printing item");
+      console.log(menuItem.userId,existingUser._id,"printing item and user");
+      // // Ensure the user is the owner of the restaurant
+      if (existingUser._id == menuItem.userId) {
         return res.status(403).json({ message: "You are not authorized to delete this menu item" });
       }
   

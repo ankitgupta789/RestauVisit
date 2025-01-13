@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 // Function to get all menu items for a restaurant by email
-export const getAllItems = async (email) => {
+export const getAllItems = async (userId) => {
   try {
-    console.log(`Fetching menu items for restaurant email: ${email}`);
+    console.log(`Fetching menu items for restaurant email: ${userId}`);
     
-    const response = await axios.get(`http://localhost:4000/api/v1/menu/getAllItems/${email}`);
+    const response = await axios.get(`http://localhost:4000/api/v1/menu/getAllItems/${userId}`);
 
     // Check if menu items exist
     if (response.data && response.data.length > 0) {

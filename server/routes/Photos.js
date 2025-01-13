@@ -5,7 +5,7 @@ const { getAllImages, addImage, deleteImage } = require('../controllers/Photos')
 // Route for getting all images of a specific user
 // Method: GET, URL: /photos/:email
 // Params: email (from the URL)
-router.get('/getphotos/:email', getAllImages);
+router.get('/getphotos/:userId', getAllImages);
 
 // Route for adding a new image for a specific user
 // Method: POST, URL: /photos

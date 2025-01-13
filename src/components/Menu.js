@@ -28,8 +28,8 @@ const Menu = () => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const email = user.email;
-        const items = await getAllItems(email);
+        const userId =user._id;
+        const items = await getAllItems(userId);
         const categorizedData = items.reduce((acc, item) => {
           if (!acc[item.category]) acc[item.category] = [];
           acc[item.category].push(item);
@@ -115,7 +115,7 @@ const Menu = () => {
   // Delete an item from the menu
   const handleDeleteItem = async (itemId, category) => {
     try {
-      await deleteItem(itemId, restaurantEmail); // Delete the item on the server
+      await deleteItem(user,itemId); // Delete the item on the server
 
       // Update the local state to remove the item
       setMenuData((prevData) => {

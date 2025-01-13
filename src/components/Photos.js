@@ -9,20 +9,20 @@ const Photos = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State to control delete confirmation modal
   const [photoToDelete, setPhotoToDelete] = useState(null); // Store the photo to delete
   const { user } = useSelector((state) => state.profile);
-  const email = user.email;
-
+ 
+  const userId=user._id;
   // Fetch all photos on component mount
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
-        const fetchedPhotos = await getAllImages(email); // Fetch photos using the getAllImages function
+        const fetchedPhotos = await getAllImages(userId); // Fetch photos using the getAllImages function
         setPhotos(fetchedPhotos); // Set the photos state with the fetched data
       } catch (error) {
         console.error("Error fetching photos:", error);
       }
     };
     fetchPhotos();
-  }, [email]); 
+  }, [userId]); 
 
   // Upload photo to Cloudinary and save URL in the database
   const handleImageUpload = async (e) => {
@@ -46,7 +46,7 @@ const Photos = () => {
 
         if (data.secure_url) {
           // Call the existing function to save the image URL in the database
-          await addImage(email, data.secure_url); // Add the image URL to your database
+          await addImage(userId, data.secure_url); // Add the image URL to your database
 
           // Update the local state with the new image URL
           setPhotos([...photos, data.secure_url]);
@@ -78,7 +78,7 @@ const Photos = () => {
   // Function to handle delete photo
   const handleDelete = async () => {
     try {
-      await deleteImage(email, photoToDelete); // Call the function to delete the image URL from the database
+      await deleteImage(userId, photoToDelete); // Call the function to delete the image URL from the database
       setPhotos(photos.filter((p) => p !== photoToDelete)); // Remove the photo from the local state
       setIsDeleteModalOpen(false); // Close the confirmation modal after successful delete
     } catch (err) {

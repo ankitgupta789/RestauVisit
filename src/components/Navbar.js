@@ -140,9 +140,9 @@ const Navbar = () => {
                 </li>
                 } 
                  {
-                    user&&
+                   user?.accountType==="User" &&
                     <li>
-                    <Link to="/notifications">Notification</Link>
+                    <Link to="/orderHistory">Order_History</Link>
                 </li>
                 } 
                

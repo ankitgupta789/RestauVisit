@@ -39,10 +39,16 @@ const profileSchema = new mongoose.Schema({
     type: String,
     trim: true, // Ensure no extra spaces
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId, // Reference to the User model
+    ref: "User", // Specify the name of the referenced model
+    required: true, // Ensure this field is mandatory
+  },
   upiId: { // New field for state
     type: String,
     trim: true, // Ensure no extra spaces
   }
+
 });
 
 // Export the Profile model

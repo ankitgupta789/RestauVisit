@@ -80,13 +80,15 @@ export function signUp(
         
         const response2=await axios.post("http://localhost:4000/api/v1/profile/createProfile",
       {
+
         name:"",
         gender:"",
         dateOfBirth:"",
         about:"",
         contactNumber:"",
         email,
-        address:""
+        address:"",
+        userId:response.data.user._id
       })
       toast.success("Sign Up Successful")
         navigate("/login")

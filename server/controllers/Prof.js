@@ -3,16 +3,16 @@ const Prof = require("../models/Prof")
 
 
 exports.createProfile = async (req, res) => {
-    const {name, gender, dateOfBirth, about, contactNumber, email, address } = req.body;
+    const {name, gender, dateOfBirth, about, contactNumber, email, address,userId } = req.body;
     
 
     try {
         
         // Create a new feedback with the given details
-		console.log("email is,",email);
+		console.log("email is,",userId);
 		console.log("am i called or not");
         const newProfile = await Prof.create({
-			name,gender, dateOfBirth, about, contactNumber, email, address
+			name,gender, dateOfBirth, about, contactNumber, email, address,userId
         });
         
         

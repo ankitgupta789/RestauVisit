@@ -5,11 +5,13 @@ import { useSelector } from 'react-redux';
 import { fetchItemsByIds } from '../services/operations/menu';
 import Razorpay from 'razorpay'; // Assuming Razorpay integration library is available
 import { verifyPaymentWithServer } from '../services/verifyPayment';
+import { useNavigate } from 'react-router-dom';
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useSelector((state) => state.profile);
+  const navigate = useNavigate();
   useEffect(() => {
     // Dynamically load Razorpay script
     const script = document.createElement('script');
@@ -121,7 +123,7 @@ const Cart = () => {
               // } else {
               //   alert('Payment verification failed');
               // }
-          
+            navigate("/orderHistory");
             } catch (error) {
               console.error('Error during payment handling:', error);
               alert('Payment processing failed, please try again later');
@@ -145,6 +147,8 @@ const Cart = () => {
         } else {
           console.error('Razorpay is not loaded correctly');
         }
+
+
       } catch (err) {
         console.error('Failed to proceed to checkout:', err);
         alert('Failed to proceed to checkout');

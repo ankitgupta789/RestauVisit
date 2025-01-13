@@ -3,11 +3,11 @@ const Photos = require('../models/Photos');
 // Controller for getting all images for a user by email
 const getAllImages = async (req, res) => {
   try {
-    const { email } = req.params; // Get the email from URL params
-    console.log(email, "sent email from the frontend");
+    const { userId } = req.params; // Get the email from URL params
+    console.log(userId, "sent userId from the frontend");
 
     // Find all photos for the user by matching email
-    const photos = await Photos.find({ email });
+    const photos = await Photos.find({ userId });
 
     if (!photos || photos.length === 0) {
       return res.status(200).json({ message: "No photos found for this user." });
@@ -25,15 +25,15 @@ const getAllImages = async (req, res) => {
 // Controller for adding a new image for a user (creating a new record each time)
 const addImage = async (req, res) => {
   try {
-    const { email, url } = req.body; // email and URL passed from frontend
+    const { userId, url } = req.body; // email and URL passed from frontend
 
-    if (!email || !url) {
+    if (!userId || !url) {
       return res.status(400).json({ message: "Email and Image URL are required." });
     }
 
     // Create a new photo document for the user
     const newPhoto = new Photos({
-      email, // Use email instead of userId
+      userId, // Use email instead of userId
       url, // Store the image URL in the new document
     });
 
@@ -47,20 +47,20 @@ const addImage = async (req, res) => {
 // Controller for deleting a specific image for a user by email
 const deleteImage = async (req, res) => {
   try {
-    const { email, url } = req.body; // email and URL to delete passed from frontend
+    const { userId, url } = req.body; // userId and URL to delete passed from frontend
 
-    if (!email || !url) {
-      return res.status(400).json({ message: "Email and Image URL are required." });
+    if (!userId || !url) {
+      return res.status(400).json({ message: "userId and Image URL are required." });
     }
 
-    // Find the photo record for the given email and URL
-    const photo = await Photos.findOne({ email, url });
+    // Find the photo record for the given userId and URL
+    const photo = await Photos.findOne({ userId, url });
 
     if (!photo) {
       return res.status(404).json({ message: "Image URL not found for this user." });
     }
 
-    console.log(photo); // Debugging log to ensure it's the correct photo document
+    // console.log(photo); // Debugging log to ensure it's the correct photo document
 
     // Use deleteOne to delete the photo document
     const result = await Photos.deleteOne({ _id: photo._id });

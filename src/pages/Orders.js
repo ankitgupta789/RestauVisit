@@ -8,7 +8,7 @@ const Orders = () => {
   const { user } = useSelector((state) => state.profile);
   useEffect(() => {
     // Create a socket connection to the server
-    const socket = io('http://localhost:4000'); // Update with your backend URL if different
+    const socket = io('http://localhost:4000');
 
     // Join the room based on restaurant's email (you can customize this to your needs)
     const restaurantEmail = user.email; // Replace with actual restaurant email
