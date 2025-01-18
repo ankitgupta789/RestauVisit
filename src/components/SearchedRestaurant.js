@@ -8,8 +8,9 @@ import { addReview,getAllReviews,editReview,deleteReview } from "../services/ope
 import { addToCart } from "../services/operations/cart";
 const SearchedRestaurant = () => {
   const location = useLocation();
-  const { email } = location.state || {};
+  const { userId } = location.state || {};
   const { user } = useSelector((state) => state.profile);
+  const email="ankitguptamanheru@gmail.com";
   // State to hold restaurant data
   const [restaurantData, setRestaurantData] = useState({
     name: "",
@@ -76,16 +77,10 @@ const SearchedRestaurant = () => {
 
   const handleAddReview = async (e) => {
     e.preventDefault();
-    const newReview = { 
-      review_text: reviewText, 
-      rating, 
-      user: user, 
-      email 
-    };
      const username=user.firstName+" "+user.lastName;
-     const restaurant_email=email;
-     const user_email=user.email;
-    const response = await addReview(restaurant_email,user_email,username ,reviewText, rating); // Calls the `addReview` function
+     
+     const commenterId=user._id;
+    const response = await addReview(userId,commenterId,username ,reviewText, rating); // Calls the `addReview` function
     if (response) {
       setReviews((prevReviews) => [...prevReviews, response]); // Add new review to the state
       setReviewText(""); // Reset form
@@ -96,7 +91,7 @@ const SearchedRestaurant = () => {
   // Fetch restaurant data and photos
   useEffect(() => {
     const fetchRestaurantData = async () => {
-      if (!email) {
+      if (!userId) {
         setError("No email provided.");
         setLoading(false);
         return;
@@ -104,10 +99,10 @@ const SearchedRestaurant = () => {
 
       try {
         // Fetch restaurant data
-        const restaurantDetails = await getProfile(email);
+        const restaurantDetails = await getProfile(userId);
 
         // Fetch photos' URLs using a separate API call
-        const photoUrls = await getAllImages(email);
+        const photoUrls = await getAllImages(userId);
 
         // Ensure Cloudinary URL formatting
         const cloudinaryImages = photoUrls.map((url) => {
@@ -139,9 +134,9 @@ const SearchedRestaurant = () => {
     try {
       let items;
       if (query) {
-        items = await searchMenuItems(email, query); // Fetch based on search query
+        items = await searchMenuItems(userId, query); // Fetch based on search query
       } else {
-        items = await getAllItems(email); // Fetch all items if no query
+        items = await getAllItems(userId); // Fetch all items if no query
       }
 
       // Store all items in both states initially
@@ -182,7 +177,7 @@ const SearchedRestaurant = () => {
   const fetchAllReviews = async () => {
     try {
       // Wait for getAllReviews to return the data
-      const data = await getAllReviews(email); 
+      const data = await getAllReviews(userId); 
 
       // Log the data to the console before setting it
       console.log('Fetched reviews:', data);
@@ -198,10 +193,10 @@ const SearchedRestaurant = () => {
   const fetchUserProfiles = async () => {
     const profiles = {};
     for (const review of reviews) {
-      if (review.user_email) {
-        const profilePicture = await getProfile(review.user_email);
+      if (review.commenterId) {
+        const profilePicture = await getProfile(review.commenterId);
         if (profilePicture) {
-          profiles[review.user_email] = profilePicture;
+          profiles[review.commenterId] = profilePicture;
         }
       }
     }
@@ -211,15 +206,16 @@ const SearchedRestaurant = () => {
   
   // Run fetchAllReviews once when the component is mounted or when email changes
   useEffect(() => {
-    if (email) {
+    if (userId) {
+      console.log("is it called");
       fetchAllReviews();
     }
-  }, [email]); 
+  }, [userId]); 
   useEffect(() => {
-    if (email) {
+    if (userId) {
       fetchMenuItems(); // Initial fetch when component loads
     }
-  }, [email]);
+  }, [userId]);
   useEffect(() => {
     if (reviews.length > 0) {
       fetchUserProfiles();
@@ -619,7 +615,7 @@ const SearchedRestaurant = () => {
             <div className="flex items-center">
               {/* Profile Image */}
               <img
-                src={userProfiles[review.user_email]!=null && userProfiles[review.user_email].image} // Assuming `profileImageUrl` is the Cloudinary URL
+                src={userProfiles[review.commenterId]!=null && userProfiles[review.commenterId].image} // Assuming `profileImageUrl` is the Cloudinary URL
                 alt={`${review.username}'s profile`}
                 className="h-10 w-10 rounded-full mr-3"
               />

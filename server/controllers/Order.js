@@ -59,7 +59,7 @@ console.log('RAZORPAY_KEY_SECRET:', process.env.RAZORPAY_KEY_SECRET);
           const menuItem = restaurantItems.find((menu) => menu._id.toString() === orderItem.itemId);
       
           if (menuItem) {
-            const restaurantEmail = menuItem.restaurant_email;
+            const restaurantEmail = menuItem.userId;
       
             // Initialize the group for this restaurant if it doesn't exist
             if (!groupedItems[restaurantEmail]) {

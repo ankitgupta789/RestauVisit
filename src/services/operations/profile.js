@@ -2,16 +2,16 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 
-export const getProfile = async (email) => {
+export const getProfile = async (userId) => {
   let result = null;
- // console.log(email);
+ console.log(userId,"id recieved is");
   // const toastId = toast.loading("Loading...");
 
   try {
-    console.log(" here email is",email);
+    // console.log(" here userId is",userId);
       const response = await axios.get("http://localhost:4000/api/v1/profile/getProfileByEmail",
     {
-      params: { email }
+      params: { userId }
     });
    // console.log("response is ",response);
       result = response.data.data;

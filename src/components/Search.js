@@ -64,9 +64,9 @@ const SearchBar = () => {
     }
   };
 
-  const handleRestaurantClick = (email) => {
+  const handleRestaurantClick = (userId) => {
     navigate("/searchedRestaurant", {
-      state: { email: email }, // Pass the email via state
+      state: { userId: userId }, // Pass the email via state
     });
   };
   useEffect(() => {
@@ -134,7 +134,7 @@ const SearchBar = () => {
               {restaurantResults.map((restaurant) => (
                 <li key={restaurant._id} className="p-3">
                   <button
-                    onClick={() => handleRestaurantClick(restaurant.email)}
+                    onClick={() => handleRestaurantClick(restaurant.userId)}
                     className="w-full text-left font-semibold text-blue-600 hover:underline"
                   >
                     {restaurant.name} - {restaurant.city}, {restaurant.state}
@@ -183,7 +183,7 @@ const SearchBar = () => {
               {cityResults.map((restaurant) => (
                 <li key={restaurant._id} className="p-3">
                   <button
-                    onClick={() => handleRestaurantClick(restaurant._id)}
+                    onClick={() => handleRestaurantClick(restaurant.userId)}
                     className="w-full text-left font-semibold text-blue-600 hover:underline"
                   >
                     {restaurant.name} - {restaurant.city}, {restaurant.state}

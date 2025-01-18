@@ -22,7 +22,11 @@ const notificationSchema = new mongoose.Schema({
     type: Boolean, 
     default: false 
   }, // Whether the notification has been viewed by the restaurant
-
+  userId: {
+     type: mongoose.Schema.Types.ObjectId,
+      ref: 'User', 
+      required: true 
+    },
   createdAt: { 
     type: Date, 
     default: Date.now 

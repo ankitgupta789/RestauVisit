@@ -92,12 +92,12 @@ export const deleteItem = async (user, id) => {
     return null; // Return null if there's an error
   }
 };
-export const searchMenuItems = async (email, query) => {
+export const searchMenuItems = async (userId, query) => {
     try {
-      console.log(`Searching menu items for restaurant email: ${email} with query: ${query}`);
+      console.log(`Searching menu items for restaurant userId: ${userId} with query: ${query}`);
       
       const response = await axios.get(
-        `http://localhost:4000/api/v1/menu/search/${email}?query=${query}`
+        `http://localhost:4000/api/v1/menu/search/${userId}?query=${query}`
       );
   
       if (response.data && response.data.length > 0) {

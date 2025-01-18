@@ -34,12 +34,13 @@ exports.createProfile = async (req, res) => {
     }
 };
 exports.getProfileByEmail = async (req, res) => {
-    const { email } = req.query;
+    const { userId } = req.query;
     
     try {
 		console.log("check");
-        console.log("email is",email);
-        const profile = await Prof.findOne({ email:email });
+        console.log("userId is",userId);
+        const profile = await Prof.findOne({ userId:userId });
+        console.log(profile);
         if (!profile) {
             return res.status(404).json({
                 success: false,

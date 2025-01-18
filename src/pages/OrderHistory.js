@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { getUserOrders } from "../services/order"; // Import the function to fetch orders
 import { useSelector } from "react-redux";
-
+import { useNavigate } from "react-router-dom";
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useSelector((state) => state.profile);
   const userId = user._id;
-
+  const navigate=useNavigate();
+  const handleRestaurantClick = (userId) => {
+    navigate("/searchedRestaurant", {
+      state: { userId: userId }, // Pass the email via state
+    });
+  };
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -73,8 +78,14 @@ const OrderHistory = () => {
               {order.items.map((restaurant, index) => (
                 <li key={index} className="bg-gray-50 border border-gray-200 p-4 rounded-md">
                   <p className="text-gray-700 font-semibold">
-                    Restaurant: <span className="text-indigo-600">{restaurant.restaurantEmail}</span>
-                  </p>
+    Restaurant site:{" "}
+    <button
+      onClick={() => handleRestaurantClick(restaurant.restaurantEmail)}
+      className="text-indigo-600 underline hover:text-indigo-800"
+    >
+      Visit
+    </button>
+  </p>
                   <ul className="mt-2 space-y-2">
                     {restaurant.items.map((item, itemIndex) => (
                       <li key={itemIndex} className="flex justify-between">

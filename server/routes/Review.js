@@ -3,7 +3,7 @@ const router = express.Router();
 const ReviewController = require('../controllers/Review');
 
 // Fetch all menu items related to a restaurant by email
-router.get('/getAllReviews/:email', ReviewController.getAllReviews);
+router.get('/getAllReviews/:userId', ReviewController.getAllReviews);
 
 // Add a new menu item
 router.post('/addReview', ReviewController.addReview);

@@ -125,6 +125,7 @@ const verifyPayment = async (req, res) => {
             restaurantEmail: restaurantEmail, // Restaurant's email
             orderId: orderDetails.orderId, // Order ID
             items: restaurant.items, // Notification message
+            userId:userId,//user who did payment
           });
         console.log(newNotification,restaurantEmail,"printing exact notification sent per restaurant");
           // Save the notification to the database

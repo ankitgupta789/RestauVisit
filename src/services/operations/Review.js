@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 // Function to get all menu items for a restaurant by email
-export const getAllReviews = async (email) => {
+export const getAllReviews = async (userId) => {
   try {
-    
-    const response = await axios.get(`http://localhost:4000/api/v1/review/getAllReviews/${email}`);
+    //  console.log("hello",userId);
+    const response = await axios.get(`http://localhost:4000/api/v1/review/getAllReviews/${userId}`);
 
     // Check if menu items exist
     if (response.data && response.data.length > 0) {
@@ -20,17 +20,17 @@ export const getAllReviews = async (email) => {
 };
 
 // Function to add a new menu item for a restaurant
-export const addReview = async (restaurant_email,user_email,username, review_text, rating) => {
+export const addReview = async (userId,commenterId,username, review_text, rating) => {
     try {
       const newReview = {
-        restaurant_email,
-        user_email,
+        userId,
+        commenterId,
         username,
         review_text,
         rating,
       };
   
-      console.log(`Adding new review for restaurant: ${restaurant_email}`);
+      console.log(`Adding new review for restaurant: ${userId}`);
       
       const response = await axios.post(
         "http://localhost:4000/api/v1/review/addReview", // Adjusted API endpoint for reviews

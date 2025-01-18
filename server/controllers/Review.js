@@ -4,14 +4,14 @@ const User = require('../models/User');
 // Add a new menu item
 const getAllReviews = async (req, res) => {
     try {
-      const { email } = req.params; // Assuming the email is sent in the request body
-  
-      if (!email) {
-        return res.status(400).json({ message: "Email is required to fetch reviews" });
+      const { userId } = req.params; // Assuming the email is sent in the request body
+    console.log("user iis",userId)
+      if (!userId) {
+        return res.status(400).json({ message: "userId is required to fetch reviews" });
       }
-  
+      console.log("hello");
       // Fetch all menu items related to the provided email
-      const menuItems = await Review.find({ restaurant_email: email });
+      const menuItems = await Review.find({ userId: userId });
   
       if (menuItems.length === 0) {
         return res.status(404).json({ message: "No review items found for this restaurant" });
@@ -25,34 +25,34 @@ const getAllReviews = async (req, res) => {
   
   const addReview = async (req, res) => {
     try {
-      const { restaurant_email, user_email, username, review_text, rating } = req.body;
-  
+      const { userId, commenterId, username, review_text, rating } = req.body;
+    //  console.log(userId,"is userId sent to the backend");
       // Validate required fields
-      if (!restaurant_email || !user_email || !username || !review_text || !rating) {
+      if (!userId || !commenterId || !username || !review_text || !rating) {
         return res.status(400).json({ message: "All fields are required" });
       }
-  
+     
       // Validate rating
       if (rating < 1 || rating > 5) {
         return res.status(400).json({ message: "Rating must be between 1 and 5" });
       }
-  
+      
       // Verify if the user exists (Optional, depends on your implementation)
-      const existingUser = await User.findOne({ email: user_email }); // Replace `User` with your user model
+      const existingUser = await User.findOne({ _id: commenterId }); // Replace `User` with your user model
       if (!existingUser) {
         return res.status(404).json({ message: "User not found" });
       }
-  
+      
       // Create a new review
       const newReview = new Review({
-        restaurant_email,
-        user_email,
+        userId,
+        commenterId,
         username,
         review_text,
         rating,
         created_at: new Date()
       });
-  
+     
       // Save the review to the database
       await newReview.save();
       res.status(201).json({ message: "Review added successfully", review: newReview });

@@ -34,7 +34,7 @@ const MyProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const result = await getProfile(user.email);
+        const result = await getProfile(user._id);
         setProfile(result);
         setFormData({
           firstName: result?.firstName || "", // Update firstName
