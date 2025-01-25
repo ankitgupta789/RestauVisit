@@ -1,20 +1,21 @@
 import axios from 'axios';
 
 // Function to fetch notifications
-export const getNotifications = async (restaurantEmail,readFlag) => {
+export const getNotifications = async (restaurantEmail, readFlag) => {
   try {
     const response = await axios.get(
-      `http://localhost:4000/api/v1/restauNotify/getNotifications/${restaurantEmail}`,readFlag
+      `http://localhost:4000/api/v1/restauNotify/getNotifications/${restaurantEmail}?readFlag=${readFlag}`
     );
-    // Assuming the backend is hosted at the same origin or has CORS configured properly
+
     const notifications = response.data;
     console.log('Notifications fetched successfully:', notifications);
     return notifications;
   } catch (error) {
     console.error('Error fetching notifications:', error);
-    throw error; // Handle this appropriately in your application
+    throw error;
   }
 };
+
 
 // Function to update notification status
 export const updateNotificationStatus = async (notificationId, data) => {

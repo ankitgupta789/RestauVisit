@@ -6,6 +6,7 @@ import { searchMenuItems, getAllItems } from "../services/operations/menu"; // F
 import { useSelector } from "react-redux";
 import { addReview,getAllReviews,editReview,deleteReview } from "../services/operations/Review";
 import { addToCart } from "../services/operations/cart";
+import Reserve from "./Reserve";
 const SearchedRestaurant = () => {
   const location = useLocation();
   const { userId } = location.state || {};
@@ -333,64 +334,74 @@ const SearchedRestaurant = () => {
   return (
     <div className="bg-blue-25 min-h-[11/12] p-6 overflow-y-auto">
       {/* Restaurant Info and Photos Section */}
-     <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
-  {/* Restaurant Info and Image Section */}
-  <div className="flex items-start mb-8">
-    {/* Restaurant Info (Left side) */}
-    <div className="flex-1">
-      <h1 className="text-4xl font-bold text-gray-800 mb-4">{name}</h1>
-      <p className="text-lg text-gray-600 mb-4">{about || "No description available."}</p>
-      <p className="text-md text-gray-700 mb-2">
-        <span className="font-semibold">Location:</span> {city}, {state}
-      </p>
-      <p className="text-md text-gray-700 mb-4">
-        <span className="font-semibold">Contact:</span> {contactNumber || "Not available"}
-      </p>
+      <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
+  {/* Main Flex Container */}
+  <div className="flex">
+    {/* Left Section (Restaurant Info and Images) */}
+    <div className="pr-6 w-3/4">
+      {/* Restaurant Info Section */}
+      <div className="flex items-start mb-8">
+        {/* Restaurant Info (Left side) */}
+        <div className="flex-1">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">{name}</h1>
+          <p className="text-lg text-gray-600 mb-4">{about || "No description available."}</p>
+          <p className="text-md text-gray-700 mb-2">
+            <span className="font-semibold">Location:</span> {city}, {state}
+          </p>
+          <p className="text-md text-gray-700 mb-4">
+            <span className="font-semibold">Contact:</span> {contactNumber || "Not available"}
+          </p>
 
-      {/* Buttons for Navigation */}
-      <div className="flex gap-4 mb-4">
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-          onClick={() => scrollToSection(menuRef)}
-        >
-          View Menu
-        </button>
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-green-600"
-          onClick={() => scrollToSection(reviewsRef)}
-        >
-          View Reviews
-        </button>
+          {/* Buttons for Navigation */}
+          <div className="flex gap-4 mb-4">
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+              onClick={() => scrollToSection(menuRef)}
+            >
+              View Menu
+            </button>
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-green-600"
+              onClick={() => scrollToSection(reviewsRef)}
+            >
+              View Reviews
+            </button>
+          </div>
+        </div>
+
+        {/* Restaurant Image (Right side of Info Section) */}
+        <div className="w-1/3 ml-8">
+          <img
+            src={image || "/default-image.jpg"} // Display the image or fallback to default
+            alt="Restaurant"
+            className="w-64 h-64 object-cover rounded-full shadow-md"
+          />
+        </div>
+      </div>
+
+      {/* Photos Section */}
+      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Photos</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {photos && photos.length > 0 ? (
+          photos.map((photo, index) => (
+            <img
+              key={index}
+              src={photo || "/default-image.jpg"} // Fallback if the URL is invalid or empty
+              alt={`Restaurant Image ${index + 1}`}
+              className="w-full h-40 object-cover rounded-lg cursor-pointer"
+              onClick={() => openModal(index)}
+            />
+          ))
+        ) : (
+          <p className="text-gray-600">No photos available.</p>
+        )}
       </div>
     </div>
 
-    {/* Restaurant Image (Right side) */}
-    <div className="w-1/3 ml-8">
-  <img
-    src={ image?image: "/default-image.jpg"} // Display the first photo from the photos array
-    alt="Restaurant"
-    className="w-64 h-64 object-cover rounded-full shadow-md"
-  />
-</div>
-
-  </div>
-
-  {/* Photos Section (Unchanged) */}
-  <h2 className="text-2xl font-semibold text-gray-800 mb-4">Photos</h2>
-  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-    {photos && photos.length > 0 ? (
-      photos.map((photo, index) => (
-        <img
-          key={index}
-          src={photo || "/default-image.jpg"} // Fallback if the URL is invalid or empty
-          alt={`Restaurant Image ${index + 1}`}
-          className="w-full h-40 object-cover rounded-lg cursor-pointer"
-          onClick={() => openModal(index)}
-        />
-      ))
-    ) : (
-      <p className="text-gray-600">No photos available.</p>
-    )}
+    {/* Right Section (Table Booking System) */}
+    <div className="flex-1 pl-6 border-l border-gray-200 w-1/4">
+      <Reserve  userId={userId}/>
+    </div>
   </div>
 </div>
 

@@ -5,40 +5,38 @@ const Order=require("../models/Order");
 const socketIO = require('socket.io');
 const Notification=require("../models/RestauNotification");
 const { connectedSockets } = require('../index');
+const { io, emailSocketMap }=require('../middlewares/Socket');
+
+// const io = socketIO(server, {
+//   cors: {
+//     origin: '*',
+//   }
+// });
 
 
-const {app,server}=require('../middlewares/Socket');
-
-const io = socketIO(server, {
-  cors: {
-    origin: '*',
-  }
-});
+// // socket 
 
 
-// socket 
+// io.on('connection', (socket) => {
+//   console.log('Connected to the client (socket.io)');
 
+//   // Restaurant joins a specific room
+//   socket.on('join-order-room', (restaurantEmail) => {
+//     socket.join(restaurantEmail);
+//     console.log(`Restaurant with email ${restaurantEmail} joined the order room.`);
+//   });
 
-io.on('connection', (socket) => {
-  console.log('Connected to the client (socket.io)');
-
-  // Restaurant joins a specific room
-  socket.on('join-order-room', (restaurantEmail) => {
-    socket.join(restaurantEmail);
-    console.log(`Restaurant with email ${restaurantEmail} joined the order room.`);
-  });
-
-  // Notify restaurant of new order
-  socket.on('new-order', (orderDetails) => {
-    const restaurantEmail = orderDetails.restaurantEmail;
-    console.log(orderDetails,"printing orderDetails");
-    socket.to(restaurantEmail).emit('order-notification', orderDetails);
-  });
+//   // Notify restaurant of new order
+//   socket.on('new-order', (orderDetails) => {
+//     const restaurantEmail = orderDetails.restaurantEmail;
+//     console.log(orderDetails,"printing orderDetails");
+//     socket.to(restaurantEmail).emit('order-notification', orderDetails);
+//   });
   
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
-  });
-});
+//   socket.on('disconnect', () => {
+//     console.log('User disconnected:', socket.id);
+//   });
+// });
 
 
 
@@ -130,8 +128,15 @@ const verifyPayment = async (req, res) => {
         console.log(newNotification,restaurantEmail,"printing exact notification sent per restaurant");
           // Save the notification to the database
           await newNotification.save();
-        //  console.log(io,"printing io");
-        io.to(restaurantEmail).emit('order-notification', newNotification);
+        
+         const socketId = emailSocketMap.get(restaurantEmail);
+         console.log(socketId,"connected id");
+         if (socketId) {
+           io.to(socketId).emit('order-notification', newNotification);
+           console.log(`Notification sent to ${restaurantEmail} with socket ID: ${socketId}`);
+         } else {
+           console.log(`No active connection found for email: ${restaurantEmail}`);
+         }
           console.log(`New order notification sent to restaurant: ${restaurantEmail}`);
 
         }
