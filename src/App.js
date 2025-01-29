@@ -36,6 +36,7 @@ import OrderHistory from "./pages/OrderHistory.js"
 import SearchedRestaurant from "./components/SearchedRestaurant.js";
 import Cart from "./pages/Cart.js";
 import Orders from "./pages/Orders.js";
+import Analytics from "./pages/Analytics/Analytics.js";
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -195,7 +196,10 @@ function App() {
         {user?.accountType==='Student'
         &&<Route path="/exercise" element={<Exercise/>}/>
         }
-        
+        <Route 
+            path="/analytics" 
+            element={user && user.accountType === "Restaurant" ? <Analytics /> : <Login />} 
+        />
         
        
         

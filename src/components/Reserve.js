@@ -9,7 +9,7 @@ const Reserve = ({ userId }) => {
   const [availability, setAvailability] = useState(null); // State to store availability status
   const [isPaymentVisible, setIsPaymentVisible] = useState(false); // State to control payment visibility
   const { user } = useSelector((state) => state.profile);
-
+const customerId=user._id;
   const timeSlots = [
     '10:00 - 11:00',
     '11:00 - 12:00',
@@ -67,18 +67,22 @@ const Reserve = ({ userId }) => {
   // Function to handle Razorpay payment
   const handlePayment = async () => {
     try {
+      console.log(userId,"id sent in backend is")
       // Prepare data for table booking
+      const userId2=userId
       const bookingData = {
+        userId2,
         slot,
         guests: Number(guests),
         amount: 50000, // Amount in smallest currency unit (e.g., 50000 paise = 500 INR)
         currency: 'INR',
-        name: 'Guest Name', // Replace with actual guest name input if needed
+        name: user.firstName+" "+user.lastName, // Replace with actual guest name input if needed
+        customerId
       };
 
       // Make a POST request to backend to create a Razorpay order
       const response = await axios.post('http://localhost:4000/api/v1/book/bookTable', bookingData);
-
+       
       const { amount, id: orderId, currency } = response.data;
 
       const options = {

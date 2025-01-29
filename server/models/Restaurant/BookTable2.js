@@ -13,8 +13,12 @@ const bookTableSchema = new mongoose.Schema({
     default: 'Created', // Status can be: Created, Paid, Failed
     enum: ['Created', 'Paid', 'Failed'],
   },
+  seen:{
+    type:Boolean, default:false
+  },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   createdAt: { type: Date, default: Date.now }, // Booking creation timestamp
+  customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
 module.exports = mongoose.model('BookTable', bookTableSchema);

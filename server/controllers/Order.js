@@ -86,7 +86,7 @@ console.log('RAZORPAY_KEY_SECRET:', process.env.RAZORPAY_KEY_SECRET);
 // Convert groupedItems object into an array
 const restaurantOrders = Object.values(groupedItems);
 
-console.log(restaurantOrders, "Grouped items by restaurant");
+// console.log(restaurantOrders, "Grouped items by restaurant");
     // Save order in the database
     const newOrder = new Order({
       orderId: razorpayOrder.id,

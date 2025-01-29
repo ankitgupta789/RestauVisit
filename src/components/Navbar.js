@@ -141,6 +141,14 @@ const Navbar = () => {
                     <Link to="/orderHistory">Order_History</Link>
                 </li>
                 } 
+                {
+                    user?.accountType==="Restaurant" &&
+                    <li>
+                    <Link to="/analytics">Analytics
+
+                    </Link>
+                </li>
+                } 
                
             </ul>
         </nav>
