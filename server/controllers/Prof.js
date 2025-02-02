@@ -37,8 +37,8 @@ exports.getProfileByEmail = async (req, res) => {
     const { userId } = req.query;
     
     try {
-		console.log("check");
-        console.log("userId is",userId);
+		// console.log("check");
+        // console.log("userId is",userId);
         const profile = await Prof.findOne({ userId:userId });
         console.log(profile);
         if (!profile) {
@@ -47,7 +47,7 @@ exports.getProfileByEmail = async (req, res) => {
                 message: "Profile not found",
             });
         }
-		console.log("fetched profile is",profile)
+		// console.log("fetched profile is",profile)
         return res.status(200).json({
             success: true,
             data: profile,

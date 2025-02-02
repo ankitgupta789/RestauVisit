@@ -26,7 +26,7 @@ const getAllReviews = async (req, res) => {
   const addReview = async (req, res) => {
     try {
       const { userId, commenterId, username, review_text, rating } = req.body;
-    //  console.log(userId,"is userId sent to the backend");
+     
       // Validate required fields
       if (!userId || !commenterId || !username || !review_text || !rating) {
         return res.status(400).json({ message: "All fields are required" });
@@ -55,6 +55,7 @@ const getAllReviews = async (req, res) => {
      
       // Save the review to the database
       await newReview.save();
+      console.log(userId,"is userId sent to the backend");
       res.status(201).json({ message: "Review added successfully", review: newReview });
     } catch (error) {
       res.status(500).json({ message: "Error adding review", error });
