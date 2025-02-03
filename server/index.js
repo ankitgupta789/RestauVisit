@@ -30,6 +30,8 @@ const RestauNotifications=require("./routes/RestauNotification.js")
 const tableRoutes=require("./routes/Restaurant/Table.js");
 const {app,server}=require('./middlewares/Socket.js')
 const bookTableRoutes=require('./routes/Restaurant/BookTable.js')
+
+const replyRoutes=require("./routes/ReplyReview.js")
 const http = require('http');
 // const Server = http.createServer(app);
 dotenv.config();
@@ -72,7 +74,7 @@ app.use('/api/v1/payment',paymentRoutes);
 app.use('/api/v1/restauNotify',RestauNotifications);
 app.use('/api/v1/table',tableRoutes);
 app.use('/api/v1/book', bookTableRoutes);
-
+app.use('/api/v1/reply',replyRoutes);
 //def route
 app.get("/", (req, res) => {
 	return res.json({

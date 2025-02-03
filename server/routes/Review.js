@@ -13,5 +13,7 @@ router.put('/editReview/:id', ReviewController.editReview);
 
 // Delete a menu item by ID
 router.delete('/deleteReview/:id', ReviewController.deleteReview);
-
+//upvoting and downvoting
+router.put("/upvote/:reviewId",  ReviewController.upvoteReview);
+router.put("/downvote/:reviewId", ReviewController.downvoteReview);
 module.exports = router;

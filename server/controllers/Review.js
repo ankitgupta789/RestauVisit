@@ -146,10 +146,74 @@ const deleteReview = async (req, res) => {
     }
   };
   
-  
+
+// Upvote a review
+const upvoteReview = async (req, res) => {
+    try {
+      
+        const { reviewId } = req.params;
+        const {userId} = req.body; // Assuming you have user authentication middleware
+        
+        const review = await Review.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ message: "Review not found" });
+        }
+        // console.log(review);
+        // Prevent duplicate upvotes
+        if (review.upvoters.includes(userId)) {
+          review.upvoters = review.upvoters.filter(id => id.toString() !== userId);
+          await review.save();
+
+            return res.json({ message: "Marked as unvoted",upvotes: review.upvoters.length, downvotes: review.downvoters.length });
+        }
+        
+        // Remove user from downvotes if they had downvoted before
+        review.downvoters = review.downvoters.filter(id => id.toString() !== userId);
+        console.log("call recieved or not",reviewId,userId);
+
+        review.upvoters.push(userId);
+        await review.save();
+        res.json({ message: "Upvoted successfully", upvotes: review.upvoters.length, downvotes: review.downvoters.length });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+};
+
+// Downvote a review
+const downvoteReview = async (req, res) => {
+    try {
+        const { reviewId } = req.params;
+        const {userId} = req.body;
+
+        const review = await Review.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ message: "Review not found" });
+        }
+
+        // Prevent duplicate downvotes
+        if (review.downvoters.includes(userId)) {
+          review.downvoters = review.downvoters.filter(id => id.toString() !== userId);
+          await review.save();
+
+            return res.json({ message: "Marked as unvoted",upvotes: review.upvoters.length, downvotes: review.downvoters.length });
+        }
+
+        // Remove user from upvotes if they had upvoted before
+        review.upvoters = review.upvoters.filter(id => id.toString() !== userId);
+        review.downvoters.push(userId);
+
+        await review.save();
+        res.json({ message: "Downvoted successfully", upvotes: review.upvoters.length, downvotes: review.downvoters.length });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+};
+
 module.exports = {
     getAllReviews,
   addReview,
   editReview,
-  deleteReview
+  deleteReview,
+  upvoteReview,
+  downvoteReview
 };

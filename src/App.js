@@ -37,6 +37,7 @@ import SearchedRestaurant from "./components/SearchedRestaurant.js";
 import Cart from "./pages/Cart.js";
 import Orders from "./pages/Orders.js";
 import Analytics from "./pages/Analytics/Analytics.js";
+import RestauReviews from "./components/Reviews/RestauReviews.js";
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -157,10 +158,10 @@ function App() {
             path="/menu" 
             element={user && user.accountType === "Restaurant" ? <Menu /> : <Login />} 
         />
-        <Route 
+        {/* <Route 
             path="/myreviews" 
             element={user && user.accountType === "Restaurant" ? <MyReviews /> : <Login />} 
-        />
+        /> */}
          <Route 
             path="/reservations" 
             element={user && user.accountType === "Restaurant" ? <Reservations /> : <Login />} 
@@ -184,7 +185,10 @@ function App() {
         &&<Route path="/myorders" element={user?<Orders/>:<Login/>} />
         }
         
-
+        {user?.accountType==='Restaurant'
+        
+        &&<Route path="/myReviews" element={user?<RestauReviews userId={user._id}/>:<Login/>} />
+        }
 
 
         {user?.accountType==='Student'

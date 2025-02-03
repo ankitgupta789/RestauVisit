@@ -91,3 +91,52 @@ export const deleteReview = async (user, id) => {
       return null; // Return null if there's an error
     }
   };
+  
+export const upvoteReview = async (reviewId,userId) => {
+    try {
+        const response = await axios.put(`http://localhost:4000/api/v1/review/upvote/${reviewId}`,{userId:userId});
+        return response.data; // Returns updated upvotes & downvotes count
+    } catch (error) {
+        console.error("Error upvoting review:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const downvoteReview = async (reviewId,userId) => {
+    try {
+        const response = await axios.put(`http://localhost:4000/api/v1/review/downvote/${reviewId}`,{userId:userId});
+        return response.data; // Returns updated upvotes & downvotes count
+    } catch (error) {
+        console.error("Error downvoting review:", error.response?.data || error.message);
+        throw error;
+    }
+};
+// api.js
+
+// Function to add a reply to a review
+export const addReply = async (userId, reviewId, text,username) => {
+  try {
+    // Make the POST request to the backend
+    // console.log(userId,reviewId,replyText,username,"data sent")
+    const response = await axios.post(`http://localhost:4000/api/v1/reply/addReply/${reviewId}`, {
+      userId,
+      text,
+      username
+    });
+    return response.data; // Return the updated review object
+  } catch (error) {
+    console.error('Error adding reply:', error);
+    throw error; // Rethrow error to be handled in the calling function
+  }
+};
+
+export const getReplies = async (reviewId) => {
+  try {
+    const response = await axios.get(`http://localhost:4000/api/v1/reply/getReplies/${reviewId}`);
+    console.log("Replies:", response.data);
+    return response.data; // Return replies to use in state if needed
+  } catch (error) {
+    console.error("Error fetching replies:", error.response?.data || error.message);
+  }
+};
+

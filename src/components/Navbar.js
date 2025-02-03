@@ -126,7 +126,7 @@ const Navbar = () => {
                 {
                     user?.accountType==="Restaurant" &&
                     <li>
-                    <Link to="/myreviews">My_Reviews</Link>
+                    <Link to="/myReviews">My_Reviews</Link>
                 </li>
                 } 
                 {

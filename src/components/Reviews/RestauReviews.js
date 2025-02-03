@@ -1,10 +1,14 @@
 import React from 'react'
-import { addReview,getAllReviews,editReview,deleteReview } from "../../services/operations/Review";
+import { addReview,getAllReviews,editReview,deleteReview,upvoteReview,downvoteReview,addReply } from "../../services/operations/Review";
 import { useState,useEffect } from 'react';
 import { useSelector } from 'react-redux';
 // import { useSelector } from 'react-redux';
 import { getProfile } from "../../services/operations/profile"; // Importing the function for fetching restaurant data
-
+// import { toast } from 'react-toastify';
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faTurnDownRight } from "@fortawesome/free-solid-svg-icons";
+import { FaReply } from 'react-icons/fa';
+import Reply from './Reply';
 const RestauReviews = ({userId}) => {
 
     
@@ -22,17 +26,23 @@ const handleMenuToggle = (reviewId) => {
   const [reviews, setReviews] = useState([]); // To store the list of reviews
   const [menuOpen, setMenuOpen] = useState(null); // Track which menu is open (by review ID)
 const [userProfiles, setUserProfiles] = useState({});
-
+const [isReplying, setIsReplying] = useState(false);
+const commenterId=user._id
      const fetchAllReviews = async () => {
         try {
           // Wait for getAllReviews to return the data
           const data = await getAllReviews(userId); 
     
           // Log the data to the console before setting it
-          console.log('Fetched reviews:', data);
-    
+        //   console.log('Fetched reviews:', data);
+          const reviewsWithVotes = data.map((review) => ({
+            ...review,
+            upvotes: review.upvoters.length,  // Set upvotes to length of the upvoters array
+            downvotes: review.downvoters.length, // Set downvotes to length of the downvoters array
+        }));
           // Set the data to the reviews state
-          setReviews(data);
+          console.log(reviewsWithVotes);
+          setReviews(reviewsWithVotes);
     
         } catch (error) {
           // Handle any errors that might occur during the fetch
@@ -106,7 +116,15 @@ const handleCancel = () => {
       }
       fetchAllReviews();
     };
-
+    const [replyForms, setReplyForms] = useState({});
+    const handleReply = async (reviewId) => {
+        setReplyForms((prev) => ({
+            ...prev,
+            [reviewId]: !prev[reviewId] // Toggle visibility for this specific review
+          }));
+        
+      };
+      
     const handleDelete = async (reviewId) => {
         const response = await deleteReview(user, reviewId);
         if (response) {
@@ -116,9 +134,46 @@ const handleCancel = () => {
         setMenuOpen(null); // Close the menu
         fetchAllReviews();
       };
+      //handling upvoting any particular review
+      const handleUpvote = async (reviewId) => {
+        try {
+          const response = await upvoteReview(reviewId, user._id);
+          if (response) {
+            setReviews((prevReviews) =>
+                prevReviews.map((review) =>
+                    review._id === reviewId
+                        ? { ...review, upvotes: response.upvotes, downvotes: response.downvotes } // Update both upvotes and downvotes if needed
+                        : review
+                )
+            );
+            console.log(reviews);
+        }
+        } catch (error) {
+          console.error("Error upvoting review:", error);
+        }
+      };
+    // handling downvoting a particular review
+    const handleDownvote = async (reviewId) => {
+        try {
+          const response = await downvoteReview(reviewId, user._id);
+          if (response) {
+            setReviews((prevReviews) =>
+                prevReviews.map((review) =>
+                    review._id === reviewId
+                        ? { ...review, upvotes: response.upvotes, downvotes: response.downvotes } // Update both upvotes and downvotes if needed
+                        : review
+                )
+
+            );
+            console.log(reviews);
+        }
+        } catch (error) {
+          console.error("Error downvoting review:", error);
+        }
+      };
   return (
 
-      <div  className="mt-8 px-4 sm:px-6 lg:px-8 w-full">
+      <div  className="mt-8 px-4 sm:px-6 lg:px-8 w-full overflow-y-auto">
   <h1 className="text-3xl font-semibold mb-6 text-gray-800">Reviews</h1>
 
   {/* Add Review Form */}
@@ -236,6 +291,7 @@ const handleCancel = () => {
                 <span className="font-semibold text-gray-800">{review.username}</span>
                 
               </p>
+            
             </div>
             {/* Star Rating */}
             <div className="flex mt-2">
@@ -258,6 +314,33 @@ const handleCancel = () => {
               ))}
             </div>
             <p className="mt-3 text-gray-800">{review.review_text}</p>
+            <div className="flex items-center mt-2">
+            <button
+              className="px-3 py-1 bg-caribbeangreen-100 text-white rounded mr-2"
+              onClick={() => handleUpvote(review._id)}
+            >
+              👍 <span className="text-pure-greys-600">{review.upvotes}</span>
+            </button>
+            <button
+              className="px-3 py-1 bg-pink-300 text-white rounded"
+              onClick={() => handleDownvote(review._id)}
+            >
+              👎<span className="text-pure-greys-600">{review.downvotes}</span>
+            </button>
+          </div>
+          <div className="mt-3 flex-row items-center">
+                <button
+                  className="flex items-center text-blue-600 hover:text-blue-800"
+                  onClick={() => handleReply(review._id)} // Assuming handleReply is a function for replies
+                >
+                  <FaReply className="mr-2" />
+                  Replies
+                </button>
+                {replyForms[review._id] && (
+                <Reply reviewId={review._id} userId={commenterId}/>)
+                    }  
+              </div>
+
           </div>
         )}
 
