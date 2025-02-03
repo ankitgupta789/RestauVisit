@@ -5,7 +5,7 @@ const User = require('../models/User');
 const getAllReviews = async (req, res) => {
     try {
       const { userId } = req.params; // Assuming the email is sent in the request body
-    console.log("user iis",userId)
+    // console.log("user iis",userId)
       if (!userId) {
         return res.status(400).json({ message: "userId is required to fetch reviews" });
       }
@@ -119,6 +119,7 @@ const deleteReview = async (req, res) => {
       const { id } = req.params; // Review ID from the URL
   
       // Find the review by ID
+      console.log(`Deleting review with ID: ${id}`);
       const review = await Review.findById(id);
       if (!review) {
         return res.status(404).json({ message: "Review not found" });
@@ -132,7 +133,7 @@ const deleteReview = async (req, res) => {
       }
   
       // Ensure the user is the owner of the review
-      if (existingUser._id.toString() !== user._id || existingUser.email !== review.user_email) {
+      if (existingUser._id.toString() !== user._id) {
         return res.status(403).json({ message: "You are not authorized to delete this review" });
       }
   
