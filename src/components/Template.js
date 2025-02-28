@@ -1,68 +1,32 @@
-import React from 'react'
-import frameImage from "../assets/frame.png"
-import SignupForm from './SignupForm'
-import LoginForm from './LoginForm'
-import {FcGoogle} from "react-icons/fc"
+import React from 'react';
+import SignupForm from './SignupForm';
+import LoginForm from './LoginForm';
+import { FcGoogle } from 'react-icons/fc';
 
-
-const Template = ({title, desc1, desc2, image, formtype, setIsLoggedIn}) => {
-
-    // console.log("ye rha mera form type");
-    // console.log(formtype)
+const Template = ({ title, desc1, desc2, image, formtype }) => {
   return (
-    <div className='flex justify-between w-11/12 max-w-[460px]  mx-auto gap-x-12 gap-y-0 mt-0'>
+    <div className='flex flex-col items-center bg-white shadow-lg rounded-lg p-6 w-11/12 max-w-[480px] mt-4 mx-auto text-black border border-gray-200'>
+      <h2 className='text-2xl font-bold text-gray-800'>{title}</h2>
+      <p className='text-md text-gray-600 mt-2'>{desc1}</p>
+      <p className='text-sm text-gray-500'>{desc2}</p>
 
-        <div className='w-11/12 max-w-[450px]' >
-            {/* <h1
-            className='text-richblack-5 font-semibold text-[1.875rem] leading-[2.375rem]' 
-            >
-                {title}
-            </h1> */}
+      <div className='w-full mt-4'>
+        {formtype === 'signup' ? <SignupForm /> : <LoginForm />}
+      </div>
 
-            <p className='text-[1.125rem] leading[1.625rem] mt-4' >
-                <span className='text-richblack-100'>Want a best dinning option in your city?</span>
-                <br/>
-                <span className='text-blue-100 italic'>RestauVisit is the best option try it!!</span>
-            </p>
+      <div className='flex items-center w-full my-4 gap-2'>
+        <div className='flex-1 h-px bg-gray-300'></div>
+        <p className='text-gray-500 text-sm'>OR</p>
+        <div className='flex-1 h-px bg-gray-300'></div>
+      </div>
 
-            {formtype === "signup" ? 
-            (<SignupForm/>):
-            (<LoginForm />)}
-
-            <div className='flex w-full items-center my-4 gap-x-2'>
-                <div className='w-full h-[1px] bg-richblack-700'></div>
-                <p className='text-richblack-700 font-medium leading[1.375rem]'>
-                    OR
-                </p>
-                <div className='w-full h-[1px] bg-richblack-700'></div>
-            </div>
-
-            <button className='w-full flex justify-center items-center rounded-[8px] font-medium text-richblack-100
-            border border-richblack-700 px-[12px] py-[8px] gap-x-2 mt-6 '>
-                <FcGoogle/>
-                <p>Sign Up with Google</p>
-            </button>
-
-        </div>
-
-        {/* <div className='relative w-11/12 max-w-[450px] '>
-            <img src={frameImage}
-                alt="Pattern"
-                width={558}
-                height={504}
-                loading="lazy"/>
-
-            <img src={image}
-                alt="Students"
-                width={558}
-                height={490}
-                loading="lazy"
-                className='absolute -top-4 right-4'
-                />    
-        </div> */}
-
+      <button className='w-full flex justify-center items-center rounded-lg font-medium text-gray-700
+            border border-gray-400 px-4 py-2 gap-2 hover:bg-gray-100 transition-all'>
+        <FcGoogle className='text-xl' />
+        <p>Sign Up with Google</p>
+      </button>
     </div>
-  )
-}
+  );
+};
 
-export default Template
+export default Template;

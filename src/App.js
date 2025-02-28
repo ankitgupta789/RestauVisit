@@ -1,6 +1,6 @@
 import { Route, Routes,Navigate } from "react-router-dom";
 import "./App.css";
-import Navbar from "./components/Navbar"
+import Navbar from "./components/Navbar/Navbar.js"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
@@ -74,54 +74,7 @@ function App() {
   };
 
   return (
-    <div className="w-screen h-screen bg-brown-5 flex flex-col">
-      <Navbar className="relative"/>
-      
-      {user && <div className="absolute bottom-20 right-10 z-20">
-    {!modal && (
-      <button
-        className="bg-blue-100 text-white font-bold py-2 px-4 rounded close-btn animate-bounce"
-        onClick={() => setModal((value) => !value)}
-      >
-        Toggle Feedback
-      </button>
-    )}
-    <div>
-      {modal && (
-        <form className="feedback bg-white rounded-lg shadow-lg p-8" onSubmit={HandleSubmit}>
-          <button
-            className="close-btn-form absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-            onClick={() => setModal((value) => !value)}
-          >
-            X
-          </button>
-         
-          <div className="my-6">
-            <input
-              className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-400"
-              placeholder="Email"
-              name="email"
-              onChange={(e) => handleChange(e)}
-              required
-            />
-          </div>
-          <div className="my-6">
-            <textarea
-              className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-blue-400 h-48 resize-none"
-              placeholder="Feedback"
-              name="content"
-              onChange={(e) => handleChange(e)}
-              required
-            ></textarea>
-          </div>
-          <button className="bg-blue-200 w-full" onClick={HandleSubmit}>
-            Submit Feedback
-          </button>
-        </form>
-      )}
-    </div>
-  </div>
-}
+    
       
       <Routes>
 
@@ -209,8 +162,7 @@ function App() {
         
         
         </Routes>
-     
-    </div>
+  
     )
 }
 
