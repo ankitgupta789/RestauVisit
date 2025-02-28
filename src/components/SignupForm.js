@@ -67,26 +67,31 @@ const SignupForm = () => {
   return (
     <div>
         {/* student-Instructor tab */}
-        <div
-        className='flex bg-white p-1 gap-x-1 my-6 rounded-full max-w-max'>
+        <div className='flex w-full justify-between items-center'>
+            <div>
+                Select Category 
+            </div>
+            <div
+            className='flex bg-richblack-50 p-1 gap-x-1 my-6 rounded-full max-w-max '>
+                
+                <button
+                className={`${accountType === "User" 
+                ?
+                "bg-richblack-900 text-richblack-5"
+                :"bg-transparent text-black"}  py-2 px-5 rounded-full transition-all duration-200`}
+                onClick={()=> setAccountType("User")}>
+                    User
+                </button>
 
-            <button
-            className={`${accountType === "User" 
-            ?
-              "bg-richblack-900 text-richblack-5"
-            :"bg-transparent text-black"} py-2 px-5 rounded-full transition-all duration-200`}
-            onClick={()=> setAccountType("User")}>
-                User
-            </button>
-
-            <button
-            className={`${accountType === "Restaurant" 
-            ?
-              "bg-richblack-900 text-richblack-5"
-            :"bg-transparent text-black"} py-2 px-5 rounded-full transition-all duration-200`}
-            onClick={() => setAccountType("Restaurant")}>
-                Restaurant
-            </button>
+                <button
+                className={`${accountType === "Restaurant" 
+                ?
+                "bg-richblack-900 text-richblack-5"
+                :"bg-transparent text-black"} py-2 px-5 rounded-full transition-all duration-200`}
+                onClick={() => setAccountType("Restaurant")}>
+                    Restaurant
+                </button>
+            </div>
         </div>
 
         <form onSubmit={submitHandler} >
@@ -101,7 +106,7 @@ const SignupForm = () => {
                             onChange={changeHandler}
                             placeholder="Enter First Name"
                             value={formData.firstName}
-                            className='bg-white rounded-[0.5rem] text-black w-full p-[12px]'
+                            className='bg-white rounded-[0.5rem] border-1 border-black text-black w-full p-[12px]'
                         />
                     </label>
 
@@ -114,7 +119,7 @@ const SignupForm = () => {
                             onChange={changeHandler}
                             placeholder="Enter Last Name"
                             value={formData.lastName}
-                            className='bg-white rounded-[0.5rem] text-black w-full p-[12px]'
+                            className='bg-white rounded-[0.5rem]border-1 border-black text-black w-full p-[12px]'
                         />
                     </label>
             </div>
@@ -129,7 +134,7 @@ const SignupForm = () => {
                         onChange={changeHandler}
                         placeholder="Enter Email Address "
                         value={formData.email}
-                        className='bg-white rounded-[0.5rem] text-black w-full p-[12px]'
+                        className='bg-white rounded-[0.5rem] border-black border-1  text-black w-full p-[12px]'
                     />
             </label>
             </div>

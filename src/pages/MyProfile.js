@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getProfile, updateProfile } from "../services/operations/profile";
 import { states, cities } from "../dummyData/addressData";  // Assuming this is where your data comes from
+import Navbar from "../components/Navbar/Navbar";
 
 const MyProfile = () => {
   const { user } = useSelector((state) => state.profile);
@@ -126,8 +127,9 @@ const MyProfile = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 h-screen overflow-auto max-h-[11/12]">
-      <div className="header mb-6">
+    <div className=" mx-auto p-4 h-screen overflow-auto max-h-screen">
+      <Navbar/>
+      <div className="header mt-2 mb-6">
         <h1 className="text-3xl font-medium text-black">My Profile</h1>
       </div>
 

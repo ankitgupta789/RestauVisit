@@ -34,7 +34,7 @@ const LoginForm = () => {
     className="flex flex-col w-full gap-y-4 mt-6">
 
         <label className='w-full'>
-            <p className='text-[0.875rem] text-richblack-5 mb-1 leading-[1.375rem]'>
+            <p className='text-[0.875rem]  mb-1 leading-[1.375rem]'>
                 Email Address<sup className='text-pink-200'>*</sup>
             </p>
             <input 
@@ -49,7 +49,7 @@ const LoginForm = () => {
         </label>
 
         <label className='w-full relative'>
-            <p className='text-[0.875rem] text-richblack-5 mb-1 leading-[1.375rem]'>
+            <p className='text-[0.875rem]  mb-1 leading-[1.375rem]'>
                 Password<sup className='text-pink-200'>*</sup>
             </p>
             <input 
