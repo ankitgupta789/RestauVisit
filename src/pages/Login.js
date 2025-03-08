@@ -1,7 +1,7 @@
 import React from 'react';
 import Template from '../components/Template';
 import loginImg from "../assets/login.png";
-import Navbar from '../components/Navbar/Navbar';
+import Navbar from '../components/Navbar/Navbar2.jsx';
 
 const Login = () => {
   return (

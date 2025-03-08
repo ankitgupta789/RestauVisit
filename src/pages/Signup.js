@@ -1,7 +1,7 @@
 import React from 'react'
 import signupImg from "../assets/signup.png"
 import Template from '../components/Template'
-import Navbar from '../components/Navbar/Navbar'
+import Navbar from '../components/Navbar/Navbar2'
 
 const Signup = ({setIsLoggedIn}) => {
   return (

@@ -1,23 +1,35 @@
-import React from 'react'
-import { useState,useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import {fetchNotifications} from "../../services/NotificationRoutes/restauNotify"
-import { fetchItemsByIds } from '../../services/operations/menu';
-const ITEMS_PER_PAGE = 5; // Number of notifications per page
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { fetchNotifications } from "../../services/NotificationRoutes/restauNotify";
+import { fetchItemsByIds } from "../../services/operations/menu";
+import {
+  Box,
+  Flex,
+  Text,
+  Button,
+  ButtonGroup,
+  Spinner,
+  Stack,
+  useColorModeValue,
+  Card,
+  CardHeader,
+  CardBody,
+  Divider,
+} from "@chakra-ui/react";
 
+const ITEMS_PER_PAGE = 5; // Number of notifications per page
 
 const RecentOnlineOrders = () => {
   const { user } = useSelector((state) => state.profile);
   const restaurantEmail = user._id;
- 
+
   const [notifications, setNotifications] = useState([]);
   const [expandedIndexes, setExpandedIndexes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [itemDetails, setItemDetails] = useState({});
   const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
- 
+
   useEffect(() => {
-    
     const loadNotifications = async () => {
       try {
         const fetchedNotifications = await fetchNotifications(restaurantEmail);
@@ -78,96 +90,121 @@ const RecentOnlineOrders = () => {
     setCurrentPage(newPage);
   };
 
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const cardBg = useColorModeValue("white", "gray.700");
+  const buttonColorScheme = useColorModeValue("blue", "teal");
+
   return (
-    <div className="space-y-6 bg-white bg-opacity-80 p-2 rounded-lg shadow-lg relative overflow-y-auto">
-    {/* Notifications Section */}
-    <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <h3 className="text-xl font-semibold text-black mb-1">
+    <Box
+      p={6}
+      bg={useColorModeValue("gray.50", "gray.800")}
+      borderRadius="lg"
+      height="720px" // Fixed height
+      overflowY="auto" // Enable vertical scrolling
+    >
+      <Text fontSize="2xl" fontWeight="bold" mb={6} color={useColorModeValue("gray.800", "white")}>
         Recent Online Orders
-      </h3>
+      </Text>
       {loading ? (
-        <p className="text-gray-600">Loading notifications...</p>
+        <Flex justify="center" align="center" h="40">
+          <Spinner size="xl" />
+        </Flex>
       ) : notifications.length > 0 ? (
-        <div>
-          {displayedNotifications.map((notification, index) => (
-            <div
-              key={index}
-              className="relative bg-gray-50 p-2 rounded-lg shadow-md hover:bg-gray-100 transition"
-            >
-              <p className="text-sm text-gray-600">
-                <span className="font-semibold">User ID:</span>{" "}
-                {notification.userId}
-              </p>
-              <p className="text-sm text-gray-600">
-                <span className="font-semibold">Created At:</span>{" "}
-                {notification.createdAt}
-              </p>
-              <button
-                onClick={() => toggleExpand(index, notification.items)}
-                className="text-blue-500 mt-3 hover:underline"
-              >
-                {expandedIndexes.includes(index) ? "Show Less" : "Show More"}
-              </button>
-              {expandedIndexes.includes(index) && (
-                <div className="absolute top-full left-0 w-full bg-white border border-gray-300 shadow-lg p-4 mt-2 rounded-lg z-10">
-                  <ul className="mt-4 space-y-3">
-                    {(itemDetails[index]?.items || []).map(
-                      (item, itemIndex) => (
-                        <li
-                          key={itemIndex}
-                          className="border-b border-gray-300 pb-2"
-                        >
-                          <h4 className="text-lg text-black font-semibold">
-                            {item.name}
-                          </h4>
-                          <p className="text-gray-500">{item.description}</p>
-                          <p className="text-gray-600">
-                            <span className="font-semibold">Quantity:</span>{" "}
-                            {item.quantity}
-                          </p>
-                          <p className="text-gray-600">
-                            <span className="font-semibold">Price:</span> ₹
-                            {item.price}
-                          </p>
-                        </li>
-                      )
-                    )}
-                  </ul>
-                  <p className="text-lg font-bold text-green-600 mt-4">
-                    Total Amount: ₹{itemDetails[index]?.totalAmount || 0}
-                  </p>
-                </div>
-              )}
-            </div>
-          ))}
+        <Stack spacing={4}>
           {/* Pagination Controls */}
-          <div className="flex justify-center items-center mt-4 space-x-2">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-              (page) => (
-                <button
+          <Flex justify="center" mt={6}>
+            <ButtonGroup spacing={2}>
+              <Button
+                onClick={handlePreviousPage}
+                isDisabled={currentPage === 1}
+                colorScheme={buttonColorScheme}
+              >
+                Previous
+              </Button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <Button
                   key={page}
                   onClick={() => handlePageChange(page)}
-                  className={`px-3 py-1 rounded-full ${
-                    currentPage === page
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
+                  colorScheme={currentPage === page ? buttonColorScheme : "gray"}
+                  variant={currentPage === page ? "solid" : "outline"}
                 >
                   {page}
-                </button>
-              )
-            )}
-          </div>
-        </div>
+                </Button>
+              ))}
+              <Button
+                onClick={handleNextPage}
+                isDisabled={currentPage === totalPages}
+                colorScheme={buttonColorScheme}
+              >
+                Next
+              </Button>
+            </ButtonGroup>
+          </Flex>
+          {displayedNotifications.map((notification, index) => (
+            <Card key={index} bg={cardBg} boxShadow="md" _hover={{ boxShadow: "lg" }}>
+              <CardHeader>
+                <Flex justify="space-between" align="center">
+                  <Box>
+                    <Text fontSize="sm" color="gray.600">
+                      <Text as="span" fontWeight="bold">User ID:</Text> {notification.userId}
+                    </Text>
+                    <Text fontSize="sm" color="gray.600">
+                      <Text as="span" fontWeight="bold">Created At:</Text>{" "}
+                      {new Date(notification.createdAt).toLocaleString()}
+                    </Text>
+                  </Box>
+                  <Button
+                    onClick={() => toggleExpand(index, notification.items)}
+                    colorScheme={buttonColorScheme}
+                    size="sm"
+                  >
+                    {expandedIndexes.includes(index) ? "Show Less" : "Show More"}
+                  </Button>
+                </Flex>
+              </CardHeader>
+              {expandedIndexes.includes(index) && (
+                <CardBody pt={0}>
+                  <Divider mb={4} />
+                  <Stack spacing={3}>
+                    {(itemDetails[index]?.items || []).map((item, itemIndex) => (
+                      <Box key={itemIndex} borderBottom="1px" borderColor="gray.200" pb={3}>
+                        <Text fontSize="lg" fontWeight="semibold" color="gray.800">
+                          {item.name}
+                        </Text>
+                        <Text fontSize="sm" color="gray.600">{item.description}</Text>
+                        <Text fontSize="sm" color="gray.600">
+                          <Text as="span" fontWeight="bold">Quantity:</Text> {item.quantity}
+                        </Text>
+                        <Text fontSize="sm" color="gray.600">
+                          <Text as="span" fontWeight="bold">Price:</Text> ₹{item.price}
+                        </Text>
+                      </Box>
+                    ))}
+                  </Stack>
+                  <Text fontSize="lg" fontWeight="bold" color="green.500" mt={4}>
+                    Total Amount: ₹{itemDetails[index]?.totalAmount || 0}
+                  </Text>
+                </CardBody>
+              )}
+            </Card>
+          ))}
+        </Stack>
       ) : (
-        <p className="text-gray-600">No notifications available</p>
+        <Text textAlign="center" color="gray.600">No notifications available</Text>
       )}
-    </div>
+    </Box>
+  );
+};
 
-    {/* Recent Bookings Section */}
-   
-  </div>
-  )
-}
-
-export default RecentOnlineOrders
+export default RecentOnlineOrders;

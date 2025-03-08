@@ -1,16 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { getAllImages, addImage, deleteImage } from '../services/operations/photos'; // Assuming deleteImage is also imported here
+import { getAllImages, addImage, deleteImage } from '../services/operations/photos';
 import { useSelector } from "react-redux";
+import Navbar from "./Navbar/Navbar2";
+import { DeleteIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Flex,
+  Text,
+  Button,
+  Input,
+  Grid,
+  GridItem,
+  Image,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  IconButton,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 const Photos = () => {
   const [photos, setPhotos] = useState([]);
   const [loadingImage, setLoadingImage] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null); // State to hold the selected photo for zooming
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State to control delete confirmation modal
   const [photoToDelete, setPhotoToDelete] = useState(null); // Store the photo to delete
+  const { isOpen: isDeleteModalOpen, onOpen: openDeleteModal, onClose: closeDeleteModal } = useDisclosure(); // Delete modal control
+  const { isOpen: isZoomModalOpen, onOpen: openZoomModal, onClose: closeZoomModal } = useDisclosure(); // Zoom modal control
   const { user } = useSelector((state) => state.profile);
- 
-  const userId=user._id;
+  const userId = user._id;
+
   // Fetch all photos on component mount
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -22,7 +44,7 @@ const Photos = () => {
       }
     };
     fetchPhotos();
-  }, [userId]); 
+  }, [userId]);
 
   // Upload photo to Cloudinary and save URL in the database
   const handleImageUpload = async (e) => {
@@ -36,7 +58,7 @@ const Photos = () => {
       try {
         // Upload image to Cloudinary
         const response = await fetch(
-          "https://api.cloudinary.com/v1_1/dvlvjwx5t/image/upload", 
+          "https://api.cloudinary.com/v1_1/dvlvjwx5t/image/upload",
           {
             method: "POST",
             body: formData,
@@ -62,17 +84,7 @@ const Photos = () => {
   // Function to handle photo click for zooming
   const handlePhotoClick = (photo) => {
     setSelectedPhoto(photo); // Set the selected photo to open in the modal
-  };
-
-  // Function to close the zoom modal
-  const closeModal = () => {
-    setSelectedPhoto(null); // Reset selected photo to close the modal
-  };
-
-  // Function to show the delete confirmation modal
-  const openDeleteModal = (photo) => {
-    setIsDeleteModalOpen(true); // Open the confirmation modal
-    setPhotoToDelete(photo); // Set the photo to delete
+    openZoomModal(); // Open the zoom modal
   };
 
   // Function to handle delete photo
@@ -80,104 +92,125 @@ const Photos = () => {
     try {
       await deleteImage(userId, photoToDelete); // Call the function to delete the image URL from the database
       setPhotos(photos.filter((p) => p !== photoToDelete)); // Remove the photo from the local state
-      setIsDeleteModalOpen(false); // Close the confirmation modal after successful delete
+      closeDeleteModal(); // Close the confirmation modal after successful delete
     } catch (err) {
       console.error("Error deleting photo:", err.message);
     }
   };
 
-  // Function to cancel the delete operation
-  const cancelDelete = () => {
-    setIsDeleteModalOpen(false); // Close the confirmation modal without deleting
-    setPhotoToDelete(null); // Reset the photo to delete
-  };
+  // Chakra UI color mode values
+  const cardBg = useColorModeValue("white", "gray.700");
+  const textColor = useColorModeValue("gray.800", "white");
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Photos</h1>
+    <Box minH="100vh" bg={useColorModeValue("gray.50", "gray.800")}>
+      <Navbar />
+      <Box p={6}>
+        <Text fontSize="2xl" fontWeight="bold" mb={6} color={textColor}>
+          Photos
+        </Text>
 
-      {/* Upload Section */}
-      <div className="flex items-center mb-6">
-        <input
-          type="file"
-          accept="image/*"
-          className="file-input border border-gray-300 rounded-md px-4 py-2 mr-4"
-          onChange={handleImageUpload}
-          disabled={loadingImage} // Disable while uploading
-        />
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          disabled={loadingImage} // Disable while uploading
-        >
-          {loadingImage ? "Uploading..." : "Upload Image"}
-        </button>
-      </div>
-
-      {/* Display Photos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {photos.length === 0 ? (
-          <p>No photos available.</p>
-        ) : (
-          photos.map((photo, index) => (
-            <div
-              key={index}
-              className="group overflow-hidden rounded-lg shadow-md bg-white relative"
-            >
-              <img
-                src={photo}
-                alt="Uploaded"
-                className="w-full h-40 object-cover cursor-pointer"
-                onClick={() => handlePhotoClick(photo)} // Open the selected photo in modal
-              />
-              {/* Delete Button */}
-              <button
-                onClick={(e) => { e.stopPropagation(); openDeleteModal(photo); }} // Open delete confirmation modal
-                className="absolute top-2 right-2 bg-blue-50 text-white rounded-full p-3 hover:bg-red-600 focus:outline-none shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <span className="material-icons text-xl">delete</span> {/* Optional: Use material icons or any other icon */}
-              </button>
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* Modal for Zoomed Photo */}
-      {selectedPhoto && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
-          onClick={closeModal}
-        >
-          <img
-            src={selectedPhoto}
-            alt="Zoomed"
-            className="max-w-3xl max-h-[90%] object-contain"
+        {/* Upload Section */}
+        <Flex align="center" mb={6}>
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            disabled={loadingImage}
+            display="none"
+            id="file-upload"
           />
-        </div>
-      )}
+          <label htmlFor="file-upload">
+            <Button
+              as="span"
+              colorScheme="blue"
+              isLoading={loadingImage}
+              loadingText="Uploading..."
+            >
+              Upload Image
+            </Button>
+          </label>
+        </Flex>
 
-      {/* Delete Confirmation Modal */}
-      {isDeleteModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Are you sure you want to delete this photo?</h2>
-            <div className="flex justify-between">
-              <button
-                onClick={handleDelete}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+        {/* Display Photos */}
+        <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={4}>
+          {photos.length === 0 ? (
+            <Text>No photos available.</Text>
+          ) : (
+            photos.map((photo, index) => (
+              <GridItem
+                key={index}
+                position="relative"
+                overflow="hidden"
+                borderRadius="md"
+                bg={cardBg}
+                boxShadow="md"
+                _hover={{ boxShadow: "lg" }}
               >
-                Yes, Delete
-              </button>
-              <button
-                onClick={cancelDelete}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+                {/* Delete Button */}
+                
+                <IconButton
+                  aria-label="Delete photo"
+                  icon={<DeleteIcon color="error" />}
+                  colorScheme="red"
+                  size="sm"
+                  position="absolute"
+                  top={2}
+                  right={2}
+                  opacity={0}
+                  _groupHover={{ opacity: 1 }}
+                  transition="opacity 0.2s"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPhotoToDelete(photo);
+                    openDeleteModal();
+                  }}
+                />
+                <Image
+                  src={photo}
+                  alt="Uploaded"
+                  w="full"
+                  h="200px"
+                  objectFit="cover"
+                  cursor="pointer"
+                  onClick={() => handlePhotoClick(photo)}
+                />
+              </GridItem>
+            ))
+          )}
+        </Grid>
+
+        {/* Modal for Zoomed Photo */}
+        <Modal isOpen={isZoomModalOpen} onClose={closeZoomModal} size="xl">
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Zoomed Photo</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Image src={selectedPhoto} alt="Zoomed" w="full" h="auto" />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+
+        {/* Delete Confirmation Modal */}
+        <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Delete Photo</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text>Are you sure you want to delete this photo?</Text>
+            </ModalBody>
+            <Flex justify="flex-end" p={4}>
+              <Button colorScheme="red" mr={3} onClick={handleDelete}>
+                Delete
+              </Button>
+              <Button onClick={closeDeleteModal}>Cancel</Button>
+            </Flex>
+          </ModalContent>
+        </Modal>
+      </Box>
+    </Box>
   );
 };
 

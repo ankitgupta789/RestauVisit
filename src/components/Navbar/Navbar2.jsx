@@ -1,314 +1,574 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import { useState,useEffect } from 'react';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import LightModeIcon from '@mui/icons-material/LightMode';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { toast } from "react-hot-toast";
+import Container from "@mui/material/Container";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  useMediaQuery,
+  Box,
+  Badge,
+} from "@mui/material";
+import { AiOutlineShoppingCart, AiOutlineMenu } from "react-icons/ai";
+import ProfileDropDown from "../ProfileDropDown";
+import { logout } from "../../services/operations/authAPI";
+import logo1 from "../../assets/logo1.png";
 
-const theme = createTheme({
+const Navbar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.profile);
+  const { totalItems } = useSelector((state) => state.cart);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState(null);
+
+  const handleMobileMenuOpen = (event) => {
+    setMobileMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMenuAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout(navigate));
+    toast.success("Logged Out");
+  };
+
+  const renderMenuItems = () => (
+    <>
+      {/* Home button  */}
+      {(user==null || user?.accountType === "User") && (
+        <Button
+          key="home"
+          onClick={() => {
+            navigate("/");
+          }}
+          sx={{
+            my: 2,
+            color: "#000080",
+            display: "block",
+            position: "relative",
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              width: "100%",
+              height: "2px",
+              backgroundColor: "#000080",
+              bottom: "-2px",
+              left: 0,
+              transform: "scaleX(0)",
+              transformOrigin: "bottom right",
+              transition: "transform 0.25s ease-out",
+            },
+            "&:hover::after": {
+              transform: "scaleX(1)",
+              transformOrigin: "bottom left",
+            },
+          }}
+          component={Link}
+          to="/"
+          color="inherit"
+        >
+          Home
+        </Button>
+      )}
+
+    
+      {/* search  */}
+      {( user===null || user?.accountType === "User") && (
+        <Button
+          key="search"
+          onClick={() => {
+            navigate("/search");
+          }}
+          sx={{
+            my: 2,
+            color: "#000080",
+            display: "block",
+            position: "relative",
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              width: "100%",
+              height: "2px",
+              backgroundColor: "#000080",
+              bottom: "-2px",
+              left: 0,
+              transform: "scaleX(0)",
+              transformOrigin: "bottom right",
+              transition: "transform 0.25s ease-out",
+            },
+            "&:hover::after": {
+              transform: "scaleX(1)",
+              transformOrigin: "bottom left",
+            },
+          }}
+          component={Link}
+          to="/search"
+          color="inherit"
+        >
+          Search
+        </Button>
+      )}
+
+      {/* about  */}
+      {
+        (user==null || user?.accountType==="User" ) &&
+
+        <Button
+          key="abt_us"
+          onClick={() => {
+            navigate("/about");
+          }}
+          sx={{
+            my: 2,
+            color: "#000080",
+            display: "block",
+            position: "relative",
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              width: "100%",
+              height: "2px",
+              backgroundColor: "#000080",
+              bottom: "-2px",
+              left: 0,
+              transform: "scaleX(0)",
+              transformOrigin: "bottom right",
+              transition: "transform 0.25s ease-out",
+            },
+            "&:hover::after": {
+              transform: "scaleX(1)",
+              transformOrigin: "bottom left",
+            },
+          }}
+          component={Link}
+          to="/about"
+          color="inherit"
+        >
+          About Us
+        </Button>
+      }
+
+      {/* Reviews  */}
+      {
+          (user?.accountType==='User') && 
+          <Button
+            key="home"
+            onClick={() => {
+              navigate("/");
+            }}
+            sx={{
+              my: 2,
+              color: "#000080",
+              display: "block",
+              position: "relative",
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                width: "100%",
+                height: "2px",
+                backgroundColor: "#000080",
+                bottom: "-2px",
+                left: 0,
+                transform: "scaleX(0)",
+                transformOrigin: "bottom right",
+                transition: "transform 0.25s ease-out",
+              },
+              "&:hover::after": {
+                transform: "scaleX(1)",
+                transformOrigin: "bottom left",
+              },
+            }}
+            component={Link}
+            to="/reviews"
+            color="inherit"
+          >
+            Reviews
+          </Button>
+      }
+
+
+      {/* Menu  */}
+
+      {
+        (user?.accountType==='Restaurant') && 
+        <Button
+            key="menu"
+            onClick={() => {
+              navigate("/menu");
+            }}
+            sx={{
+              my: 2,
+              color: "#000080",
+              display: "block",
+              position: "relative",
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                width: "100%",
+                height: "2px",
+                backgroundColor: "#000080",
+                bottom: "-2px",
+                left: 0,
+                transform: "scaleX(0)",
+                transformOrigin: "bottom right",
+                transition: "transform 0.25s ease-out",
+              },
+              "&:hover::after": {
+                transform: "scaleX(1)",
+                transformOrigin: "bottom left",
+              },
+            }}
+            component={Link}
+            to="/menu"
+            color="inherit"
+          >
+            Menu
+          </Button>
+      }
+
+      {/* Photos  */}
+      {
+        (user?.accountType==="Restaurant") && 
+        (<Button
+          key="photos"
+          onClick={() => {
+            navigate("/photos");
+          }}
+          sx={{
+            my: 2,
+            color: "#000080",
+            display: "block",
+            position: "relative",
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              width: "100%",
+              height: "2px",
+              backgroundColor: "#000080",
+              bottom: "-2px",
+              left: 0,
+              transform: "scaleX(0)",
+              transformOrigin: "bottom right",
+              transition: "transform 0.25s ease-out",
+            },
+            "&:hover::after": {
+              transform: "scaleX(1)",
+              transformOrigin: "bottom left",
+            },
+          }}
+          component={Link}
+          to="/photos"
+          color="inherit"
+        >
+          Photos
+        </Button>)
+      }
+
+
+      {/* My Reviews  */}
+      {
+        (user?.accountType==='Restaurant')
+        && (
+          <Button
+            key="myreviews"
+            onClick={() => {
+              navigate("/myReviews");
+            }}
+            sx={{
+              my: 2,
+              color: "#000080",
+              display: "block",
+              position: "relative",
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                width: "100%",
+                height: "2px",
+                backgroundColor: "#000080",
+                bottom: "-2px",
+                left: 0,
+                transform: "scaleX(0)",
+                transformOrigin: "bottom right",
+                transition: "transform 0.25s ease-out",
+              },
+              "&:hover::after": {
+                transform: "scaleX(1)",
+                transformOrigin: "bottom left",
+              },
+            }}
+            component={Link}
+            to="/myReviews"
+            color="inherit"
+          >
+            My_Reviews
+          </Button>
+        )
+      }
+
+      {/* Reservations  */}
+      {
+        user?.accountType==='Restaurant' && 
+        (
+          <Button
+            key="Reservations"
+            onClick={() => {
+              navigate("/reservations");
+            }}
+            sx={{
+              my: 2,
+              color: "#000080",
+              display: "block",
+              position: "relative",
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                width: "100%",
+                height: "2px",
+                backgroundColor: "#000080",
+                bottom: "-2px",
+                left: 0,
+                transform: "scaleX(0)",
+                transformOrigin: "bottom right",
+                transition: "transform 0.25s ease-out",
+              },
+              "&:hover::after": {
+                transform: "scaleX(1)",
+                transformOrigin: "bottom left",
+              },
+            }}
+            component={Link}
+            to="/reservations"
+            color="inherit"
+          >
+            Reservations
+          </Button>
+        )
+      }
+
+      {
+        user?.accoutType==='User' && (
+          <Button
+            key="orderHistory"
+            onClick={() => {
+              navigate("/orderHistory");
+            }}
+            sx={{
+              my: 2,
+              color: "#000080",
+              display: "block",
+              position: "relative",
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                width: "100%",
+                height: "2px",
+                backgroundColor: "#000080",
+                bottom: "-2px",
+                left: 0,
+                transform: "scaleX(0)",
+                transformOrigin: "bottom right",
+                transition: "transform 0.25s ease-out",
+              },
+              "&:hover::after": {
+                transform: "scaleX(1)",
+                transformOrigin: "bottom left",
+              },
+            }}
+            component={Link}
+            to="/orderHistory"
+            color="inherit"
+          >
+            Order_history
+          </Button>
+        )
+      }
+
+      {/* Analytics  */}
+      {
+        user?.accountType==='Restaurant' && (
+          <Button
+          key="analytics"
+          onClick={() => {
+            navigate("/analytics");
+          }}
+          sx={{
+            my: 2,
+            color: "#000080",
+            display: "block",
+            position: "relative",
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              width: "100%",
+              height: "2px",
+              backgroundColor: "#000080",
+              bottom: "-2px",
+              left: 0,
+              transform: "scaleX(0)",
+              transformOrigin: "bottom right",
+              transition: "transform 0.25s ease-out",
+            },
+            "&:hover::after": {
+              transform: "scaleX(1)",
+              transformOrigin: "bottom left",
+            },
+          }}
+          component={Link}
+          to="/analytics"
+          color="inherit"
+        >
+          Analytics
+        </Button>
+        )
+      }
+    </>
+  );
+
+  const theme = createTheme({
     palette: {
-      purple: {
-        main: '#8656cd',
-        light: '#E9DB5D',
-        dark: '#A29415',
-        contrastText: '#242105',
+      primary: {
+        main: "#6C63FF",
       },
     },
   });
- 
-const pages = ['Home', 'Search', 'About Us','Reviews','Order History'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
-function ResponsiveAppBar({thememode,toggle,setUser,user,setFlag,flag}) {
-
-  const navigate=useNavigate()
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [navuser,setNavuser] = useState({})
- 
-  // ------------ hook to handle the user details ------------------ 
-  useEffect(()=>{
-    const check=async()=>{
-      try{
-        const loggedInUser = localStorage.getItem("user");
-        if (loggedInUser) {
-          console.log(loggedInUser);
-          const foundUser = JSON.parse(loggedInUser);
-          console.log("found user",foundUser  )
-          setNavuser(foundUser)
-          await setUser(foundUser);
-        }
-      }catch(err){
-        console.log(err)
-      }
-    }
-    check()
-  },[user?._id,flag])
-
-  console.log(user);
-  const [showNav, setShowNav] = useState(false);
-  
-  //  ------------- function to logout ----------------------- 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/login');
-  };
-  
-  
-
-  function Logout() {
-    localStorage.clear();
-    navigate('/login');
-  }
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
 
   return (
     <ThemeProvider theme={theme}>
-    <AppBar position="static" color="transparent" sx={{ boxShadow: 'none', elevation: 0 }}>
-
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <img src="logo1.png" style={{height:"50px"}}/>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            onClick={()=>{navigate("/")}}
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'poppins',
-              fontWeight: 700,
-              letterSpacing: '.1rem',
-            color: thememode === 'dark' ? 'white' : '#000080',
-            cursor: 'pointer',
-              textDecoration: 'none',
-            }}
+      <AppBar
+        position="static"
+        sx={{
+          backgroundImage: "linear-gradient(to right,#bcdbff, #d2e7ff)",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          padding: "1px 0",
+        }}
+      >
+        <Container className="w-screen">
+          <Toolbar
+            disableGutters
+            sx={{ display: "flex", justifyContent: "start", gap: 1 }}
           >
-            Restau Visit :)
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              <Button
-                key="Dues"
-                onClick={()=>{navigate("/dues")}}
-                sx={{
-                    my: 2,
-                    color: thememode === 'dark' ? 'white' : '#000080',    
-                    display: 'block',
-                    position: 'relative',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      width: '100%',
-                      height: '2px',
-                      backgroundColor: thememode==='dark'?'white':'#000080',
-                      bottom: '-2px',
-                      left: 0,
-                      transform: 'scaleX(0)',
-                      transformOrigin: 'bottom right',
-                      transition: 'transform 0.25s ease-out',
-                    },
-                    '&:hover::after': {
-                      transform: 'scaleX(1)',
-                      transformOrigin: 'bottom left',
-                    },
-                  }}
-              >
-               Dues
-              </Button>
-              <Button
-                key="Groups"
-                onClick={()=>{navigate("/groups")}}
-                sx={{
-                    my: 2,
-                    color: thememode === 'dark' ? 'white' : '#000080',
-                    display: 'block',
-                    position: 'relative',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      width: '100%',
-                      height: '2px',
-                      backgroundColor: thememode==='dark'?'white':'#000080',
-                      bottom: '-4px', // Adjust this value to move the underline up or down
-                      left: 0,
-                      transform: 'scaleX(0)',
-                      transformOrigin: 'bottom right',
-                      transition: 'transform 0.25s ease-out',
-                    },
-                    '&:hover::after': {
-                      transform: 'scaleX(1)',
-                      transformOrigin: 'bottom left',
-                    },
-                  }}
-              >
-                Groups
-              </Button>
-              <Button
-                key="Savings"
-                onClick={()=>{navigate("/savings")}}
-                sx={{
-                    my: 2,
-                    color: thememode === 'dark' ? 'white' : '#000080',   
-                    display: 'block',
-                    position: 'relative',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      width: '100%',
-                      height: '2px',
-                      backgroundColor: thememode==='dark'?'white':'#000080',
-                      bottom: '-4px', // Adjust this value to move the underline up or down
-                      left: 0,
-                      transform: 'scaleX(0)',
-                      transformOrigin: 'bottom right',
-                      transition: 'transform 0.25s ease-out',
-                    },
-                    '&:hover::after': {
-                      transform: 'scaleX(1)',
-                      transformOrigin: 'bottom left',
-                    },
-                  }}
-              >
-                Savings
-              </Button>
-              <Button
-                key="Charts"
-                onClick={()=>{navigate("/charts")}}
-                sx={{
-                    my: 2,
-                    color: thememode === 'dark' ? 'white' : '#000080',
-                    display: 'block',
-                    position: 'relative',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      width: '100%',
-                      height: '2px',
-                      backgroundColor: thememode==='dark'?'white':'#000080',
-                      bottom: '-4px', // Adjust this value to move the underline up or down
-                      left: 0,
-                      transform: 'scaleX(0)',
-                      transformOrigin: 'bottom right',
-                      transition: 'transform 0.25s ease-out',
-                    },
-                    '&:hover::after': {
-                      transform: 'scaleX(1)',
-                      transformOrigin: 'bottom left',
-                    },
-                  }}
-              >
-                Charts
-              </Button>
-              <Button
-                key="Stocks"
-                onClick={()=>{navigate("/stocks")}}
-                sx={{
-                    my: 2,
-            color: thememode === 'dark' ? 'white' : '#000080',
+            {/* Logo */}
 
-                    display: 'block',
-                    position: 'relative',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      width: '100%',
-                      height: '2px',
-                      backgroundColor: thememode==='dark'?'white':'#000080',
-                      bottom: '-4px', // Adjust this value to move the underline up or down
-                      left: 0,
-                      transform: 'scaleX(0)',
-                      transformOrigin: 'bottom right',
-                      transition: 'transform 0.25s ease-out',
-                    },
-                    '&:hover::after': {
-                      transform: 'scaleX(1)',
-                      transformOrigin: 'bottom left',
-                    },
-                  }}
-              >
-                Stocks
-              </Button>
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-          <LightModeIcon 
-          onClick={toggle}
-          sx={{
-            color: thememode === 'dark' ? 'white' : 'inherit',
-            cursor: 'pointer'
-          }}
-          />
-            <MailOutlineIcon sx={{mx: 2,
-            color: thememode === 'dark' ? 'white' : 'inherit',
-            cursor: 'pointer'
-             }}
-             onClick={()=>{navigate("/inbox")}}
+            <img
+              src={logo1}
+              alt="Logo"
+              style={{ height: "40px", marginRight: "10px" }}
             />
-            {/* <Tooltip title=""> */}
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src={navuser?.image || 'ProfileImg.jpeg'} />
-              </IconButton>
-            {/* </Tooltip> */}
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-                <MenuItem key="Profile" onClick={()=>{navigate("/profile")}}>
-                  <Typography textAlign="center">Profile</Typography>
-                </MenuItem>
-                <MenuItem key="Vault" onClick={()=>{navigate("/vault")}}>
-                  <Typography textAlign="center">Vault</Typography>
-                </MenuItem>
-                <MenuItem key="Logout" onClick={()=>{Logout()}}>
-                  <Typography textAlign="center">Logout</Typography>
-                </MenuItem>
 
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+            {/* Desktop Menu */}
+            {!isMobile && (
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  display: "flex",
+                  justifyContent: "evenly",
+                  gap: 2,
+                }}
+              >
+                {renderMenuItems()}
+              </Box>
+            )}
+
+            {/* Right Icons */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              {token ? (
+                <ProfileDropDown />
+              ) : (
+                <>
+                  <Button
+                    component={Link}
+                    to="/login"
+                    color="primary"
+                    variant="outlined"
+                    sx={{
+                      borderColor: "#6C63FF",
+                      color: "#6C63FF",
+                      "&:hover": { backgroundColor: "#6C63FF", color: "#fff" },
+                    }}
+                  >
+                    Log In
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/signup"
+                    variant="contained"
+                    color="primary"
+                  >
+                    Sign Up
+                  </Button>
+                </>
+              )}
+
+              {/* Cart Icon */}
+              {user?.accountType === "User" && (
+                <IconButton component={Link} to="/cart" color="primary">
+                  <Badge badgeContent={totalItems} color="secondary">
+                    <AiOutlineShoppingCart size={22} />
+                  </Badge>
+                  
+                </IconButton>
+              )}
+            </Box>
+
+            {/* Mobile Menu */}
+            {isMobile && (
+              <>
+                <IconButton color="primary" onClick={handleMobileMenuOpen}>
+                  <AiOutlineMenu size={24} />
+                </IconButton>
+                <Menu
+                  anchorEl={mobileMenuAnchorEl}
+                  open={Boolean(mobileMenuAnchorEl)}
+                  onClose={handleMobileMenuClose}
+                  sx={{
+                    "& .MuiMenu-paper": {
+                      backgroundColor: "#fff",
+                      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
+                      borderRadius: "10px",
+                      padding: "10px",
+                    },
+                  }}
+                >
+                  {renderMenuItems()}
+                  {token ? (
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  ) : (
+                    <>
+                      <MenuItem
+                        component={Link}
+                        to="/login"
+                        onClick={handleMobileMenuClose}
+                      >
+                        Log In
+                      </MenuItem>
+                      <MenuItem
+                        component={Link}
+                        to="/signup"
+                        onClick={handleMobileMenuClose}
+                      >
+                        Sign Up
+                      </MenuItem>
+                    </>
+                  )}
+                </Menu>
+              </>
+            )}
+          </Toolbar>
+        </Container>
+      </AppBar>
     </ThemeProvider>
   );
-}
-export default ResponsiveAppBar;
+};
+
+export default Navbar;

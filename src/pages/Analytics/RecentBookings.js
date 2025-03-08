@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { fetchRecentReservations } from "../../services/Restaurants/BookTable"; // Backend function for fetching recent reservations
 import { useSelector } from "react-redux";
+import {
+  Box,
+  Flex,
+  Text,
+  Spinner,
+  Stack,
+  Card,
+  CardBody,
+  Avatar,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 const RecentBookings = () => {
   const { user } = useSelector((state) => state.profile); // Get user details from Redux
@@ -8,6 +19,10 @@ const RecentBookings = () => {
   const [bookings, setBookings] = useState([]); // State for bookings
   const [loading, setLoading] = useState(true); // State for loading
   const [error, setError] = useState(null); // State for errors
+
+  // Move useColorModeValue to the top level
+  const cardBg = useColorModeValue("white", "gray.700");
+  const textColor = useColorModeValue("gray.800", "white");
 
   // Fetch bookings on component mount
   useEffect(() => {
@@ -30,64 +45,86 @@ const RecentBookings = () => {
 
   // Display loading or error message if applicable
   if (loading) {
-    return <p className="text-center text-gray-500">Loading bookings...</p>;
+    return (
+      <Flex justify="center" align="center" height="600px">
+        <Spinner size="xl" />
+      </Flex>
+    );
   }
 
   if (error) {
-    return <p className="text-center text-red-500">{error}</p>;
+    return (
+      <Flex justify="center" align="center" height="600px">
+        <Text color="red.500">{error}</Text>
+      </Flex>
+    );
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white shadow-md p-6 rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">Recent Bookings</h2>
+    <Box
+      // bg={useColorModeValue("gray.50", "gray.800")}
+      // borderRadius="lg"
+      // p={6}
+      // height="720px" // Fixed height
+      // overflowY="auto" // Enable vertical 
+      className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 h-[720px] overflow-y-auto"
+    >
+      <Text fontSize="2xl" fontWeight="bold" mb={6} color={textColor}>
+        Recent Bookings
+      </Text>
       {bookings.length === 0 ? (
-        <p className="text-gray-600">No recent bookings found.</p>
+        <Text color="gray.600">No recent bookings found.</Text>
       ) : (
-        <ul className="space-y-4">
+        <Stack spacing={4}>
           {bookings.map((booking, index) => (
-            <li
-              key={index}
-              className="bg-gray-100 p-4 rounded-lg shadow hover:shadow-lg transition flex items-center justify-between"
-            >
-              {/* Booking Details */}
-              <div>
-                <p className="text-sm text-gray-600">
-                  <span className="font-semibold">Customer ID:</span> {booking.customerId}
-                </p>
-                <p className="text-sm text-gray-600">
-                  <span className="font-semibold">Date:</span>{" "}
-                  {new Date(booking.createdAt).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-gray-600">
-                  <span className="font-semibold">Time:</span> {booking.slot}
-                </p>
-                <p className="text-sm text-gray-600">
-                  <span className="font-semibold">Guests:</span> {booking.guests}
-                </p>
-                {/* <p className="text-sm text-gray-600">
-                  <span className="font-semibold">Status:</span> {booking.status}
-                </p> */}
-              </div>
+            <Card key={index} bg={cardBg} boxShadow="md" _hover={{ boxShadow: "lg" }}>
+              <CardBody>
+                <Flex justify="space-between" align="center">
+                  {/* Booking Details */}
+                  <Box>
+                    <Text fontSize="sm" color="gray.600">
+                      <Text as="span" fontWeight="bold">Customer ID:</Text> {booking.customerId}
+                    </Text>
+                    <Text fontSize="sm" color="gray.600">
+                      <Text as="span" fontWeight="bold">Date:</Text>{" "}
+                      {new Date(booking.createdAt).toLocaleDateString()}
+                    </Text>
+                    <Text fontSize="sm" color="gray.600">
+                      <Text as="span" fontWeight="bold">Time:</Text> {booking.slot}
+                    </Text>
+                    <Text fontSize="sm" color="gray.600">
+                      <Text as="span" fontWeight="bold">Guests:</Text> {booking.guests}
+                    </Text>
+                  </Box>
 
-              {/* User Image */}
-              <div className="flex-shrink-0 ml-4">
-                {booking.userImage ? (
-                  <img
-                    src={booking.userImage}
-                    alt="User"
-                    className="w-16 h-16 rounded-full object-cover border border-gray-300"
-                  />
-                ) : (
-                  <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center">
-                    <span className="text-gray-500 text-sm">No Image</span>
-                  </div>
-                )}
-              </div>
-            </li>
+                  {/* User Image */}
+                  <Box flexShrink={0} ml={4}>
+                    {booking.userImage ? (
+                      <Avatar
+                        src={booking.userImage}
+                        name="User"
+                        size="lg"
+                        border="2px"
+                        borderColor="gray.300"
+                      />
+                    ) : (
+                      <Avatar
+                        name="No Image"
+                        size="lg"
+                        bg="gray.300"
+                        color="gray.500"
+                        border="2px"
+                        borderColor="gray.300"
+                      />
+                    )}
+                  </Box>
+                </Flex>
+              </CardBody>
+            </Card>
           ))}
-        </ul>
+        </Stack>
       )}
-    </div>
+    </Box>
   );
 };
 

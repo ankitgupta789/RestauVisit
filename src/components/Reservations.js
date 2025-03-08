@@ -1,13 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { FaChair } from 'react-icons/fa';
-import { addTable, fetchTables, markSlotAsBooked, markSlotAsUnBooked } from '../services/Restaurants/Table'; // Import markSlotAsUnBooked
-import { useSelector } from 'react-redux';
-import NotificationRender from './NotificationRender';
+import React, { useState, useEffect } from "react";
+import { FaChair } from "react-icons/fa";
+import {
+  Box,
+  Flex,
+  Text,
+  Button,
+  Input,
+  Grid,
+  GridItem,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { addTable, fetchTables, markSlotAsBooked, markSlotAsUnBooked } from "../services/Restaurants/Table";
+import { useSelector } from "react-redux";
+import NotificationRender from "./NotificationRender";
+import Navbar from "./Navbar/Navbar2";
+
 const TableManager = () => {
   const [tables, setTables] = useState([]); // State to store tables
   const [showInput, setShowInput] = useState(false); // State to show input form
-  const [capacity, setCapacity] = useState(''); // State to store capacity input
+  const [capacity, setCapacity] = useState(""); // State to store capacity input
   const [selectedTable, setSelectedTable] = useState(null); // Selected table object for popup
+  const { isOpen, onOpen, onClose } = useDisclosure(); // Modal control
   const { user } = useSelector((state) => state.profile);
 
   // Fetch tables from backend
@@ -15,9 +35,9 @@ const TableManager = () => {
     try {
       const fetchedTables = await fetchTables(user._id); // Pass restaurantId (user._id)
       setTables(fetchedTables);
-      console.log(fetchedTables, 'fetched tables');
+      console.log(fetchedTables, "fetched tables");
     } catch (error) {
-      console.error('Error fetching tables:', error);
+      console.error("Error fetching tables:", error);
     }
   };
 
@@ -29,8 +49,13 @@ const TableManager = () => {
     setShowInput(true); // Show input form
   };
 
+  const handleCloseInput = () => {
+    setShowInput(false); // Hide input form
+    setCapacity(""); // Reset capacity
+  };
+
   const handleSubmit = async () => {
-    if (capacity.trim() !== '') {
+    if (capacity.trim() !== "") {
       try {
         await addTable(user._id, Number(capacity)); // Call backend to add table
         setTables((prev) => [
@@ -38,23 +63,20 @@ const TableManager = () => {
           { id: tables.length + 1, capacity: Number(capacity) },
         ]);
         setShowInput(false); // Hide input form
-        setCapacity(''); // Reset capacity
+        setCapacity(""); // Reset capacity
         loadTables();
       } catch (error) {
-        console.error('Error adding table:', error);
-        alert('Failed to add table. Please try again.');
+        console.error("Error adding table:", error);
+        alert("Failed to add table. Please try again.");
       }
     } else {
-      alert('Please enter a valid capacity!');
+      alert("Please enter a valid capacity!");
     }
   };
 
   const handleTableClick = (table) => {
     setSelectedTable(table); // Set selected table for popup
-  };
-
-  const closePopup = () => {
-    setSelectedTable(null); // Close the popup
+    onOpen(); // Open the modal
   };
 
   const handleSlotBooking = async (tableId, timeSlot, userName, index) => {
@@ -67,11 +89,11 @@ const TableManager = () => {
         );
         setSelectedTable({ ...selectedTable, slots: updatedSlots });
         loadTables();
-        alert('Slot successfully booked!');
+        alert("Slot successfully booked!");
       }
     } catch (error) {
-      console.error('Error booking slot:', error);
-      alert('Failed to book the slot. Please try again.');
+      console.error("Error booking slot:", error);
+      alert("Failed to book the slot. Please try again.");
     }
   };
 
@@ -79,12 +101,12 @@ const TableManager = () => {
     const confirmUnbooking = window.confirm(
       `Are you sure you want to unbook the slot: ${timeSlot}?`
     );
-  
+
     if (!confirmUnbooking) {
       // If the user cancels, do nothing
       return;
     }
-  
+
     try {
       const result = await markSlotAsUnBooked(tableId, timeSlot);
       if (result) {
@@ -94,134 +116,102 @@ const TableManager = () => {
         );
         setSelectedTable({ ...selectedTable, slots: updatedSlots });
         loadTables();
-        alert('Slot successfully unbooked!');
+        alert("Slot successfully unbooked!");
       }
     } catch (error) {
-      console.error('Error unbooking slot:', error);
-      alert('Failed to unbook the slot. Please try again.');
+      console.error("Error unbooking slot:", error);
+      alert("Failed to unbook the slot. Please try again.");
     }
   };
-  
+
+  // Move all useColorModeValue calls to the top level
+  const cardBg = useColorModeValue("white", "gray.700");
+  const textColor = useColorModeValue("gray.800", "white");
+  const pageBg = useColorModeValue("gray.50", "gray.800");
+  const tableBg = useColorModeValue("gray.100", "gray.600");
+  const notificationBg = useColorModeValue("blue.50", "blue.900");
+
   return (
-    <div style={{ display: 'flex', height: '100vh'}}>
-    <div style={{ padding: '20px', textAlign: 'center' ,width: '60%',backgroundColor:'white'}}>
-      {/* Add Table Button */}
-      <button
-        onClick={handleAddTable}
-        style={{
-          padding: '10px 20px',
-          fontSize: '16px',
-          backgroundColor: '#4caf50',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-        }}
-      >
-        Add Table
-      </button>
+    <Box minH="100vh" bg={pageBg}>
+      <Navbar />
+      <Flex h="calc(100vh - 64px)">
+        {/* Left Side: Table Manager */}
+        <Box w="60%" p={6} bg={cardBg}>
+          {/* Add Table Button */}
+          {!showInput ? (
+            <Button
+              onClick={handleAddTable}
+              colorScheme="green"
+              size="lg"
+              mb={4}
+            >
+              Add Table
+            </Button>
+          ) : (
+            <Flex gap={2} mb={4}>
+              <Input
+                type="number"
+                placeholder="Enter table capacity"
+                value={capacity}
+                onChange={(e) => setCapacity(e.target.value)}
+              />
+              <Button onClick={handleSubmit} colorScheme="green">
+                Submit
+              </Button>
+              <Button onClick={handleCloseInput} colorScheme="red">
+                Close
+              </Button>
+            </Flex>
+          )}
 
-      {/* Input for Capacity */}
-      {showInput && (
-        <div style={{ marginTop: '20px' }}>
-          <input
-            type="number"
-            placeholder="Enter table capacity"
-            value={capacity}
-            onChange={(e) => setCapacity(e.target.value)}
-            style={{
-              padding: '10px',
-              fontSize: '16px',
-              marginRight: '10px',
-              border: '1px solid #ccc',
-              borderRadius: '5px',
-            }}
-          />
-          <button
-            onClick={handleSubmit}
-            style={{
-              padding: '10px 20px',
-              fontSize: '16px',
-              backgroundColor: '#4caf50',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-          >
-            Submit
-          </button>
-        </div>
-      )}
+          {/* Display Tables */}
+          <Grid templateColumns="repeat(auto-fill, minmax(150px, 1fr))" gap={4}>
+            {tables.map((table) => (
+              <GridItem
+                key={table._id}
+                onClick={() => handleTableClick(table)}
+                p={4}
+                bg={tableBg}
+                borderRadius="md"
+                cursor="pointer"
+                _hover={{ shadow: "md" }}
+                textAlign="center"
+              >
+                <FaChair size={40} color="#4caf50" style={{ marginBottom: "5px" }} />
+                <Text fontWeight="bold">Table {table.id}</Text>
+                <Text>Capacity: {table.capacity}</Text>
+              </GridItem>
+            ))}
+          </Grid>
+        </Box>
 
-      {/* Display Tables */}
-      <div
-        style={{
-          marginTop: '20px',
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-        }}
-      >
-        {tables.map((table) => (
-          <div
-            key={table._id}
-            onClick={() => handleTableClick(table)}
-            style={{
-              margin: '10px',
-              textAlign: 'center',
-              cursor: 'pointer',
-              border: '1px solid #ccc',
-              padding: '10px',
-              borderRadius: '5px',
-              backgroundColor: '#f9f9f9',
-              boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <FaChair size={40} color="#4caf50" style={{ marginBottom: '5px' }} />
-            <div>Table {table.id}</div>
-            <div>Capacity: {table.capacity}</div>
-          </div>
-        ))}
-      </div>
+        {/* Right Side: Notifications */}
+        <Box flex={1} p={6} bg={notificationBg}>
+          <NotificationRender />
+        </Box>
+      </Flex>
 
-      {/* Popup for Selected Table */}
-      {selectedTable && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <div
-            style={{
-              background: '#fff',
-              padding: '20px',
-              borderRadius: '10px',
-              width: '50%',
-              textAlign: 'center',
-            }}
-          >
-            <h3>Table {selectedTable.id}</h3>
-            <p>Capacity: {selectedTable.capacity}</p>
-            <h4>Available Slots</h4>
-            <div className="grid grid-cols-4 gap-3 mt-4">
-              {selectedTable.slots.map((slot, index) => (
-                <div
+      {/* Modal for Selected Table */}
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Table {selectedTable?.id}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text mb={4}>Capacity: {selectedTable?.capacity}</Text>
+            <Text fontSize="lg" fontWeight="bold" mb={4}>
+              Available Slots
+            </Text>
+            <Grid templateColumns="repeat(4, 1fr)" gap={3}>
+              {selectedTable?.slots.map((slot, index) => (
+                <Box
                   key={index}
-                  className={`p-4 rounded-lg text-center shadow-md ${
-                    slot.isBooked
-                      ? 'bg-pink-400 text-red-700'
-                      : 'bg-caribbeangreen-100 text-green-700 hover:bg-green-300 hover:cursor-pointer'
-                  }`}
-                  title={!slot.isBooked ? 'Click to Book Table' : 'Click to Unbook Table'}
+                  p={4}
+                  bg={slot.isBooked ? "pink.100" : "green.100"}
+                  borderRadius="md"
+                  textAlign="center"
+                  cursor="pointer"
+                  _hover={{ shadow: "md" }}
                   onClick={() => {
                     if (slot.isBooked) {
                       handleSlotUnbooking(selectedTable._id, slot.slot, index);
@@ -233,94 +223,63 @@ const TableManager = () => {
                     }
                   }}
                 >
-                  <span>{slot.slot}</span>
-                  {!slot.isBooked ? (
-                    <div style={{ fontSize: '12px', color: '#555' }}>Book Table</div>
-                  ):
-                  <div style={{ fontSize: '12px', color: '#555' }}>Unbook Table</div>}
-                </div>
+                  <Text fontWeight="bold">{slot.slot}</Text>
+                  <Text fontSize="sm" color="gray.600">
+                    {slot.isBooked ? "Unbook Table" : "Book Table"}
+                  </Text>
+                </Box>
               ))}
-            </div>
-            <div style={{ marginTop: '20px' }}>
-              {selectedTable.slots.map(
-                (slot, index) =>
-                  slot.showForm && (
-                    <div
-                      key={index}
-                      style={{
-                        marginTop: '10px',
-                        textAlign: 'center',
-                        backgroundColor: '#f0f0f0',
-                        padding: '20px',
-                        borderRadius: '10px',
+            </Grid>
+
+            {/* Booking Form */}
+            {selectedTable?.slots.map(
+              (slot, index) =>
+                slot.showForm && (
+                  <Box
+                    key={index}
+                    mt={4}
+                    p={4}
+                    bg="gray.100"
+                    borderRadius="md"
+                  >
+                    <Text fontSize="lg" fontWeight="bold" mb={2}>
+                      Book Slot: {slot.slot}
+                    </Text>
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const userName = e.target.userName.value;
+                        if (userName.trim() === "") {
+                          alert("Please enter a valid name.");
+                          return;
+                        }
+                        handleSlotBooking(selectedTable._id, slot.slot, userName, index);
                       }}
                     >
-                      <h4>Book Slot: {slot.slot}</h4>
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          const userName = e.target.userName.value;
-                          if (userName.trim() === '') {
-                            alert('Please enter a valid name.');
-                            return;
-                          }
-                          handleSlotBooking(selectedTable._id, slot.slot, userName, index);
-                        }}
-                      >
-                        <input
-                          type="text"
-                          name="userName"
-                          placeholder="Enter your name"
-                          style={{
-                            padding: '10px',
-                            fontSize: '16px',
-                            marginRight: '10px',
-                            border: '1px solid #ccc',
-                            borderRadius: '5px',
-                            width: '80%',
-                          }}
-                        />
-                        <button
-                          type="submit"
-                          style={{
-                            padding: '10px 20px',
-                            fontSize: '16px',
-                            backgroundColor: '#4caf50',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '5px',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          Confirm Booking
-                        </button>
-                      </form>
-                    </div>
-                  )
-              )}
-            </div>
-            <button
-              onClick={closePopup}
-              style={{
-                marginTop: '10px',
-                padding: '10px 20px',
-                backgroundColor: '#f44336',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-              }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-    <div style={{ flex: 1, padding: '20px',backgroundColor:'lightblue' }}>
-        <NotificationRender/>
-      </div>
-    </div>
+                      <Input
+                        type="text"
+                        name="userName"
+                        placeholder="Enter your name"
+                        mb={2}
+                      />
+                      <Button type="submit" colorScheme="green" w="full">
+                        Confirm Booking
+                      </Button>
+                    </form>
+                  </Box>
+                )
+            )}
+
+            {/* Close Button */}
+            <Flex justify="flex-end" mt={6}>
+              <Button onClick={onClose} colorScheme="red">
+                Close
+              </Button>
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </Box>
   );
 };
 

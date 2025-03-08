@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getUserOrders } from "../services/order"; // Import the function to fetch orders
+import { getUserOrders } from "../../services/order"; // Import the function to fetch orders
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 const OrderHistory = () => {
