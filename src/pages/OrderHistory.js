@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getUserOrders } from "../services/order"; // Import the function to fetch orders
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Navbar2 from "../components/Navbar/Navbar2"
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,6 +51,12 @@ const OrderHistory = () => {
   }
 
   return (
+
+    <div className="min-h-screen h-screen">
+ <Navbar2/>
+ 
+
+
     <div className="w-full mx-auto p-6 overflow-y-auto">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Your Orders</h2>
       {orders.map((order) => (
@@ -105,6 +112,7 @@ const OrderHistory = () => {
           </div>
         </div>
       ))}
+    </div>
     </div>
   );
 };

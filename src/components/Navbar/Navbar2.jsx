@@ -84,7 +84,7 @@ const Navbar = () => {
 
     
       {/* search  */}
-      {( user===null || user?.accountType === "User") && (
+      {/* {( user===null || user?.accountType === "User") && (
         <Button
           key="search"
           onClick={() => {
@@ -118,7 +118,7 @@ const Navbar = () => {
         >
           Search
         </Button>
-      )}
+      )} */}
 
       {/* about  */}
       {
@@ -196,8 +196,46 @@ const Navbar = () => {
             Reviews
           </Button>
       }
+       {/* Reviews  */}
+       {
+          (user?.accountType==='User') && 
+          <Button
+            key="orderHistory"
+            onClick={() => {
+              navigate("/orderHistory");
+            }}
+            sx={{
+              my: 2,
+              color: "#000080",
+              display: "block",
+              position: "relative",
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                width: "100%",
+                height: "2px",
+                backgroundColor: "#000080",
+                bottom: "-2px",
+                left: 0,
+                transform: "scaleX(0)",
+                transformOrigin: "bottom right",
+                transition: "transform 0.25s ease-out",
+              },
+              "&:hover::after": {
+                transform: "scaleX(1)",
+                transformOrigin: "bottom left",
+              },
+            }}
+            component={Link}
+            to="/orderHistory"
+            color="inherit"
+          >
+            Order_history
+          </Button>
+      }
+     
 
-
+    
       {/* Menu  */}
 
       {
@@ -355,45 +393,8 @@ const Navbar = () => {
           </Button>
         )
       }
-
-      {
-        user?.accoutType==='User' && (
-          <Button
-            key="orderHistory"
-            onClick={() => {
-              navigate("/orderHistory");
-            }}
-            sx={{
-              my: 2,
-              color: "#000080",
-              display: "block",
-              position: "relative",
-              "&::after": {
-                content: '""',
-                position: "absolute",
-                width: "100%",
-                height: "2px",
-                backgroundColor: "#000080",
-                bottom: "-2px",
-                left: 0,
-                transform: "scaleX(0)",
-                transformOrigin: "bottom right",
-                transition: "transform 0.25s ease-out",
-              },
-              "&:hover::after": {
-                transform: "scaleX(1)",
-                transformOrigin: "bottom left",
-              },
-            }}
-            component={Link}
-            to="/orderHistory"
-            color="inherit"
-          >
-            Order_history
-          </Button>
-        )
-      }
-
+          
+      
       {/* Analytics  */}
       {
         user?.accountType==='Restaurant' && (
@@ -511,7 +512,7 @@ const Navbar = () => {
               )}
 
               {/* Cart Icon */}
-              {user?.accountType === "User" && (
+              {user && user?.accountType=="User" && (
                 <IconButton component={Link} to="/cart" color="primary">
                   <Badge badgeContent={totalItems} color="secondary">
                     <AiOutlineShoppingCart size={22} />
@@ -519,6 +520,24 @@ const Navbar = () => {
                   
                 </IconButton>
               )}
+               {user && user?.accountType == "Restaurant" && (
+                          <Link to="/myorders" className="relative">
+                            <span style={{ fontSize: "24px", color: "yellow" }}>
+                              <AiOutlineShoppingCart />
+                            </span>
+                            {totalItems > 0 && (
+                              <span
+                                style={{
+                                  fontSize: "16px",
+                                  fontWeight: "bold",
+                                  color: "yellow",
+                                }}
+                              >
+                                {totalItems}
+                              </span>
+                            )}
+                          </Link>
+                        )}
             </Box>
 
             {/* Mobile Menu */}

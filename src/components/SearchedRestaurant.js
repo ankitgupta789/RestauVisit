@@ -8,7 +8,7 @@ import { addReview,getAllReviews,editReview,deleteReview } from "../services/ope
 import { addToCart } from "../services/operations/cart";
 import Reserve from "./Reserve";
 import RestauReviews from "./Reviews/RestauReviews";
-
+import Navbar2 from "../components/Navbar/Navbar2"
 const SearchedRestaurant = () => {
   const location = useLocation();
   const { userId } = location.state || {};
@@ -331,9 +331,13 @@ const SearchedRestaurant = () => {
       console.error("Error in handleClickCart:", error);
     }
   };
-  
+ 
+ 
+
 
   return (
+    <div className="min-h-screen h-screen">
+      <Navbar2/>
     <div className="bg-blue-25 min-h-[11/12] p-6 overflow-y-auto">
       {/* Restaurant Info and Photos Section */}
       <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
@@ -560,6 +564,7 @@ const SearchedRestaurant = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };
