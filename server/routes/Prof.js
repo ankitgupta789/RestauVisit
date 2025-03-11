@@ -6,7 +6,8 @@ const {
   getProfileByEmail,
   updateProfile,
   searchRestaurants,
-  searchRestaurantsCity
+  searchRestaurantsCity,
+  getProfileById 
 } = require("../controllers/Prof")
 
 // ********************************************************************************************************
@@ -19,4 +20,5 @@ router.get("/getProfileByEmail",getProfileByEmail)
 router.put('/updateProfile/:email', updateProfile);
 router.get("/searchRestaurants", searchRestaurants);
 router.get("/searchRestaurantsCity", searchRestaurantsCity);
+router.get("/getProfileById/:id",getProfileById)
 module.exports = router

@@ -158,14 +158,14 @@ const Navbar = () => {
           About Us
         </Button>
       }
-
+   
       {/* Reviews  */}
       {
           (user?.accountType==='User') && 
           <Button
             key="home"
             onClick={() => {
-              navigate("/");
+              navigate("/allrestaurants");
             }}
             sx={{
               my: 2,
@@ -190,7 +190,7 @@ const Navbar = () => {
               },
             }}
             component={Link}
-            to="/reviews"
+            to="/allrestaurants"
             color="inherit"
           >
             Reviews

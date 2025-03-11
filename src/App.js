@@ -38,6 +38,7 @@ import Cart from "./pages/Cart.js";
 import Orders from "./pages/Orders.js";
 import Analytics from "./pages/Analytics/Analytics.js";
 import RestauReviews from "./components/Reviews/RestauReviews.js";
+import ReviewsByUser from "./pages/Reviews.jsx"
 //import Navbar from "./components/Navbar";
 function App() {
   const{token} = useSelector((state) =>state.auth);
@@ -120,8 +121,8 @@ function App() {
             element={user && user.accountType === "Restaurant" ? <Reservations /> : <Login />} 
         />
         <Route path="/orderHistory" element={user ? <OrderHistory/>: <Login/>} />
-        {/* <Route path="/dashboard/my-profile" element={<MyProfile/>} /> */}
-       
+
+        <Route path="/allrestaurants" element={user ? <ReviewsByUser/>: <Login/>} />
 
         <Route path="/my-profile" element={ user?< MyProfile />:<Login/>}/> 
         

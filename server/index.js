@@ -28,6 +28,7 @@ const orderRoutes=require("./routes/Order.js");
 const paymentRoutes=require("./routes/Payment.js")
 const RestauNotifications=require("./routes/RestauNotification.js")
 const tableRoutes=require("./routes/Restaurant/Table.js");
+const RatingRoutes=require("./routes/Restaurant/Rating.js")
 const {app,server}=require('./middlewares/Socket.js')
 const bookTableRoutes=require('./routes/Restaurant/BookTable.js')
 
@@ -75,6 +76,7 @@ app.use('/api/v1/restauNotify',RestauNotifications);
 app.use('/api/v1/table',tableRoutes);
 app.use('/api/v1/book', bookTableRoutes);
 app.use('/api/v1/reply',replyRoutes);
+app.use('/api/v1/getall',RatingRoutes);
 //def route
 app.get("/", (req, res) => {
 	return res.json({
