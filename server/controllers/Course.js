@@ -1,7 +1,7 @@
 const Course = require("../models/Course");
 
 const User = require("../models/User");
-const { toast } = require('react-hot-toast');
+// const { toast } = require('react-hot-toast');
 const mailSender = require("../utils/mailSender");
 // Function to create a new course
 exports.createCourse = async (req, res) => {
