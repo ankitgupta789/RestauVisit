@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import axios from "axios";
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export const getProfile = async (userId) => {
   let result = null;
@@ -9,7 +9,7 @@ export const getProfile = async (userId) => {
 
   try {
     // console.log(" here userId is",userId);
-      const response = await axios.get("http://localhost:4000/api/v1/profile/getProfileByEmail",
+      const response = await axios.get(`${BASE_URL}/profile/getProfileByEmail`,
     {
       params: { userId }
     });
@@ -28,7 +28,7 @@ export const getProfile = async (userId) => {
 export const updateProfile = async (email, updates) => {
   try {
     console.log(email,updates);
-    const response = await axios.put(`http://localhost:4000/api/v1/profile/updateProfile/${email}`, updates);
+    const response = await axios.put(`${BASE_URL}/profile/updateProfile/${email}`, updates);
 
     return response.data; // Return updated profile data
   } catch (error) {
@@ -43,7 +43,7 @@ export const searchRestaurants = async (name) => {
 
   try {
     // console.log("Searching for restaurants with name:", name);
-    const response = await axios.get("http://localhost:4000/api/v1/profile/searchRestaurants", {
+    const response = await axios.get(`${BASE_URL}/profile/searchRestaurants`, {
       params: { name },
     });
     result = response.data;
@@ -61,7 +61,7 @@ export const searchRestaurantsByCity = async (city) => {
   console.log(city,"recieved city or not");
   try {
   
-    const response = await axios.get("http://localhost:4000/api/v1/profile/searchRestaurantsCity", {
+    const response = await axios.get(`${BASE_URL}/profile/searchRestaurantsCity`, {
       params: { city },
     });
     result = response.data;

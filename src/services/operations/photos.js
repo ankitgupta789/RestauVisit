@@ -1,11 +1,11 @@
 import axios from "axios";
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 // Function to get all images for a user by email
 export const getAllImages = async (userId) => {
   try {
     // Call the API to get the images based on email
     console.log(userId, "email sent ");
-    const response = await axios.get(`${"http://localhost:4000/api/v1/photos/getphotos"}/${userId}`);
+    const response = await axios.get(`${`${BASE_URL}/photos/getphotos`}/${userId}`);
     
     // Check if photos exist
     if (response.data && response.data.length > 0) {
@@ -26,7 +26,7 @@ export const addImage = async (userId, imageUrl) => {
   try {
     console.log(userId, imageUrl, "console for checking if data received during posting image");
 
-    const response = await axios.post(`${"http://localhost:4000/api/v1/photos/addphotos"}`, { userId, url: imageUrl });
+    const response = await axios.post(`${`${BASE_URL}/photos/addphotos`}`, { userId, url: imageUrl });
 
     // Check if the image was added successfully
     if (response.status === 201) {
@@ -42,7 +42,7 @@ export const addImage = async (userId, imageUrl) => {
 // Function to delete an image for a user by email
 export const deleteImage = async (userId, imageUrl) => {
   try {
-    const response = await axios.delete(`${"http://localhost:4000/api/v1/photos/deletephotos"}`, { data: { userId, url: imageUrl } });
+    const response = await axios.delete(`${`${BASE_URL}/photos/deletephotos`}`, { data: { userId, url: imageUrl } });
 
     // Check if the image was deleted successfully
     if (response.status === 200) {

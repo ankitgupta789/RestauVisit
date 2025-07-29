@@ -1,10 +1,10 @@
 import axios from 'axios';
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 // Function to get all menu items for a restaurant by email
 export const getAllReviews = async (userId) => {
   try {
     //  console.log("hello",userId);
-    const response = await axios.get(`http://localhost:4000/api/v1/review/getAllReviews/${userId}`);
+    const response = await axios.get(`${BASE_URL}/review/getAllReviews/${userId}`);
 
     // Check if menu items exist
     if (response.data && response.data.length > 0) {
@@ -33,7 +33,7 @@ export const addReview = async (userId,commenterId,username, review_text, rating
       console.log(`Adding new review for restaurant: ${userId}`);
       
       const response = await axios.post(
-        "http://localhost:4000/api/v1/review/addReview", // Adjusted API endpoint for reviews
+        `${BASE_URL}/review/addReview`, // Adjusted API endpoint for reviews
         newReview // Sending the review data to the server
       );
   
@@ -55,7 +55,7 @@ export const editReview = async (user, id, updatedData) => {
       console.log(id,"id sent is");
       
       const response = await axios.put(
-        `http://localhost:4000/api/v1/review/editReview/${id}`, // Adjusted API endpoint for editing reviews
+        `${BASE_URL}/review/editReview/${id}`, // Adjusted API endpoint for editing reviews
         { ...updatedData, user } // Send user data along with the updated review data
       );
   
@@ -76,7 +76,7 @@ export const deleteReview = async (user, id) => {
       console.log(`Deleting review with ID: ${id}`);
       
       const response = await axios.delete(
-        `http://localhost:4000/api/v1/review/deleteReview/${id}`, // Adjusted API endpoint for deleting reviews
+        `${BASE_URL}/review/deleteReview/${id}`, // Adjusted API endpoint for deleting reviews
         {
           data: { user } // Send user data to verify authorization
         }
@@ -94,7 +94,7 @@ export const deleteReview = async (user, id) => {
   
 export const upvoteReview = async (reviewId,userId) => {
     try {
-        const response = await axios.put(`http://localhost:4000/api/v1/review/upvote/${reviewId}`,{userId:userId});
+        const response = await axios.put(`${BASE_URL}/review/upvote/${reviewId}`,{userId:userId});
         return response.data; // Returns updated upvotes & downvotes count
     } catch (error) {
         console.error("Error upvoting review:", error.response?.data || error.message);
@@ -104,7 +104,7 @@ export const upvoteReview = async (reviewId,userId) => {
 
 export const downvoteReview = async (reviewId,userId) => {
     try {
-        const response = await axios.put(`http://localhost:4000/api/v1/review/downvote/${reviewId}`,{userId:userId});
+        const response = await axios.put(`${BASE_URL}/review/downvote/${reviewId}`,{userId:userId});
         return response.data; // Returns updated upvotes & downvotes count
     } catch (error) {
         console.error("Error downvoting review:", error.response?.data || error.message);
@@ -118,7 +118,7 @@ export const addReply = async (userId, reviewId, text,username) => {
   try {
     // Make the POST request to the backend
     // console.log(userId,reviewId,replyText,username,"data sent")
-    const response = await axios.post(`http://localhost:4000/api/v1/reply/addReply/${reviewId}`, {
+    const response = await axios.post(`${BASE_URL}/reply/addReply/${reviewId}`, {
       userId,
       text,
       username
@@ -132,7 +132,7 @@ export const addReply = async (userId, reviewId, text,username) => {
 
 export const getReplies = async (reviewId) => {
   try {
-    const response = await axios.get(`http://localhost:4000/api/v1/reply/getReplies/${reviewId}`);
+    const response = await axios.get(`${BASE_URL}/reply/getReplies/${reviewId}`);
     console.log("Replies:", response.data);
     return response.data; // Return replies to use in state if needed
   } catch (error) {

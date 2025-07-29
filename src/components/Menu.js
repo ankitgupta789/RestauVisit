@@ -3,7 +3,7 @@ import { getAllItems, addItem, deleteItem, editItem } from "../services/operatio
 import { useSelector } from "react-redux";
 import axios from "axios"; // To make API requests for Cloudinary
 import { FaEllipsisV } from "react-icons/fa"; 
-
+import Navbar2 from "../components/Navbar/Navbar2"
 const Menu = () => {
   const [menuData, setMenuData] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -284,6 +284,13 @@ const Menu = () => {
   }, [isSidebarOpen]);
 
   return (
+
+
+
+<div className="min-h-screen h-screen">
+ <Navbar2/>
+ 
+
     <div className="relative min-h-[11/12] bg-cover bg-center p-8 bg-gray-100 overflow-y-auto" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080')" }}>
       <h1 className="text-4xl font-bold text-center text-white mb-8 drop-shadow-lg">Our Menu</h1>
 
@@ -409,6 +416,7 @@ const Menu = () => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

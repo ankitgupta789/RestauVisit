@@ -1,10 +1,10 @@
 import axios from 'axios';
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const fetchReviews = async () => {
   try {
     console.log("reached-->")
     const response = await axios.get(
-      'http://localhost:4000/api/v1/getall/reviews' // Replace with your actual backend URL if needed
+      `${BASE_URL}/getall/reviews` // Replace with your actual backend URL if needed
     );
     console.log(response.data, "all reviews");
     return response.data;
@@ -15,7 +15,7 @@ export const fetchReviews = async () => {
 };
 
 
-const BASE_URL = 'http://localhost:4000/api/v1/profile'; // Adjust if needed
+const BASE_URL1 = `${BASE_URL}/profile`; // Adjust if needed
 
 export const fetchProfileByUserId = async (userId) => {
     
@@ -23,7 +23,7 @@ export const fetchProfileByUserId = async (userId) => {
   try {
     console.log("Fetching profile for userId:", userId);
     
-    const response = await axios.get(`${BASE_URL}/getProfileById/${userId}`);
+    const response = await axios.get(`${BASE_URL1}/getProfileById/${userId}`);
     
     console.log(response.data, "Fetched profile data");
    

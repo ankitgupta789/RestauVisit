@@ -1,10 +1,10 @@
 import axios from 'axios';
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const createOrder = async (orderData) => {
   try {
     // Sending a POST request to the backend to create an order
     console.log(orderData,"data in frontend");
-    const response = await axios.post('http://localhost:4000/api/v1/order/create-order', {orderData});
+    const response = await axios.post(`${BASE_URL}/order/create-order`, {orderData});
     return response;
   } catch (error) {
     console.error('Error creating order:', error);
@@ -13,7 +13,7 @@ export const createOrder = async (orderData) => {
 };
 export const getUserOrders = async (userId) => {
   try {
-    const response = await axios.get(`http://localhost:4000/api/v1/order/getorders/${userId}`);
+    const response = await axios.get(`${BASE_URL}/order/getorders/${userId}`);
     if (response.status === 200) {
       console.log('Orders retrieved successfully:', response.data.orders);
       return response.data.orders;

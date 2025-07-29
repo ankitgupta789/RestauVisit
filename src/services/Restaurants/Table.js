@@ -1,10 +1,10 @@
 // Function to call the addTable API
 import axios from 'axios';
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const addTable = async (restaurantId, capacity) => {
   try {
     const response = await axios.post(
-      'http://localhost:4000/api/v1/table/add-table', 
+      `${BASE_URL}/table/add-table`, 
       {
         restaurantId,
         capacity,
@@ -34,7 +34,7 @@ export const fetchTables = async (restaurantId) => {
   
       // Make a GET request to the backend
       const response = await axios.get(
-        `http://localhost:4000/api/v1/table/getTables?restaurantId=${restaurantId}`
+        `${BASE_URL}/table/getTables?restaurantId=${restaurantId}`
       );
   
       // Handle the response
@@ -52,7 +52,7 @@ export const fetchTables = async (restaurantId) => {
 export const markSlotAsBooked = async (tableId, timeSlot, userName) => {
   try {
     console.log(tableId,timeSlot,userName);
-    const response = await axios.post('http://localhost:4000/api/v1/table/markBooked', {
+    const response = await axios.post(`${BASE_URL}/table/markBooked`, {
       tableId,
       timeSlot,
       userName,
@@ -74,7 +74,7 @@ export const markSlotAsBooked = async (tableId, timeSlot, userName) => {
 export const markSlotAsUnBooked = async (tableId, timeSlot) => {
     try {
       console.log(tableId,timeSlot);
-      const response = await axios.post('http://localhost:4000/api/v1/table/unmarkBooked', {
+      const response = await axios.post(`${BASE_URL}/table/unmarkBooked`, {
         tableId,
         timeSlot
       });
@@ -103,7 +103,7 @@ export const markSlotAsUnBooked = async (tableId, timeSlot) => {
       }
   
       // API Req
-      const response = await axios.post('http://localhost:4000/api/v1/table/checkSlotAvailability', {
+      const response = await axios.post(`${BASE_URL}/table/checkSlotAvailability`, {
         timeSlot,
         capacity,
       });

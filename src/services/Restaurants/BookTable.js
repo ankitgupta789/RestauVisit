@@ -1,9 +1,9 @@
 import axios from 'axios';
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const verifyPaymentOnServer = async (razorpay_order_id, razorpay_payment_id, razorpay_signature,userId) => {
   try {
     // Send payment details to backend for verification using Axios
-    const response = await axios.post('http://localhost:4000/api/v1/book/verifyPayment', {
+    const response = await axios.post(`${BASE_URL}/book/verifyPayment`, {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
@@ -26,7 +26,7 @@ export const markBookingAsSeen = async (bookingId) => {
   try {
     // Replace 'http://localhost:4000' with your backend URL
     
-    const response = await axios.post(`http://localhost:4000/api/v1/book/mark-seen/${bookingId}`);
+    const response = await axios.post(`${BASE_URL}/book/mark-seen/${bookingId}`);
     console.log('Booking marked as seen:', response.data);
     return response.data; // Return the response in case you want to handle it
   } catch (error) {
@@ -37,7 +37,7 @@ export const markBookingAsSeen = async (bookingId) => {
 export const getOrdersByUserId = async (userId) => {
   try {
     console.log("present here")
-    const response = await axios.get(`http://localhost:4000/api/v1/book/orders/${userId}`);
+    const response = await axios.get(`${BASE_URL}/book/orders/${userId}`);
 
     if (response.data.success) {
       // console.log('Orders fetched successfully:', response.data.data);
@@ -54,7 +54,7 @@ export const getOrdersByUserId = async (userId) => {
 
 export const fetchRecentReservations = async (userId) => {
   try {
-    const response = await axios.get( `http://localhost:4000/api/v1/book/getRecentReservations/${userId}` // Replace with your actual backend URL
+    const response = await axios.get( `${BASE_URL}/book/getRecentReservations/${userId}` // Replace with your actual backend URL
     );
     console.log(response.data,"all bookings");
     return response.data;

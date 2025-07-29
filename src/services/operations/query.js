@@ -1,6 +1,6 @@
 import {toast} from "react-hot-toast"
 import axios from "axios"
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const addquery = async ({query, email, documentName,userEmail
 
  }) => {
@@ -10,7 +10,7 @@ export const addquery = async ({query, email, documentName,userEmail
     // console.log("Token :",token);
     console.log("hello ji")
     try {
-        const response= await axios.post("http://localhost:4000/api/v1/query/createQuery",
+        const response= await axios.post(`${BASE_URL}/query/createQuery`,
         {query, email, documentName,userEmail
       })
       
@@ -30,7 +30,7 @@ export const addquery = async ({query, email, documentName,userEmail
     const toastId = toast.loading("Loading...");
 
     try {
-        const response = await axios.get("http://localhost:4000/api/v1/query/getAllQuery");
+        const response = await axios.get(`${BASE_URL}/query/getAllQuery`);
         result = response.data;
         toast.success("Queries Fetched Successfully");
     } catch (error) {
@@ -44,7 +44,7 @@ export const deleteQuery = async (queryId,Email) => {
     let result = null;
     const toastId = toast.loading("Deleting...");
     try {
-      const response = await axios.delete(`http://localhost:4000/api/v1/query/deleteQuery/${queryId}`, {
+      const response = await axios.delete(`${BASE_URL}/query/deleteQuery/${queryId}`, {
         data: {Email }  // Sending userEmail in the request body
       });
       toast.success("Query Deleted Successfully");

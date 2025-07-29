@@ -1,6 +1,6 @@
 import {toast} from "react-hot-toast"
 import axios from "axios"
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const addfeedback = async ({email,content
 
  }) => {
@@ -10,7 +10,7 @@ export const addfeedback = async ({email,content
     // console.log("Token :",token);
      console.log(email,content);
     try {
-        const response= await axios.post("http://localhost:4000/api/v1/feedback/createfeedback",
+        const response= await axios.post(`${BASE_URL}/feedback/createfeedback`,
         {email,content
       })
       

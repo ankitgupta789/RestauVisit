@@ -15,9 +15,9 @@ const Signup = ({setIsLoggedIn}) => {
       </p>
       
     <Template
-      title="Join the millions learning to code with StudyNotion for free"
-      desc1="Build skills for today, tomorrow, and beyond."
-      desc2="Education to future-proof your career."
+      title="Join the millions discovering great dining experiences with RestauVisit"
+      desc1="Find your next favorite restaurant or manage your own effortlessly."
+      desc2="Your go-to platform for the best dining experience."
       image={signupImg}
       formtype="signup"
       setIsLoggedIn={setIsLoggedIn}

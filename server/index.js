@@ -49,7 +49,6 @@ app.use(
 		credentials:true,
 	})
 )
-
 //cloudinary connection
 cloudinaryConnect();
 

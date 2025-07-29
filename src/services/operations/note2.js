@@ -1,13 +1,13 @@
 import {toast} from "react-hot-toast"
 import axios from "axios"
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const addnote = async (note, email, documentName
  ) => {
     let result = null
     const toastId = toast.loading("Loading...");
     try {
         console.log("hello",note,email,documentName);
-        const response= await axios.post("http://localhost:4000/api/v1/note/createNote",
+        const response= await axios.post(`${BASE_URL}/note/createNote`,
         {note, email, documentName
       })
       
@@ -27,7 +27,7 @@ export const addnote = async (note, email, documentName
     const toastId = toast.loading("Loading...");
 
     try {
-        const response = await axios.get("http://localhost:4000/api/v1/note/getAllNote");
+        const response = await axios.get(`${BASE_URL}/note/getAllNote`);
         result = response.data;
         toast.success("Notes Fetched Successfully");
     } catch (error) {
@@ -41,7 +41,7 @@ export const deleteNote = async (noteId) => {
   let result = null;
   const toastId = toast.loading("Deleting...");
   try {
-    const response = await axios.delete(`http://localhost:4000/api/v1/note/deleteNote/${noteId}`);
+    const response = await axios.delete(`${BASE_URL}/note/deleteNote/${noteId}`);
     toast.success("Note Deleted Successfully");
     result = response.data;
   } catch (error) {

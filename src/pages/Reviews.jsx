@@ -82,7 +82,7 @@ const ReviewsByUser = () => {
   return (
     <>
     <Navbar2/>
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 text-white p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-700 text-black p-8">
         
       <h1 className="text-4xl font-extrabold text-center mb-10 drop-shadow-lg">
         User Reviews

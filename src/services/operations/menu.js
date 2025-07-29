@@ -1,11 +1,11 @@
 import axios from 'axios';
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 // Function to get all menu items for a restaurant by email
 export const getAllItems = async (userId) => {
   try {
     console.log(`Fetching menu items for restaurant email: ${userId}`);
     
-    const response = await axios.get(`http://localhost:4000/api/v1/menu/getAllItems/${userId}`);
+    const response = await axios.get(`${BASE_URL}/menu/getAllItems/${userId}`);
 
     // Check if menu items exist
     if (response.data && response.data.length > 0) {
@@ -38,7 +38,7 @@ export const addItem = async (user, name, description, price, category, image_ur
     console.log(`Adding new menu item for restaurant: ${restaurant_email}`);
     
     const response = await axios.post(
-      "http://localhost:4000/api/v1/menu/addItem",
+      `${BASE_URL}/menu/addItem`,
       { ...newMenuItem, user } // Sending user data and menu item data
     );
 
@@ -57,7 +57,7 @@ export const editItem = async (user, id, updatedData) => {
   try {
     console.log(updatedData,"data to be updated");
     const response = await axios.put(
-      `http://localhost:4000/api/v1/menu/editItem/${id}`,
+      `${BASE_URL}/menu/editItem/${id}`,
       { ...updatedData, user } // Send user data along with the updated data
     );
 
@@ -77,7 +77,7 @@ export const deleteItem = async (user, id) => {
     console.log(`Deleting menu item with ID: ${id}`);
     
     const response = await axios.delete(
-      `http://localhost:4000/api/v1/menu/deleteItem/${id}`,
+      `${BASE_URL}/menu/deleteItem/${id}`,
       {
         data: { user } // Send user data to verify authorization
       }
@@ -97,7 +97,7 @@ export const searchMenuItems = async (userId, query) => {
       console.log(`Searching menu items for restaurant userId: ${userId} with query: ${query}`);
       
       const response = await axios.get(
-        `http://localhost:4000/api/v1/menu/search/${userId}?query=${query}`
+        `${BASE_URL}/menu/search/${userId}?query=${query}`
       );
   
       if (response.data && response.data.length > 0) {
@@ -122,7 +122,7 @@ export const searchMenuItems = async (userId, query) => {
       }
       console.log(itemIds,"ids sent from the frontend");
       // Call the backend API
-      const response = await axios.get('http://localhost:4000/api/v1/menu/getItemsByIds', { params: { itemIds }, });
+      const response = await axios.get(`${BASE_URL}/menu/getItemsByIds`, { params: { itemIds }, });
       console.log(response.data,"response for the cart");
       // Check if menu items exist
       

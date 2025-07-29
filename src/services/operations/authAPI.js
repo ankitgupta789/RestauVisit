@@ -7,7 +7,7 @@ import { apiConnector } from "../apiconnector"
 import { endpoints } from "../api"
 import axios from "axios"
 import { useSelector } from "react-redux"
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 // const {
 //   SENDOTP_API,
 //   SIGNUP_API,
@@ -29,7 +29,7 @@ export function sendOtp(email, navigate) {
     //   response)
     console.log("hello jiiii")
     
-    const response=await axios.post("http://localhost:4000/api/v1/auth/sendotp",{email,checkUserPresent:true})
+    const response=await axios.post(`${BASE_URL}/auth/sendotp`,{email,checkUserPresent:true})
     //   console.log(response.data.success)
     // console.log(process.env.REACT_APP_BASE_URL);
     console.log("OTP response is ",response) 
@@ -62,7 +62,7 @@ export function signUp(
       dispatch(setLoading(true))
       try {
         console.log("hii i am here"); 
-        const response = await axios.post("http://localhost:4000/api/v1/auth/signup",{
+        const response = await axios.post(`${BASE_URL}/auth/signup`,{
           accountType,
           firstName,
           lastName,
@@ -78,7 +78,7 @@ export function signUp(
           throw new Error(response.data.message)
         }
         
-        const response2=await axios.post("http://localhost:4000/api/v1/profile/createProfile",
+        const response2=await axios.post(`${BASE_URL}/profile/createProfile`,
       {
 
         name:"",
@@ -106,7 +106,7 @@ export function signUp(
       const toastId = toast.loading("Loading...")
       dispatch(setLoading(true))
       try {
-        const response = await axios.post("http://localhost:4000/api/v1/auth/reset-password-token", {
+        const response = await axios.post(`${BASE_URL}/auth/reset-password-token`, {
           email,
         })
   
@@ -131,7 +131,7 @@ export function signUp(
       const toastId = toast.loading("Loading...")
       dispatch(setLoading(true))
       try {
-        const response = await axios.post("http://localhost:4000/api/v1/auth/reset-password",{
+        const response = await axios.post(`${BASE_URL}/auth/reset-password`,{
           password,
           confirmPassword,
           token,
@@ -158,7 +158,7 @@ export function signUp(
       const toastId = toast.loading("Loading...")
       dispatch(setLoading(true))
       try {
-        const response=await axios.post("http://localhost:4000/api/v1/auth/login",{email, password})
+        const response=await axios.post(`${BASE_URL}/auth/login`,{email, password})
         console.log("LOGIN API RESPONSE............", response)
   
         if(!response.data.success) {

@@ -1,6 +1,6 @@
 import {toast} from "react-hot-toast"
 import axios from "axios"
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const addDocument = async ({title,
   category,
   authorName, 
@@ -16,7 +16,7 @@ export const addDocument = async ({title,
     // console.log("Token :",token);
     try {
       console.log("kuch hai??",title,category,authorName,content,articleSummary,difficultyLevel,enableComments,email);
-        const response= await axios.post("http://localhost:4000/api/v1/course/createCourse",
+        const response= await axios.post(`${BASE_URL}/course/createCourse`,
         {title,
           category,
           authorName, 
@@ -46,7 +46,7 @@ export const addDocument = async ({title,
     let result = null;
     const toastId = toast.loading("Loading...");
     try {
-      const response = await axios.get("http://localhost:4000/api/v1/course/getAllCourses");
+      const response = await axios.get(`${BASE_URL}/course/getAllCourses`);
       console.log("GET ALL DOCUMENTS API RESPONSE............", response);
   
       toast.success("Documents Fetched Successfully");
@@ -63,7 +63,7 @@ export const checkDocumentExistence = async (documentName) => {
   try {
     
     const response = await axios.get(
-      `http://localhost:4000/api/v1/course/checkCourseExistence/${documentName}`
+      `${BASE_URL}/course/checkCourseExistence/${documentName}`
     );
     console.log("CHECK DOCUMENT EXISTENCE API RESPONSE............", response);
     
@@ -86,7 +86,7 @@ export const getUnpublishedCourses = async () => {
 
   try {
     // Make a GET request to fetch unpublished courses
-    const response = await axios.get("http://localhost:4000/api/v1/course/getUnpublishedCourses");
+    const response = await axios.get(`${BASE_URL}/course/getUnpublishedCourses`);
     
     // Log the response for debugging
     console.log("GET UNPUBLISHED COURSES API RESPONSE............", response);
