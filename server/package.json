@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "build":"echo do nothing",
     "dev": "nodemon index.js"
   },
   "keywords": [],
