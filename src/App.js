@@ -90,11 +90,11 @@ function App() {
         <Route path="/solarSystem" element={user ? <SolarSystem/>: <Login/>} />
         <Route path="/spaceHistory" element={user ? <SpaceHistory/>: <Login/>} />
         
-        <Route path="/about" element={<About/>} />
+       
         
         <Route path="/drafts" element={<Drafts/>}/>
         <Route path="/search" element={<Search/>}/>
-        <Route path="/reviews" element={<Reviews/>}/>
+        {/* <Route path="/reviews" element={<Reviews/>}/> */}
         <Route 
             path="/reserveSeat" 
             element={user && user.accountType === "User" ? <Reserve /> : <Login />} 

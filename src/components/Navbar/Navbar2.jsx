@@ -120,44 +120,7 @@ const Navbar = () => {
         </Button>
       )} */}
 
-      {/* about  */}
-      {
-        (user==null || user?.accountType==="User" ) &&
-
-        <Button
-          key="abt_us"
-          onClick={() => {
-            navigate("/about");
-          }}
-          sx={{
-            my: 2,
-            color: "#000080",
-            display: "block",
-            position: "relative",
-            "&::after": {
-              content: '""',
-              position: "absolute",
-              width: "100%",
-              height: "2px",
-              backgroundColor: "#000080",
-              bottom: "-2px",
-              left: 0,
-              transform: "scaleX(0)",
-              transformOrigin: "bottom right",
-              transition: "transform 0.25s ease-out",
-            },
-            "&:hover::after": {
-              transform: "scaleX(1)",
-              transformOrigin: "bottom left",
-            },
-          }}
-          component={Link}
-          to="/about"
-          color="inherit"
-        >
-          About Us
-        </Button>
-      }
+      
    
       {/* Reviews  */}
       {
