@@ -11,6 +11,7 @@ import UserContext from '../../UserContext.js'
 const Chats = () => {
   const [fetchAgain, setFetchAgain] = useState(true);
   const {user}=ChatState()
+  const BASE_URL=process.env.REACT_APP_BASE_URL;
 
   const { setChats } = ChatState();
   const toast=useToast()
@@ -25,7 +26,7 @@ const Chats = () => {
               }
           }
 
-          const {data}=await axios.get("http://localhost:4000/api/community",config)
+          const {data}=await axios.get(`${BASE_URL}/api/community`,config)
           console.log(data,"token",user.token)
           if(!data)
           {

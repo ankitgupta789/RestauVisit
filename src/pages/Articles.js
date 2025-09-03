@@ -12,7 +12,7 @@ const Articles = () => {
   const { user } = useSelector((state) => state.profile);
 
   
-  
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   // Function to handle category click
   const handleCategoryClick = (category) => {

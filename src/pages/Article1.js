@@ -6,6 +6,9 @@ import { addquery } from '../services/operations/query';
 import { useNavigate } from 'react-router-dom';
 import StarRating from './Starrating'; // Import your StarRating component
 
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const Article1 = ({ category }) => {
   const { user } = useSelector((state) => state.profile);
   const navigate = useNavigate();
@@ -63,7 +66,7 @@ const Article1 = ({ category }) => {
         setError(null);
 
         // Fetching articles based on category
-        const articlesResponse = await axios.get(`http://localhost:4000/api/v1/course/findbycategory?category=${category}`);
+        const articlesResponse = await axios.get(`${BASE_URL}/api/course/findbycategory?category=${category}`);
         if (articlesResponse.data.success) {
           setArticles(articlesResponse.data.data);
           setFilteredArticles(articlesResponse.data.data);
@@ -87,7 +90,7 @@ const Article1 = ({ category }) => {
 
         // Loop through each article and fetch its rating
         for (const article of articles) {
-          const ratingsResponse = await axios.get(`http://localhost:4000/api/v1/rating/getRatings/${article._id}`);
+          const ratingsResponse = await axios.get(`${BASE_URL}/api/v1/rating/getRatings/${article._id}`);
 
           if (ratingsResponse.data.success) {
             // Store the rating data using the article's ID as the key
@@ -126,7 +129,7 @@ const Article1 = ({ category }) => {
   // Function to fetch comments for a specific article
   const fetchComments = async (articleId) => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/v1/comment/comments/${articleId}`);
+      const response = await axios.get(`${BASE_URL}/api/v1/comment/comments/${articleId}`);
       setComments(response.data.data); // Assuming API returns comments array under `data`
     } catch (error) {
       console.error('Error fetching comments:', error);
@@ -153,7 +156,7 @@ const Article1 = ({ category }) => {
   const handleAddComment = async () => {
     try {
       const fullName = `${user?.firstName || 'First'} ${user?.lastName || 'Last'}`;
-      const response = await axios.post('http://localhost:4000/api/v1/comment/comments', {
+      const response = await axios.post(`${BASE_URL}/api/v1/comment/comments`, {
         articleId: selectedArticle._id,
         comment: newComment,
         commenterId: user._id,
@@ -170,14 +173,14 @@ const Article1 = ({ category }) => {
   const handleRatingSubmit = async () => {
     try {
       // Step 1: Submit the new rating
-      const response = await axios.post('http://localhost:4000/api/v1/rating/createRating', {
+      const response = await axios.post(`${BASE_URL}/api/v1/rating/createRating`, {
         articleId: selectedArticle._id,
         rating: userRating,
         userId: user._id,
       });
   
       // Step 2: Fetch the updated rating after submission
-      const updatedRatingsResponse = await axios.get(`http://localhost:4000/api/v1/rating/getRatings/${selectedArticle._id}`);
+      const updatedRatingsResponse = await axios.get(`${BASE_URL}/api/v1/rating/getRatings/${selectedArticle._id}`);
   
       // Check if the response was successful
       if (updatedRatingsResponse.data.success) {

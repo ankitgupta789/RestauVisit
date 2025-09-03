@@ -6,6 +6,7 @@ import { markBookingAsSeen,getOrdersByUserId } from '../services/Restaurants/Boo
 const NotificationRender = () => {
   const [notifications, setNotifications] = useState([]);
   const { user } = useSelector((state) => state.profile);
+  const BASE_URL=process.env.REACT_APP_BASE_URL;
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -24,7 +25,7 @@ const NotificationRender = () => {
     const restaurantEmail = user._id;
     console.log('Joining room with email:', restaurantEmail);
 
-    const socket = io('http://localhost:4000'); // Replace with your backend server URL
+    const socket = io(`${BASE_URL}`); // Replace with your backend server URL
     console.log('Client socket connected');
 
     socket.emit('join-order-room', restaurantEmail);

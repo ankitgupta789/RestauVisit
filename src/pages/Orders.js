@@ -10,6 +10,7 @@ import Navbar from '../components/Navbar/Navbar2';
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]); // State to store notifications
   const { user } = useSelector((state) => state.profile);
+  const BASE_URL=process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     const fetchNotificationsWithMenuDetails = async () => {
@@ -54,7 +55,7 @@ const Notifications = () => {
     fetchNotificationsWithMenuDetails();
 
     // Create a socket connection to the server
-    const socket = io('http://localhost:4000');
+    const socket = io(`${BASE_URL}`);
 
     // Join the room based on restaurant's email
     const restaurantEmail = user._id;

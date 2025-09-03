@@ -35,6 +35,7 @@ const SideBar = () => {
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const BASE_URL=process.env.REACT_APP_BASE_URL;
 
 
   const handleSearch = async () => {
@@ -58,7 +59,7 @@ const SideBar = () => {
         },
       };
 
-      const { data } = await axios.get(`http://localhost:4000/api/user?search=${search}`, config);
+      const { data } = await axios.get(`${BASE_URL}/api/user?search=${search}`, config);
       console.log("side bar data is ",data);
       setLoading(false);
       setSearchResult(data);
@@ -87,7 +88,7 @@ const SideBar = () => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post(`http://localhost:4000/api/community`, { userId }, config);
+      const { data } = await axios.post(`${BASE_URL}/api/community`, { userId }, config);
       console.log("SIde bar data post ",data);
       //if the chat is present  then just append it
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);

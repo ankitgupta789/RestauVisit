@@ -10,6 +10,7 @@ const Drafts = () => {
   const [selectedDraft, setSelectedDraft] = useState(null); // For viewing content modal
   const [draftToPublish, setDraftToPublish] = useState(null); // For publish confirmation modal
   const { user } = useSelector((state) => state.profile);
+  const BASE_URL=process.env.REACT_APP_BASE_URL
 
   // Fetch unpublished courses when the component loads
   useEffect(() => {
@@ -32,7 +33,7 @@ const Drafts = () => {
     try {
       // Make the PUT request to update the course's published status
       const response = await axios.put(
-        `http://localhost:4000/api/v1/course/editPublishedCourse/${courseId}`, 
+        `${BASE_URL}/api/v1/course/editPublishedCourse/${courseId}`, 
         {
           email: authorEmail,      // Send the author's email
           title: articleTitle,     // Send the article title

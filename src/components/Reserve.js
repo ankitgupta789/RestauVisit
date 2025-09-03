@@ -9,6 +9,7 @@ const Reserve = ({ userId }) => {
   const [availability, setAvailability] = useState(null); // State to store availability status
   const [isPaymentVisible, setIsPaymentVisible] = useState(false); // State to control payment visibility
   const { user } = useSelector((state) => state.profile);
+  const BASE_URL=process.env.REACT_APP_BASE_URL;
 const customerId=user._id;
   const timeSlots = [
     '10:00 - 11:00',
@@ -81,7 +82,7 @@ const customerId=user._id;
       };
 
       // Make a POST request to backend to create a Razorpay order
-      const response = await axios.post('http://localhost:4000/api/v1/book/bookTable', bookingData);
+      const response = await axios.post(`${BASE_URL}/api/v1/book/bookTable`, bookingData);
        
       const { amount, id: orderId, currency } = response.data;
 

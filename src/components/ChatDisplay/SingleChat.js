@@ -11,7 +11,7 @@ import io from "socket.io-client";
 import Lottie from 'react-lottie'
 
 const AnimationData =require('../animation/AnimationData.json')
-const ENDPOINT="http://localhost:4000"
+const ENDPOINT=process.env.REACT_APP_BASE_URL
 var socket,selectedChatCompare;
 // console.log(io)
 

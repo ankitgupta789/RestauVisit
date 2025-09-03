@@ -13,6 +13,7 @@ const UpdateGroupModal = ({fetchAgain,setFetchAgain,fetchMessages}) => {
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
     const [renameloading, setRenameLoading] = useState(false);
+    const BASE_URL=process.env.REACT_APP_BASE_URL;
     const toast = useToast();
   
     const { selectedChat, setSelectedChat, user } = ChatState();
@@ -44,7 +45,7 @@ const UpdateGroupModal = ({fetchAgain,setFetchAgain,fetchMessages}) => {
                   },
             }
 
-            const {data}=await axios.put("http://localhost:4000/api/community/remove",{
+            const {data}=await axios.put(`${BASE_URL}/api/community/remove`,{
                 userId:user1._id,
                 chatId:selectedChat._id 
             },config)
@@ -105,7 +106,7 @@ const UpdateGroupModal = ({fetchAgain,setFetchAgain,fetchMessages}) => {
                 },
               };
 
-              const {data}=await axios.put(`http://localhost:4000/api/community/add`,{
+              const {data}=await axios.put(`${BASE_URL}/api/community/add`,{
                 chatId:selectedChat._id,
                 userId:user1._id
               },config)
@@ -142,7 +143,7 @@ const UpdateGroupModal = ({fetchAgain,setFetchAgain,fetchMessages}) => {
                 }
             }
 
-            const {data}=await axios.put(`http://localhost:4000/api/community/rename`,{
+            const {data}=await axios.put(`${BASE_URL}/api/community/rename`,{
                 chatId:selectedChat._id,
                 chatName:groupChatName
             },config)
@@ -186,7 +187,7 @@ const UpdateGroupModal = ({fetchAgain,setFetchAgain,fetchMessages}) => {
             }
             setLoading(true)
 
-            const {data}=await axios.get(`http://localhost:4000/api/user?search=${search}`,config)
+            const {data}=await axios.get(`${BASE_URL}/api/user?search=${search}`,config)
             
             if(!data)
             {

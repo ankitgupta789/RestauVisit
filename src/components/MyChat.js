@@ -13,6 +13,7 @@ const MyChat = ({ fetchAgain }) => {
   const toast = useToast();
   const [loggedUser, setLoggedUser] = useState();
   console.log(chats);
+  const BASE_URL=process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     // fetching chats
@@ -24,7 +25,7 @@ const MyChat = ({ fetchAgain }) => {
           }
         };
 
-        const { data } = await axios.get("http://localhost:4000/api/community", config);
+        const { data } = await axios.get(`${BASE_URL}/api/community`, config);
         console.log(data);
         if (!data) {
           res.status(404).json("error while fetching chats");
